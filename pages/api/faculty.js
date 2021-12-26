@@ -3,32 +3,19 @@ import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
 
 const db = require("../../models");
+const Faculties = require("../../models/faculty")(db.sequelize, DataTypes);
 const College = require("../../models/college")(db.sequelize, DataTypes);
-
+Faculties.belongsTo(College, { foreignKey: "college_id", as: "college" });
+College.hasMany(Faculties, { foreignKey: "college_id" });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
   .post(async (req, res) => {
     const body = req.body;
-    if (
-      !body.name ||
-      !body.pt_code ||
-      !body.code ||
-      !body.address_1 ||
-      !body.city ||
-      !body.post_code ||
-      !body.phone ||
-      !body.fax ||
-      !body.decission_letter ||
-      !body.since ||
-      !body.email ||
-      !body.email ||
-      !body.site ||
-      !body.pt_start_date
-    )
+    if (!body.name || !body.college_id || !body.code)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
-      const data = await College.create(body);
+      const data = await Faculties.create(body);
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(500).json({ error });
@@ -37,8 +24,9 @@ export default nextConnect()
   .get(async (req, res) => {
     if (req.query.id) {
       try {
-        const data = await College.findOne({
+        const data = await Faculties.findOne({
           where: { id: req.query.id },
+          include: { model: College, as: "college" },
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
         return res.status(200).json({ data }).end();
@@ -47,7 +35,12 @@ export default nextConnect()
       }
     } else {
       try {
-        const data = await College.findAll();
+        const data = await Faculties.findAll({
+          include: {
+            model: College,
+            as: "college",
+          },
+        });
         if (data.length == 0)
           return res.status(404).json({ error: "Data not found", data });
         return res.status(200).json({ data });
@@ -56,16 +49,16 @@ export default nextConnect()
       }
     }
   })
-  .patch((req, res) => {
+  .patch(async (req, res) => {
     const body = req.body;
     const id = body.id;
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
     delete body.id;
     try {
-      const data = await College.update(body, {
+      const data = await Faculties.update(body, {
         where: { id: id },
       });
-      return res.status(200).json({ message: "success update class type" });
+      return res.status(200).json({ message: "success update data" });
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -75,7 +68,7 @@ export default nextConnect()
     if (!body.id)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
-      const data = await College.delete({
+      const data = await Faculties.delete({
         where: { id: body.id },
       });
       return res.status(200).json({ message: "success delete data" });
