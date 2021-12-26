@@ -56,7 +56,7 @@ export default nextConnect()
       }
     }
   })
-  .patch((req, res) => {
+  .patch(async (req, res) => {
     const body = req.body;
     const id = body.id;
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
