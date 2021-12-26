@@ -122,6 +122,9 @@ export default function () {
 	async function submitTeacher() {
 		try {
 			const sendData = {
+				first_name,
+				last_name,
+				middle_name,
 				place_of_birth,
 				date_of_birth,
 				gender,

@@ -20,10 +20,25 @@ const topMenuList = [
       {
         name: "Profile",
         link: "academic/profile",
+				disable : true,
       },
       {
         name: "Card",
         link: "academic/card",
+				disable : true,
+      },
+      {
+        name: "Curriculums",
+        link: "academic/curriculum",
+      },
+      {
+        name: "Courses",
+        link: "academic/course",
+      },
+      {
+        name: "Courses Selection",
+        link: "academic/course-selection",
+				disable : true,
       },
     ],
   },
@@ -98,9 +113,11 @@ function ChildMenu({ child }) {
           sx={{
             my: 1,
             cursor: "pointer",
+						opacity: !item.disable ? 1 : 0.3,
           }}
           onClick={() => {
-            router.push("/" + item.link);
+						if(!item.disable)
+            	router.push("/" + item.link);
           }}
         >
           {item.name}

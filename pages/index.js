@@ -47,7 +47,7 @@ export default function () {
     <>
       <Head>
         <title>
-					Teacher Status | SIA UIII
+					Home | SIA UIII
         </title>
         <meta
           name="viewport"
@@ -78,12 +78,15 @@ export default function () {
 							>
 						</Card>
 					</Grid>
-					{/* <Grid xs={4}>
+					{
+						!session &&
+					<Grid xs={3}>
 						<Card
-							sx={{ bgcolor : '#84754E', height : 200, m : 1}}
+							sx={{ bgcolor : '#84754E', height : 400, m : 1}}
 							>
 						</Card>
-					</Grid> */}
+					</Grid>
+					}
 					<Grid xs={5}>
 						<Card
 							sx={{ bgcolor : '#E3A130', height : 400, m : 1}}
