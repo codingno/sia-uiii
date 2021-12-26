@@ -12,7 +12,7 @@ const MasterStudyType = require("../../models/masterStudyType")(
 
 export default nextConnect()
     .post((req, res) => {
-      const body = JSON.parse(req.body);
+      const body = req.body;
       if (!body.name || !body.description)
         return res.status(400).json({ message: "Incomplete parameters" });
       MasterStudyType.create(body)
@@ -48,7 +48,7 @@ export default nextConnect()
       }
     })
     .patch((req, res) => {
-      const body = JSON.parse(req.body);
+      const body = req.body;
       const id = body.id;
       if (!id)
         return res.status(400).json({ error: "Incomplete parameters" });
@@ -65,17 +65,17 @@ export default nextConnect()
           return res.status(500).json({ error });
         });
     })
-    .delete((response) => {
-      const body = JSON.parse(req.body);
+    .delete((req, res) => {
+      const body = req.body;
       if (!body.id)
-        return response.status(400).json({ message: "Incomplete parameters" });
-      MasterStudyType.delete({
-        where: { id: req.query.id },
+        return res.status(400).json({ message: "Incomplete parameters" });
+      MasterCourseGroup.delete({
+        where: { id: body.id },
       })
         .then((data) => {
-          return response.status(200).json({ data });
+          return res.status(200).json({ message: 'success delete data' });
         })
         .catch((error) => {
-          return response.status(500).json({ error });
+          return res.status(500).json({ error });
         });
     })

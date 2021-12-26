@@ -102,7 +102,7 @@ CREATE TABLE `college` (
 	`code` int NOT NULL,
 	`name` varchar(255) NOT NULL,
 	`address_1` varchar(10000) NOT NULL,
-	`address_2` varchar(10000) NOT NULL,
+	`address_2` varchar(10000),
 	`city` varchar(255) NOT NULL,
 	`post_code` int NOT NULL,
 	`phone` varchar(255) NOT NULL,

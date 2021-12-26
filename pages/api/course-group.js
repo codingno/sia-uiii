@@ -65,17 +65,17 @@ export default nextConnect()
           return res.status(500).json({ error });
         });
     })
-    .delete((response) => {
-      const body = JSON.parse(req.body);
+    .delete((req, res) => {
+      const body = req.body;
       if (!body.id)
-        return response.status(400).json({ message: "Incomplete parameters" });
+        return res.status(400).json({ message: "Incomplete parameters" });
       MasterCourseGroup.delete({
-        where: { id: req.query.id },
+        where: { id: body.id },
       })
         .then((data) => {
-          return response.status(200).json({ data });
+          return res.status(200).json({ message: 'success delete data' });
         })
         .catch((error) => {
-          return response.status(500).json({ error });
+          return res.status(500).json({ error });
         });
     })
