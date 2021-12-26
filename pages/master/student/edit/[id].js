@@ -195,7 +195,7 @@ export default function () {
 				departement_id,
 				status,
 			}	
-			const { data } = await axios.post('/api/student', sendData)
+			const { data } = await axios.patch('/api/student', sendData)
 			alert("Student successfully created.")
 			router.back()
 		} catch (error) {

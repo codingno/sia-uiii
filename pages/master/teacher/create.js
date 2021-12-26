@@ -128,11 +128,9 @@ export default function () {
 				identity_id,
 				identity_type_id,
 				user_id,
-				student_number,
-				teacher_id,
-				entry_year,
-				entry_semester,
-				entry_status,
+				ein,
+				nidn_code,
+				title,
 				departement_id,
 				status,
 			}	
@@ -149,12 +147,6 @@ export default function () {
 
   return (
     <FormLayout title="Teacher Create | SIA UIII" titlePage="Teacher Create">
-      <Stack
-        mb={4}
-        sx={{
-          minWidth: 640,
-        }}
-      >
         <FormContainer
           label="Employer Identification Number"
           name="ein"
@@ -277,7 +269,6 @@ export default function () {
             Submit
           </Button>
         </Stack>
-      </Stack>
     </FormLayout>
   );
 }

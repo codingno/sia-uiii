@@ -61,22 +61,20 @@ export default function () {
   const [identity_type_id, setIdentityType] = useState("");
 
   const [user_id, setUserID] = useState("");
-  const [student_number, setStudentNumber] = useState("");
-  const [teacher_id, setTeacherID] = useState("");
-  const [entry_year, setEntryYear] = useState("");
-  const [entry_semester, setEntrySemester] = useState(entrySemesterOptions[0].id);
-  const [entry_status, setEntryStatus] = useState(entryStatusOptions[0].id);
+  const [ein, setEIN] = useState("");
+  const [nidn_code, setNIDNCode] = useState("");
+  const [title, setTitle] = useState("");
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
 
   useEffect(() => {
-    getStudentData();
+    getTeacherData();
   }, [id]);
 
-  async function getStudentData() {
+  async function getTeacherData() {
     if (id) {
       try {
-        const { data } = await axios.get(`/api/student?id=${id}`);
+        const { data } = await axios.get(`/api/teacher?id=${id}`);
         setName(data.data.name);
   			setFirstName(data.data.first_name);
   			setLastName(data.data.last_name);
@@ -88,11 +86,9 @@ export default function () {
   			setIdentityType(data.data.identity_type_id);
 
   			setUserID(data.data.user_id);
-  			setStudentNumber(data.data.student_number);
-  			setTeacherID(data.data.teacher_id);
-  			setEntryYear(data.data.entry_year);
-  			setEntrySemester(data.data.entry_semester);
-  			setEntryStatus(data.data.entry_status);
+  			setEIN(data.data.ein);
+  			setNIDNCode(data.data.nidn_code);
+  			setTitle(data.data.title);
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
       } catch (error) {
@@ -104,25 +100,6 @@ export default function () {
       }
     }
   }
-
-
-	useEffect(() => {
-			getTeacher()
-	},[departement_id])
-
-	async function getTeacher() {
-		try {
-			const { data } = await axios.get('/api/teacher')
-			const teachers = data.data.filter(item => item.departement_id == departement_id)
-			setTeacherOptions(teachers)
-		} catch (error) {
-			if (error.response) {
-				if (error.response.status == 404) return;
-				alert(error.response.data);
-			}
-			alert(error);
-		}	
-	}
 
 	useEffect(() => {
 		if(departementOptions.length == 0)
@@ -162,12 +139,12 @@ export default function () {
 
 	useEffect(() => {
 		if(statusOptions.length == 0)
-			getStudentStatus()
+			getTeacherStatus()
 	},[statusOptions])
 
-	async function getStudentStatus() {
+	async function getTeacherStatus() {
 		try {
-			const { data } = await axios.get('/api/student-status')
+			const { data } = await axios.get('/api/teacher-status')
 			setStatusOptions(data.data)
 		} catch (error) {
 			if (error.response) {
@@ -178,7 +155,7 @@ export default function () {
 		}	
 	}
 
-	async function submitStudent() {
+	async function submitTeacher() {
 		try {
 			const sendData = {
 				place_of_birth,
@@ -187,15 +164,13 @@ export default function () {
 				identity_id,
 				identity_type_id,
 				user_id,
-				student_number,
-				teacher_id,
-				entry_year,
-				entry_semester,
-				entry_status,
+				ein,
+				nidn_code,
+				title,
 				departement_id,
 				status,
 			}	
-			const { data } = await axios.post('/api/student', sendData)
+			const { data } = await axios.patch('/api/teacher', sendData)
 			alert("Student successfully created.")
 			router.back()
 		} catch (error) {
@@ -205,47 +180,26 @@ export default function () {
 			alert(error)
 		}	
 	}
-
   return (
-    <FormLayout title="Student Create | SIA UIII" titlePage="Student Create">
-      <Stack
-        mb={4}
-        sx={{
-          width: 640,
-        }}
-      >
+    <FormLayout title="Teacher Edit | SIA UIII" titlePage="Teacher Edit">
         <FormContainer
-          label="Student Number"
-          name="student_number"
-          value={student_number}
-          setValue={setStudentNumber}
+          label="Employer Identification Number"
+          name="ein"
+          value={ein}
+          setValue={setEIN}
         />
         <FormContainer
-          label="Entry Year"
-          name="entry_year"
-          value={entry_year}
-          setValue={setEntryYear}
+          label="Teacher Number"
+          name="nidn_code"
+          value={nidn_code}
+          setValue={setNIDNCode}
         />
-				<FormParent label="Entry Semester">
-					<Select
-						displayEmpty
-						value={entry_semester}
-						onChange={(e) => setEntrySemester(e.target.value)}
-						inputProps={{ "aria-label": "Without label" }}
-					>
-						{entrySemesterOptions.length > 0 && entrySemesterOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
-					</Select>
-				</FormParent>
-				<FormParent label="Entry Status">
-					<Select
-						displayEmpty
-						value={entry_status}
-						onChange={(e) => setEntryStatus(e.target.value)}
-						inputProps={{ "aria-label": "Without label" }}
-					>
-						{entryStatusOptions.length > 0 && entryStatusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
-					</Select>
-				</FormParent>
+        <FormContainer
+          label="Title"
+          name="title"
+          value={title}
+          setValue={setTitle}
+        />
 				<FormParent label="Departement">
 					<Select
 						displayEmpty
@@ -257,19 +211,6 @@ export default function () {
 							<em>None</em>
 						</MenuItem>
 						{departementOptions.length > 0 && departementOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
-					</Select>
-				</FormParent>
-				<FormParent label="Teacher Academic">
-					<Select
-						displayEmpty
-						value={teacher_id}
-						onChange={(e) => setTeacherID(e.target.value)}
-						inputProps={{ "aria-label": "Without label" }}
-					>
-						<MenuItem value={""}>
-							<em>None</em>
-						</MenuItem>
-						{teacherOptions.length > 0 && teacherOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
 				<FormParent label="Status">
@@ -358,12 +299,11 @@ export default function () {
               width: 150,
             }}
             startIcon={() => <></>}
-						onClick={submitStudent}
+						onClick={submitTeacher}
           >
             Submit
           </Button>
         </Stack>
-      </Stack>
     </FormLayout>
   );
 }
