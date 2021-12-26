@@ -73,7 +73,8 @@ export default function () {
 				<List 
 					title="Faculties"
 					name="Faculty"
-					addLink="/master/faculty/edit/"
+					getUrl="/api/faculty"
+					addLink="/master/faculty/create"
 					tableHead={[
 						{ id: 'name', label: 'Name', alignRight: false },
 						{ id: 'status', label: 'Status', alignRight: false },
@@ -86,7 +87,7 @@ export default function () {
 						}
 					]}
 					deleteOptions={{
-						link : '/master/faculty/',
+						link : '/api/faculty/',
 						note: 'Are you sure to delete this item?'
 					}}
 				/>

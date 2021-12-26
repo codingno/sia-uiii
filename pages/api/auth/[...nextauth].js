@@ -92,7 +92,6 @@ export default NextAuth({
 				const condition = {
 					username : credentials.username,
 				}
-        console.log(`🚀 ~ file: [...nextauth].js ~ line 95 ~ authorize ~ condition`, condition)
 				// const getUser = await User.findOne({ 
 				// 	// where : condition,
 				// 	include : [
@@ -117,15 +116,12 @@ export default NextAuth({
 					],
 					// raw: true,
 				})
-        console.log(`🚀 ~ file: [...nextauth].js ~ line 118 ~ authorize ~ user_secret`, user_secret)
 				// return null
 				// user = await db.sequelize.models.user.findAll()
 				const allowed = await bcrypt.compare(credentials.password, user_secret.pass)
-        console.log(`🚀 ~ file: [...nextauth].js ~ line 123 ~ authorize ~ allowed`, allowed)
 				// const allowed = await bcrypt.compare(credentials.password, getUser.user_secret.pass)
 				if(allowed) 
 					user = user_secret.user
-          console.log(`🚀 ~ file: [...nextauth].js ~ line 128 ~ authorize ~ user`, user)
 				// else
 				// 	return null
 				
@@ -136,12 +132,10 @@ export default NextAuth({
 				throw error	
 			}
 
-        console.log(`🚀 ~ file: [...nextauth].js ~ line 1222 ~ authorize ~ allowed`, user)
       // const user = { id: 1, name: "J Smith", email: "jsmith@example.com" }
 
       if (user) {
 				// delete user.user_secret
-				console.log(`🚀 ~ file: [...nextauth].js ~ line 124 ~ authorize ~ user`, user)
         // Any object returned will be saved in `user` property of the JWT
         return user
       } else {

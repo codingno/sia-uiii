@@ -12,6 +12,7 @@ import {
   Button,
   Checkbox,
 	Divider,
+	Grid,
   TableRow,
   TableBody,
   TableCell,
@@ -185,7 +186,10 @@ export default function List(props) {
   const isUserNotFound = filteredUsers.length === 0;
   return ( 
 			<>
-      <Container>
+			<Grid
+				xs={9}
+				p={1}
+			>
         <Card>
         <Stack direction="row" alignItems="center" justifyContent="space-between" p={5}>
           <Typography variant="h5" gutterBottom>
@@ -215,7 +219,9 @@ export default function List(props) {
 						<div style={{ margin: 'auto', display: 'flex', justifyContent: 'center'}}>
 							<CircularProgress /> 
 						</div> :
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer 
+						// sx={{ minWidth: 800 }}
+						>
               <Table>
                 <CategoryListHead
                   order={order}
@@ -319,7 +325,7 @@ export default function List(props) {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-      </Container>
+			</Grid>
 			</>
   );
 }

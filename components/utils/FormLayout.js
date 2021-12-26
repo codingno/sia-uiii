@@ -29,9 +29,13 @@ import FormContainer from "./FormContainer";
 import TopMenu from "./TopMenu";
 import Stack from "@mui/material/Stack";
 
+import { useSession, signOut } from "next-auth/react"
+
 
 export default function (props) {
 	const { children, title, titlePage,  } = props
+	const { data: session, status } = useSession()
+
   return (
     <>
       <Head>
@@ -48,11 +52,25 @@ export default function (props) {
 					bgcolor : '#C7C9C7'
 				}}
 			>
+				<Grid
+					container
+					spacing={1}
+					direction="row"
+					justifyContent="center"
+					alignItems="flex-start"
+					alignContent="center"
+					wrap="wrap"
+					
+				>
+					
 				<TopMenu />
-        <Grid container spacing={0}>
+        <Grid 
+				xs={9}
+				p={1}
+				>
           <Card
 					sx={{
-						width : '80%',
+						// width : '80%',
 						mx : 'auto',
 					}}
 					>
@@ -82,6 +100,7 @@ export default function (props) {
 						</Grid>
 					</Card>
         </Grid>
+				</Grid>
       </Container>
     </>
   );

@@ -1,13 +1,18 @@
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Button from "@mui/material/Button";
 
 import FormContainer from "../../../components/utils/FormContainer";
 import FormLayout from "../../../components/utils/FormLayout";
 import Stack from "@mui/material/Stack";
 
-export default function () {
+import { useRouter } from 'next/router'
 
+import axios from 'axios';
+
+export default function () {
+	const router = useRouter()
+
+  const [id, setID] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -22,6 +27,74 @@ export default function () {
   const [since, setSince] = useState("");
   const [site, setSite] = useState("");
   const [ptStartDate, setPtStartDate] = useState("");
+
+	useEffect(() => {
+		getCollegeData()
+	},[])
+
+	async function getCollegeData() {
+		try {
+			const { data } = await axios.get('/api/college?id=1')
+			const collegeData = data.data
+			setID(collegeData.id)
+			setName(collegeData.name)
+			setEmail(collegeData.email)
+			setCode(collegeData.code)
+			setPtCode(collegeData.pt_code)
+			setAddress1(collegeData.address_1)
+			setAddress2(collegeData.address_2)
+			setCity(collegeData.city)
+			setPostCode(collegeData.post_code)
+			setPhone(collegeData.phone)
+			setFax(collegeData.fax)
+			setDecisionLetter(collegeData.decision_letter)
+			setSince(collegeData.since)
+			setSite(collegeData.site)
+			setPtStartDate(collegeData.pt_start_date)
+		} catch (error) {
+			if(error.response) {
+				if(error.response.status = 404)
+					return
+				alert(error.response.data)
+			}
+			else	
+				alert(error)
+		}	
+	}
+
+	async function submitForm() {
+		try {
+			const prepareData = {
+				id,
+				name,
+				email,
+				code,
+				pt_code : ptCode,
+				address_1 : address1,
+				address_2 : address2,
+				city,
+				post_code : postCode,
+				phone,
+				fax,
+				decision_letter : decisionLetter,
+				since : new Date(since),
+				site,
+				pt_start_date : new Date(ptStartDate),
+			}	
+			const { data } = await axios.patch('/api/college', prepareData)
+			alert("Update data success.")
+			router.back()
+		} catch (error) {
+			if(error.response) {
+				if(error.response.data.data)
+					alert(error.response.data.data.message)
+				else
+					alert(error.response.data)
+			}
+			alert(error)
+		}
+	}
+
   return (
     <FormLayout title="College Identity | SIA UIII" titlePage="College Identity">
       <Stack
@@ -123,6 +196,7 @@ export default function () {
               width: 150,
             }}
             startIcon={() => <></>}
+						onClick={submitForm}
           >
             Submit
           </Button>

@@ -19,9 +19,8 @@ export default nextConnect()
       !body.post_code ||
       !body.phone ||
       !body.fax ||
-      !body.decission_letter ||
+      !body.decision_letter ||
       !body.since ||
-      !body.email ||
       !body.email ||
       !body.site ||
       !body.pt_start_date

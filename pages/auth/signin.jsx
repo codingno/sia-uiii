@@ -169,7 +169,10 @@ export default function SignIn({ csrfToken }) {
       {/* </AuthLayout> */}
 			<div className="container-login" >
 				<div className="login-white-uiii">
-					{/* <Image src={whiteUiii} alt="login-logo" /> */}
+					<Image src="/static/white-uiii.png" alt="login-logo" 
+							width={479}
+							height={132}
+					/>
 				</div>
 				<div className="login-line"></div>
 				<div className="login-form">

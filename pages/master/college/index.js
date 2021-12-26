@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import plusFill from '@iconify/icons-eva/plus-fill';
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
@@ -36,24 +36,59 @@ import CardMedia from '@mui/material/CardMedia'
 
 import { useRouter } from 'next/router'
 
+import axios from 'axios';
 
 export default function () {
 	const router = useRouter()
 
-	const [name, setName] = useState("Universitas Islam Internasioal Indonesia")
-	const [email, setEmail] = useState("info@uiii.ac.id")
-	const [code, setCode] = useState("uiiicode")
-	const [ptCode, setPtCode] = useState("uiiiptcode")
-	const [address1, setAddress1] = useState("Depok")
-	const [address2, setAddress2] = useState("Depok")
-	const [city, setCity] = useState("Depok")
-	const [postCode, setPostCode] = useState("12345")
-	const [phone, setPhone] = useState("12345678")
-	const [fax, setFax] = useState("12345678")
-	const [decisionLetter, setDecisionLetter] = useState("12345678")
-	const [since, setSince] = useState("2019")
-	const [site, setSite] = useState("uiii.ac.id")
-	const [ptStartDate, setPtStartDate] = useState("2020-02-02")
+	const [name, setName] = useState("")
+	const [email, setEmail] = useState("")
+	const [code, setCode] = useState("")
+	const [ptCode, setPtCode] = useState("")
+	const [address1, setAddress1] = useState("")
+	const [address2, setAddress2] = useState("")
+	const [city, setCity] = useState("")
+	const [postCode, setPostCode] = useState("")
+	const [phone, setPhone] = useState("")
+	const [fax, setFax] = useState("")
+	const [decisionLetter, setDecisionLetter] = useState("")
+	const [since, setSince] = useState("")
+	const [site, setSite] = useState("")
+	const [ptStartDate, setPtStartDate] = useState("")
+
+	useEffect(() => {
+		getCollegeData()
+	},[])
+
+	async function getCollegeData() {
+		try {
+			const { data } = await axios.get('/api/college?id=1')
+			const collegeData = data.data
+			setName(collegeData.name)
+			setEmail(collegeData.email)
+			setCode(collegeData.code)
+			setPtCode(collegeData.pt_code)
+			setAddress1(collegeData.address_1)
+			setAddress2(collegeData.address_2)
+			setCity(collegeData.city)
+			setPostCode(collegeData.post_code)
+			setPhone(collegeData.phone)
+			setFax(collegeData.fax)
+			setDecisionLetter(collegeData.decision_letter)
+			setSince(collegeData.since)
+			setSite(collegeData.site)
+			setPtStartDate(collegeData.pt_start_date)
+		} catch (error) {
+			if(error.response) {
+				if(error.response.status = 404)
+					return
+				alert(error.response.data)
+			}
+			else	
+				alert(error)
+		}	
+	}
+
   return (
     <>
       <Head>
@@ -71,10 +106,14 @@ export default function () {
 				}}
 			>
 				<TopMenu />
-        <Grid container spacing={0}>
+        <Grid 
+				xs={12}
+				// container 
+				// spacing={0}
+				>
           <Card
 					sx={{
-						width : '100%',
+						// width : '100%',
 						mx : 'auto',
 					}}
 					>
