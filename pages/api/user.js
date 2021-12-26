@@ -23,6 +23,7 @@ export default async (req, res) => {
       // });
     },
 		GET: (response) => {
+      console.log({db});
 			response.json({message : "ok"})
 		},
 		PATCH: (response) => {

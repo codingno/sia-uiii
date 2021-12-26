@@ -3,6 +3,6 @@ module.exports = (res, method, handlers) => {
     res.setHeader("Allow", Object.keys(handlers));
     res.status(405).end(`Method ${method} Not Allowed`);
   } else {
-    handlers[method](res);
+    return handlers[method](res);
   }
 };

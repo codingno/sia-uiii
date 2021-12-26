@@ -20,26 +20,27 @@ const modelFolder = process.env.ROOT + '/models'
 console.log(`🚀 ~ file: index.js ~ line 20 ~ modelFolder`, modelFolder)
 console.log(`🚀 ~ file: index.js ~ line 23 ~ __dirname`, __dirname)
 
-fs
-  // .readdirSync(__dirname)
-  .readdirSync(modelFolder)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    // const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-		const fileName = file.split('.')[0]
-    console.log(`🚀 ~ file: index.js ~ line 32 ~ fileName`, fileName)
-    const model = require(path.resolve('./models', fileName))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-		console.log('create model ' + model.name);
-  });
+// fs
+//   .readdirSync(__dirname)
+//   // .readdirSync(modelFolder)
+//   .filter(file => {
+//     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+//   })
+//   .forEach(file => {
+//     console.log({file});
+//     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+// 		const fileName = file.split('.')[0]
+//     console.log(`🚀 ~ file: index.js ~ line 32 ~ fileName`, fileName)
+//     // const model = require(path.resolve('./models', fileName))(sequelize, Sequelize.DataTypes);
+//     db[model.name] = model;
+// 		console.log('create model ' + model.name);
+//   });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+// Object.keys(db).forEach(modelName => {
+//   if (db[modelName].associate) {
+//     db[modelName].associate(db);
+//   }
+// });
 
 // sequelize.sync({ force: true })
 
