@@ -74,7 +74,7 @@ export default nextConnect()
     if (!body.id)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
-      const data = await College.delete({
+      const data = await College.destroy({
         where: { id: body.id },
       });
       return res.status(200).json({ message: "success delete data" });

@@ -1,10 +1,12 @@
 // This is an example of how to read a JSON Web Token from an API route
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
+import UserServices from "../../services/UserServices";
 
 const db = require("../../models");
 const Teacher = require("../../models/teacher")(db.sequelize, DataTypes);
 const User = require("../../models/user")(db.sequelize, DataTypes);
+const UserInfo = require("../../models/userinfo")(db.sequelize, DataTypes);
 const Departement = require("../../models/departement")(
   db.sequelize,
   DataTypes
@@ -16,19 +18,29 @@ Teacher.belongsTo(Departement, {
 Departement.hasMany(Teacher, { foreignKey: "departement_id" });
 Teacher.belongsTo(User, { foreignKey: "user_id", as: "user" });
 User.hasMany(Teacher, { foreignKey: "user_id" });
+Teacher.belongsTo(UserInfo, { foreignKey: "user_id", as: "user_info", targetKey: 'user_id' });
+UserInfo.hasMany(Teacher, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
   .post(async (req, res) => {
     const body = req.body;
-    if (!body.user_id)
-      return res.status(400).json({ message: "Incomplete parameters" });
-    try {
-      const data = await Teacher.create(body);
-      return res.status(200).json({ data });
-    } catch (error) {
-      return res.status(500).json({ error });
-    }
+    UserServices.create(body, async function (err, user_id) {
+      const data_teacher = {
+        user_id: user_id,
+        ein: body.ein,
+        nidn_code: body.nidn_code,
+        title: body.title,
+        departement_id: body.departement_id,
+        status: body.status
+      }
+      try {
+        const data = await Teacher.create(body);
+        return res.status(200).json({ data });
+      } catch (error) {
+        return res.status(500).json({ error });
+      }  
+    })
   })
   .get(async (req, res) => {
     if (req.query.id) {
@@ -38,6 +50,7 @@ export default nextConnect()
           include: [
             { model: Departement, as: "departement" },
             { model: User, as: "user" },
+            { model: UserInfo, as: "user_info" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
@@ -51,6 +64,7 @@ export default nextConnect()
           include: [
             { model: Departement, as: "departement" },
             { model: User, as: "user" },
+            { model: UserInfo, as: "user_info" },
           ],
         });
         if (data.length == 0)
@@ -80,7 +94,7 @@ export default nextConnect()
     if (!body.id)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
-      const data = await Teacher.delete({
+      const data = await Teacher.destroy({
         where: { id: body.id },
       });
       return res.status(200).json({ message: "success delete data" });
