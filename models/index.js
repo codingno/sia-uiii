@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
-console.log(`🚀 ~ file: index.js ~ line 7 ~ __filename`, __filename)
+// console.log(`🚀 ~ file: index.js ~ line 7 ~ __filename`, __filename)
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
@@ -17,8 +17,8 @@ if (config.use_env_variable) {
 }
 
 const modelFolder = process.env.ROOT + '/models' 
-console.log(`🚀 ~ file: index.js ~ line 20 ~ modelFolder`, modelFolder)
-console.log(`🚀 ~ file: index.js ~ line 23 ~ __dirname`, __dirname)
+// console.log(`🚀 ~ file: index.js ~ line 20 ~ modelFolder`, modelFolder)
+// console.log(`🚀 ~ file: index.js ~ line 23 ~ __dirname`, __dirname)
 
 // fs
 //   .readdirSync(__dirname)
