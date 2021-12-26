@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `users` (
 	`id` CHAR(36) BINARY , 
-	`name` VARCHAR(255), 
-	`email` VARCHAR(255) UNIQUE, 
+	`name` VARCHAR(100), 
+	`email` VARCHAR(100) UNIQUE, 
 	`email_verified` DATETIME, 
 	`image` VARCHAR(255), 
 	PRIMARY KEY (`id`)
@@ -16,10 +16,10 @@ CREATE TABLE IF NOT EXISTS `verification_tokens` (`token` VARCHAR(255) , `identi
 CREATE TABLE `user_info` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_id` CHAR(36) BINARY , 
-	`first_name` varchar(255) NOT NULL,
-	`last_name` varchar(255) NOT NULL,
-	`middle_name` varchar(255) NOT NULL,
-	`place_of_birth` varchar(255) NOT NULL,
+	`first_name` varchar(60) NOT NULL,
+	`last_name` varchar(40) NOT NULL,
+	`middle_name` varchar(40),
+	`place_of_birth` varchar(80) NOT NULL,
 	`date_of_birth` DATE NOT NULL,
 	`gender` enum('MAN','WOMAN') NOT NULL DEFAULT 'MAN',
 	`identity_id` int NOT NULL,

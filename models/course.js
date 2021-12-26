@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     curriculum_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     code: DataTypes.STRING,
-    label: DataTypes.STRING,
+    // label: DataTypes.STRING,
     credits: DataTypes.INTEGER,
     theory_credits: DataTypes.INTEGER,
     practice_credits: DataTypes.INTEGER,
