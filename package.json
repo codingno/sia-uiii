@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3232",
     "up": "db-migrate up",
     "migrate": "db-migrate create",
     "models": "sequelize-cli model:generate --name "
