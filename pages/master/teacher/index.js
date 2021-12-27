@@ -13,6 +13,7 @@ export default function () {
         name="Teacher"
 				getUrl="/api/teacher"
         addLink="/master/teacher/create"
+				isUserList={true}
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
           { id: "departement_id", label: "Departement", alignRight: false },

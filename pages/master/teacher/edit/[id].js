@@ -171,7 +171,7 @@ export default function () {
 				status,
 			}	
 			const { data } = await axios.patch('/api/teacher', sendData)
-			alert("Student successfully created.")
+			alert("Teacher successfully updated.")
 			router.back()
 		} catch (error) {
 			if(error.response) {

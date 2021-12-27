@@ -138,7 +138,7 @@ export default function () {
 				status,
 			}	
 			const { data } = await axios.post('/api/teacher', sendData)
-			alert("Student successfully created.")
+			alert("Teacher successfully created.")
 			router.back()
 		} catch (error) {
 			if(error.response) {

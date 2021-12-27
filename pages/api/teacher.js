@@ -25,23 +25,22 @@ UserInfo.hasMany(Teacher, { foreignKey: "user_id", sourceKey:'user_id' });
 export default nextConnect()
   .post(async (req, res) => {
     const body = req.body;
-    UserServices.create(body, async function (err, user_id) {
-      const data_teacher = {
-        user_id: user_id,
-        ein: body.ein,
-        nidn_code: body.nidn_code,
-        title: body.title,
-        departement_id: body.departement_id,
-        status: body.status
-      }
       try {
+				const user_id = await UserServices.create(body)
+				const data_teacher = {
+					user_id: user_id,
+					ein: body.ein,
+					nidn_code: body.nidn_code,
+					title: body.title,
+					departement_id: body.departement_id,
+					status: body.status
+				}
         const data = await Teacher.create(data_teacher);
         return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });
       }  
     })
-  })
   .get(async (req, res) => {
     if (req.query.id) {
       try {
