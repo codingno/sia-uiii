@@ -5,19 +5,19 @@ const User = require("../models/user")(db.sequelize, DataTypes);
 const UserInfo = require("../models/userinfo")(db.sequelize, DataTypes);
 const UserSecret = require("../models/usersecret")(db.sequelize, DataTypes);
 
-export default UserService = {
+export default {
   create: async function (data, callback) {
     const data_user = {
       id: uuidv4(),
       name:
-        data.first_name + data.middle_name
+        data.first_name + (data.middle_name
           ? " " + data.middle_name
-          : "" + data.last_name
+          : "") + (data.last_name
           ? " " + data.last_name
-          : "",
+          : ""),
       email: data.email || null,
-      email_verified: new Date(data.email_verified) || null,
-      image: image || null,
+      email_verified: new Date(),
+      image: data.image || null,
     };
     try {
       const user = await User.create(data_user);
@@ -28,7 +28,7 @@ export default UserService = {
         last_name: data.last_name | null,
         place_of_birth: data.place_of_birth,
         date_of_birth: new Date(data.date_of_birth),
-        gender: data.gender || null,
+        gender: data.gender || 1,
         identity_id: data.identity_id || null,
         identity_type_id: data.identity_type_id || null,
       };
