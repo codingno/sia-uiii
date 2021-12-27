@@ -8,7 +8,6 @@ export default function () {
 
   return (
     <BasicLayout title="Teacher Status">
-      <TopMenu />
       <List
         title="Teacher Status"
         name="Teacher Status"

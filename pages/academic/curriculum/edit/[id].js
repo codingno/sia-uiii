@@ -69,7 +69,7 @@ export default function () {
 				departement_id,
 			}	
 			const { data } = await axios.patch('/api/curriculum', sendData)
-			alert("Curriculum successfully created.")
+			alert("Curriculum successfully updated.")
 			router.back()
 		} catch (error) {
 			if(error.response) {
@@ -80,7 +80,7 @@ export default function () {
 	}
 
   return (
-    <FormLayout title="Curriculum Create | SIA UIII" titlePage="Curriculum Create">
+    <FormLayout title="Curriculum Edit | SIA UIII" titlePage="Curriculum Edit">
       <Stack
         mb={4}
         sx={{
