@@ -35,7 +35,7 @@ export default nextConnect()
         status: body.status
       }
       try {
-        const data = await Teacher.create(body);
+        const data = await Teacher.create(data_teacher);
         return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });
@@ -80,14 +80,20 @@ export default nextConnect()
     const id = body.id;
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
     delete body.id;
-    try {
-      const data = await Teacher.update(body, {
-        where: { id: id },
-      });
-      return res.status(200).json({ message: "success update data" });
-    } catch (error) {
-      return res.status(500).json({ error });
-    }
+    UserServices.update(body, async function (err, data) {
+      if(err) 
+        res.status(500).json({err})
+      else {
+        try {
+          const data = await Teacher.update(body, {
+            where: { id: id },
+          });
+          return res.status(200).json({ message: "success update data" });
+        } catch (error) {
+          return res.status(500).json({ error });
+        }
+      }  
+    })
   })
   .delete(async (req, res) => {
     const body = req.body;
