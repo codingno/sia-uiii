@@ -77,22 +77,25 @@ export default function () {
     if (id) {
       try {
         const { data } = await axios.get(`/api/student?id=${id}`);
-        setName(data.data.name);
-  			setFirstName(data.data.first_name);
-  			setLastName(data.data.last_name);
-  			setMiddleName(data.data.middle_name);
-  			setPlaceOfBirth(data.data.place_of_birth);
-  			setDateOfBirth(data.data.date_of_birth);
-  			setGender(data.data.gender);
-  			setIdentityID(data.data.identity_id);
-  			setIdentityType(data.data.identity_type_id);
+        console.log(`🚀 ~ file: [id].js ~ line 80 ~ getStudentData ~ data`, data)
+  			setFirstName(data.data.user_info.first_name);
+  			setLastName(data.data.user_info.last_name);
+  			setMiddleName(data.data.user_info.middle_name);
+  			setPlaceOfBirth(data.data.user_info.place_of_birth);
+  			setDateOfBirth(data.data.user_info.date_of_birth);
+				const genderGet = genderOptions.filter(item => item.name == data.data.user_info.gender)[0].id
+  			setGender(genderGet);
+  			setIdentityID(data.data.user_info.identity_id);
+  			setIdentityType(data.data.user_info.identity_type_id);
 
   			setUserID(data.data.user_id);
   			setStudentNumber(data.data.student_number);
-  			setTeacherID(data.data.teacher_id);
   			setEntryYear(data.data.entry_year);
-  			setEntrySemester(data.data.entry_semester);
-  			setEntryStatus(data.data.entry_status);
+				const entrySemesterGet = entrySemesterOptions.filter(item => item.name == data.data.entry_semester)[0].id
+  			setEntrySemester(entrySemesterGet);
+				const entryStatusGet = entryStatusOptions.filter(item => item.name == data.data.entry_status)[0].id
+  			setEntryStatus(entryStatusGet);
+  			setTeacherID(data.data.teacher_id);
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
       } catch (error) {
@@ -107,13 +110,16 @@ export default function () {
 
 
 	useEffect(() => {
+		if(teacherOptions.length == 0)
 			getTeacher()
-	},[departement_id])
+	},[teacherOptions,departement_id])
 
 	async function getTeacher() {
+		if(departement_id != "")
 		try {
 			const { data } = await axios.get('/api/teacher')
 			const teachers = data.data.filter(item => item.departement_id == departement_id)
+			teachers.map(item => { item.name = item.user.name})
 			setTeacherOptions(teachers)
 		} catch (error) {
 			if (error.response) {

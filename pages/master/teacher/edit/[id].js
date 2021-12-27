@@ -75,15 +75,15 @@ export default function () {
     if (id) {
       try {
         const { data } = await axios.get(`/api/teacher?id=${id}`);
-        setName(data.data.name);
-  			setFirstName(data.data.first_name);
-  			setLastName(data.data.last_name);
-  			setMiddleName(data.data.middle_name);
-  			setPlaceOfBirth(data.data.place_of_birth);
-  			setDateOfBirth(data.data.date_of_birth);
-  			setGender(data.data.gender);
-  			setIdentityID(data.data.identity_id);
-  			setIdentityType(data.data.identity_type_id);
+  			setFirstName(data.data.user_info.first_name);
+  			setLastName(data.data.user_info.last_name);
+  			setMiddleName(data.data.user_info.middle_name);
+  			setPlaceOfBirth(data.data.user_info.place_of_birth);
+  			setDateOfBirth(data.data.user_info.date_of_birth);
+				const genderGet = genderOptions.filter(item => item.name == data.data.user_info.gender)[0].id
+  			setGender(genderGet);
+  			setIdentityID(data.data.user_info.identity_id);
+  			setIdentityType(data.data.user_info.identity_type_id);
 
   			setUserID(data.data.user_id);
   			setEIN(data.data.ein);
