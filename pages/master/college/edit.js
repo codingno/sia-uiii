@@ -6,11 +6,13 @@ import FormLayout from "../../../components/utils/FormLayout";
 import Stack from "@mui/material/Stack";
 
 import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
 
 import axios from 'axios';
 
 export default function () {
 	const router = useRouter()
+	const { data: session, status } = useSession()
 
   const [id, setID] = useState("");
   const [name, setName] = useState("");
@@ -95,8 +97,11 @@ export default function () {
 		}
 	}
 
+	if(status === 'loading' || status === 'unauthenticated')
+		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
+
   return (
-    <FormLayout title="College Identity | SIA UIII" titlePage="College Identity">
+    <FormLayout title="College Identity | AIS UIII" titlePage="College Identity">
       <Stack
         mb={4}
         sx={{

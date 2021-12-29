@@ -21,7 +21,7 @@ import {
   Checkbox,
   TextField,
   IconButton,
-  InputAdornment,
+  InputAdornment, Grid,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
@@ -80,9 +80,6 @@ export default function SignIn({ csrfToken }) {
 	const { data: session, status } = useSession()
 	 const router = useRouter()
 
-	if(status === 'authenticated') {
-		router.push('/')
-	}
 	// const dispatch = useDispatch();
 	// const { user } = useSelector(state => state)
 	// const navigate = useNavigate();
@@ -140,6 +137,13 @@ export default function SignIn({ csrfToken }) {
 			setDisableReset(false)
 		}
 	}
+
+	if(status === 'authenticated') {
+		router.push('/')
+	}
+	if(status === 'loading' || status === 'authenticated')
+		return ""
+
   return (
     // <form method="post" action="/api/auth/callback/credentials">
     //   <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
@@ -167,7 +171,47 @@ export default function SignIn({ csrfToken }) {
           Get started
         </Link> */}
       {/* </AuthLayout> */}
-			<div className="container-login" >
+			<div className="container-login">
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="center"
+				alignItems="center"
+				alignContent="center"
+				wrap="wrap"
+				// sx={{
+				// 	width : '100vw',
+				// 	height : '100vh',
+				// }}
+				
+			>
+				
+				<Grid 
+					xs={12}
+					container
+					spacing={1}
+					direction="row"
+					justifyContent="center"
+					alignItems="center"
+					alignContent="center"
+					wrap="wrap"
+				>
+					<Typography variant="h5" color="primary.dark">
+						Academic Information System
+					</Typography>
+				</Grid>
+				<Grid 
+					xs={12}
+					container
+					spacing={1}
+					direction="row"
+					justifyContent="center"
+					alignItems="center"
+					alignContent="center"
+					wrap="wrap"
+				>
+			{/* <div className="container-login" > */}
 				<div className="login-white-uiii">
 					<Image src="/static/white-uiii.png" alt="login-logo" 
 							width={479}
@@ -197,6 +241,9 @@ export default function SignIn({ csrfToken }) {
 						</label>
 					</form>
 				</div>
+			{/* </div> */}
+				</Grid>
+			</Grid>
 			</div>
 			{/* { popUpForgotPassword && <div className="login-form forgot-password">
 				<form>

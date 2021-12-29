@@ -14,8 +14,8 @@ import Typography from "@mui/material/Typography";
 import UserSide from "./UserSide";
 
 const topMenuList = [
-  {
-    name: "Academics",
+	{
+    name: "Administrations",
     child: [
       {
         name: "Profile",
@@ -27,6 +27,11 @@ const topMenuList = [
         link: "academic/card",
 				disable : true,
       },
+		],
+	},
+  {
+    name: "Academics",
+    child: [
       {
         name: "Curriculums",
         link: "academic/curriculum",
@@ -67,6 +72,10 @@ const topMenuList = [
       },
     ],
   },
+  {
+    name: "Portfolio Academics",
+		link: "portfolio",
+	},
   {
     name: "Admin",
     child: [
@@ -130,6 +139,7 @@ function ChildMenu({ child }) {
 }
 
 function ItemMenu({ menu }) {
+	const router = useRouter()
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   return (
@@ -137,7 +147,12 @@ function ItemMenu({ menu }) {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+					if(menu.child)
+						setOpen(true)
+					else
+           	router.push("/" + menu.link);
+				}}
         ref={anchorRef}
       >
         {menu.name}

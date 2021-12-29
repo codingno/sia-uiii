@@ -9,12 +9,15 @@ import Stack from "@mui/material/Stack";
 import axios from 'axios';
 
 import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
 
 export default function (props) {
 	const { title, titlePage, submitUrl, method } = props
 
 	const router = useRouter()
   const { id } = router.query
+
+	const { data: session, status } = useSession()
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -58,6 +61,13 @@ export default function (props) {
 		alert(`Data ${name} already ${method == 'edit' ? 'updated' : 'created'}`)
 		router.back()
 	}
+
+	useEffect(() => {
+		if(!session && status == `unauthenticated`)
+			router.push('/auth/signin')
+	},[session, status])	
+	if(status === 'loading' || status === 'unauthenticated')
+		return ""
 
   return (
     <FormLayout title={title} titlePage={titlePage}>

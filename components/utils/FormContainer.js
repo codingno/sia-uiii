@@ -9,7 +9,7 @@ export default function FormContainer(props) {
       direction="row"
       alignItems="center"
       ml={5}
-      mt={2}
+      mt={1}
       sx={{ width: "80%", display: "flex", justifyContent: "flex-start" }}
     >
       <span style={{ width: "35%" }}>{props.label}</span>

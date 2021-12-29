@@ -10,9 +10,11 @@ import FormParent from "../../../components/utils/FormParent";
 
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react"
 
 export default function () {
 	const router = useRouter()
+	const { data: session, status : statusSession } = useSession()
 
 	const entryStatusOptions = [
 		{
@@ -148,8 +150,15 @@ export default function () {
 		}	
 	}
 
+	useEffect(() => {
+		if(!session && statusSession == `unauthenticated`)
+			router.push('/auth/signin')
+	},[session, statusSession])	
+	if(statusSession === 'loading' || statusSession === 'unauthenticated')
+		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
+
   return (
-    <FormLayout title="Teacher Create | SIA UIII" titlePage="Teacher Create">
+    <FormLayout title="Teacher Create | AIS UIII" titlePage="Teacher Create">
         <FormContainer
           label="Employer Identification Number"
           name="ein"

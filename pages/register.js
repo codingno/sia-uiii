@@ -64,7 +64,7 @@ const Register = () => {
     <>
       <Head>
         <title>
-          Register | Material Kit
+          Register | AIS UIII
         </title>
       </Head>
       <Box

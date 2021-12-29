@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
@@ -43,11 +43,19 @@ export default function () {
 	const router = useRouter()
 	const { data: session, status } = useSession()
 
+	useEffect(() => {
+		if(!session && status == `unauthenticated`)
+			router.push('/auth/signin')
+	},[session, status])	
+
+	if(!session)
+		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
+
   return (
     <>
       <Head>
         <title>
-					Home | SIA UIII
+					Home | AIS UIII
         </title>
         <meta
           name="viewport"

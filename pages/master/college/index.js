@@ -35,11 +35,13 @@ import { Icon } from '@iconify/react';
 import CardMedia from '@mui/material/CardMedia'
 
 import { useRouter } from 'next/router'
+import { useSession } from "next-auth/react"
 
 import axios from 'axios';
 
 export default function () {
 	const router = useRouter()
+	const { data: session, status } = useSession()
 
 	const [name, setName] = useState("")
 	const [email, setEmail] = useState("")
@@ -88,6 +90,13 @@ export default function () {
 				alert(error)
 		}	
 	}
+
+	useEffect(() => {
+		if(!session && status == `unauthenticated`)
+			router.push('/auth/signin')
+	},[session, status])	
+	if(status === 'loading' || status === 'unauthenticated')
+		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
     <>
