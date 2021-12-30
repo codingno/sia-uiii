@@ -185,7 +185,8 @@ export default function (props) {
 		<>
     <Grid
       xs={12}
-      p={1}
+      py={3}
+			px={1}
       spacing={0}
       direction="row"
       justifyContent="space-between"

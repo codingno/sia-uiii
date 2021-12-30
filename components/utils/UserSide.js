@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import Image from "next/image";
 import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
+import Typography from '@mui/material/Typography'
 
 export default function () {
 	const router = useRouter()
@@ -23,6 +24,7 @@ export default function () {
           <Card
             sx={{
               height: 400,
+							bgcolor : 'primary.main',
             }}
           >
             <CardHeader
@@ -39,8 +41,20 @@ export default function () {
                 </Avatar>
               }
               action={<IconButton aria-label=""></IconButton>}
-              title={session.user.name}
-              subheader={session.user.email}
+              title={
+								<Typography variant="h6" color="background.default">
+								{session.user.name}
+								</Typography>
+							}
+							// title={session.user.name}
+              subheader={
+								<Typography variant="body1" color="primary.dark">
+									{session.user.email}
+								</Typography>
+							}
+							sx={{
+								pb : 5,
+							}}
             />
 						<Divider />
           </Card>

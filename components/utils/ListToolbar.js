@@ -80,16 +80,17 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
           </IconButton>
         </Tooltip>
       ) : (
-				<div>
-          <IconButton>
-						<RefreshIcon onClick={refresh} sx={{ marginLeft : 0}} />
-          </IconButton>
-        {/* <Tooltip title="Filter list">
-          <IconButton>
-            <Icon icon={roundFilterList} />
-          </IconButton>
-        </Tooltip> */}
-				</div>
+				// <div>
+        //   <IconButton>
+				// 		<RefreshIcon onClick={refresh} sx={{ marginLeft : 0}} />
+        //   </IconButton>
+        // <Tooltip title="Filter list">
+        //   <IconButton>
+        //     <Icon icon={roundFilterList} />
+        //   </IconButton>
+        // </Tooltip>
+				// </div>
+				<></>
       )}
     </RootStyle>
   );

@@ -166,10 +166,16 @@ export const theme = createTheme({
       dark: '#E3A130',
       contrastText: '#FFFFFF'
     },
+    // secondary: {
+    //   main: '#10B981',
+    //   light: '#3FC79A',
+    //   dark: '#0B815A',
+    //   contrastText: '#FFFFFF'
+    // },
     secondary: {
-      main: '#10B981',
+      main: '#00778B',
       light: '#3FC79A',
-      dark: '#0B815A',
+      dark: '#31261D',
       contrastText: '#FFFFFF'
     },
     success: {
