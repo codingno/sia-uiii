@@ -1,6 +1,7 @@
 // This is an example of how to read a JSON Web Token from an API route
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
+import { isLogin, isPublic } from "./config/police";
 
 const db = require("../../models");
 const Course = require("../../models/course")(db.sequelize, DataTypes);
@@ -37,6 +38,7 @@ CourseGorup.hasMany(Course, { foreignKey: "course_group_id" });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
+  .use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
     if (!body.name)

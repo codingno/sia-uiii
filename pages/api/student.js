@@ -26,6 +26,7 @@ UserInfo.hasMany(Student, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
+  .use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
         try {

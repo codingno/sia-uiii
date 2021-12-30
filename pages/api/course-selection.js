@@ -1,6 +1,7 @@
 // This is an example of how to read a JSON Web Token from an API route
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
+import { isLogin, isPublic } from "./config/police";
 
 const db = require("../../models");
 const CourseSelection = require("../../models/course_selection")(
@@ -58,6 +59,7 @@ CourseSelection.belongsTo(Teacher, {
 Teacher.hasMany(CourseSelection, { foreignKey: "teacher_id" });
 
 export default nextConnect()
+  .use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
     if (!body.departement_id || !body.student_id || !body.course_id || !body.class_type_id || !body.teacher_id)
@@ -71,9 +73,12 @@ export default nextConnect()
   })
   .get(async (req, res) => {
     if (req.query.id) {
+      const condition = {id: req.query.id}
+      if(req.user && req.user.departement_id)
+        condition.departement_id = req.user.departement_id
       try {
         const data = await CourseSelection.findOne({
-          where: { id: req.query.id },
+          where: condition,
           include: [
               { model: Departement, as: "departement" },
               { model: Student, as: "student" },
@@ -88,8 +93,11 @@ export default nextConnect()
         return res.status(500).json({ error });
       }
     } else {
+      if(req.user && req.user.departement_id)
+        condition.departement_id = req.user.departement_id
       try {
-        const data = await CourseSelection.findAll({
+        const data = await CourseSelection.findAll(
+          {where: condition},{
           include: [
               { model: Departement, as: "departement" },
               { model: Student, as: "student" },
