@@ -280,7 +280,7 @@ export default function List(props) {
                                 <Stack
                                   direction="row"
                                   alignItems="left"
-                                  spacing={2}
+                                  spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
                                     {row[item]}

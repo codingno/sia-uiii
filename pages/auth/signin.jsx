@@ -1,6 +1,7 @@
 import { getCsrfToken, useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 // material
+import { signIn } from "next-auth/react"
 import { styled } from '@mui/material/styles';
 import { Card, Stack, Link, Container, Typography, CircularProgress } from '@mui/material';
 // layouts
@@ -91,7 +92,7 @@ export default function SignIn({ csrfToken }) {
 	const [disableReset, setDisableReset] = useState(false)
 	const [userInfo, setuserInfo] = useState({})
 	const forgotPassword = (bool) => setPopUpForgotPassword(bool)
-	const signIn = async (e) => {
+	const signInOld = async (e) => {
 		e.preventDefault()
 		// const data = JSON.stringify({email, password})
 		try {
@@ -136,6 +137,19 @@ export default function SignIn({ csrfToken }) {
 			setErrorReset(error.response.data.err)
 			setDisableReset(false)
 		}
+	}
+
+	async function onSignIn(e) {
+		e.preventDefault()
+		try {
+			const response = await signIn('credentials', { username : email, password})	
+      console.log(`🚀 ~ file: signin.jsx ~ line 146 ~ onSignIn ~ response`, response)
+		} catch (error) {
+			if(error.response) {
+				alert(error.response.data)
+			}	else 
+				alert(error)
+		}	
 	}
 
 	if(status === 'authenticated') {
@@ -220,7 +234,8 @@ export default function SignIn({ csrfToken }) {
 				</div>
 				<div className="login-line"></div>
 				<div className="login-form">
-    		<form method="post" action="/api/auth/callback/credentials" >
+    		{/* <form method="post" action="/api/auth/callback/credentials" > */}
+    		<form >
 					<input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
 						<label htmlFor="username">
@@ -236,7 +251,7 @@ export default function SignIn({ csrfToken }) {
 						</label>
 						<label htmlFor="forgotPassword" className="login-options">
 							<span onClick={() => forgotPassword(true)}>Forgot your Password?</span>
-							<button type="submit" className="login-submit" 
+							<button type="submit" className="login-submit" onClick={e => onSignIn(e)}
 							>Sign In</button>
 						</label>
 					</form>
