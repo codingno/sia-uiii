@@ -19,12 +19,32 @@ const topMenuList = [
     child: [
       {
         name: "Profile",
-        link: "academic/profile",
+        link: "administration/profile",
 				disable : true,
       },
       {
         name: "Card",
-        link: "academic/card",
+        link: "administration/card",
+				disable : true,
+      },
+      {
+        name: "Courses Selection",
+        link: "administration/course-selection",
+				disable : true,
+      },
+      {
+        name: "Grade",
+        link: "administration/grade",
+				disable : true,
+      },
+      {
+        name: "Payment",
+        link: "administration/payment",
+				disable : true,
+      },
+      {
+        name: "VISA",
+        link: "administration/visa",
 				disable : true,
       },
 		],
@@ -39,11 +59,6 @@ const topMenuList = [
       {
         name: "Courses",
         link: "academic/course",
-      },
-      {
-        name: "Courses Selection",
-        link: "academic/course-selection",
-				disable : true,
       },
     ],
   },

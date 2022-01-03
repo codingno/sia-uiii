@@ -58,7 +58,7 @@ export default function MoreMenu(props) {
         anchorEl={ref.current}
         onClose={() => setIsOpen(false)}
         PaperProps={{
-          sx: { width: 300, maxWidth: '100%' }
+          sx: { width: 150, maxWidth: '100%' }
         }}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}

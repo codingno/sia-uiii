@@ -9,6 +9,7 @@ export default function () {
   return (
     <BasicLayout title="Student Status">
       <List
+        title="Student Status"
         name="Student Status"
         getUrl="/api/student-status"
         addLink="/master-admin/student-status/create"

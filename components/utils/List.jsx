@@ -228,7 +228,7 @@ export default function List(props) {
               <TableContainer
               // sx={{ minWidth: 800 }}
               >
-                <Table>
+                <Table size="small">
                   <CategoryListHead
                     order={order}
                     orderBy={orderBy}
