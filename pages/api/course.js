@@ -51,10 +51,14 @@ export default nextConnect()
     }
   })
   .get(async (req, res) => {
+    let condition = {}
+    if(!req.user.isAdmin && req.user.departement_id)
+      condition.departement_id = req.user.departement_id
     if (req.query.id) {
+      condition.id = req.query.id
       try {
         const data = await Course.findOne({
-          where: { id: req.query.id },
+          where: condition,
           include: [
             { model: Curriculum, as: "curriculum" },
             { model: Departement, as: "departement" },
@@ -70,6 +74,7 @@ export default nextConnect()
     } else {
       try {
         const data = await Course.findAll({
+          where: condition,
           include: [
             { model: Curriculum, as: "curriculum" },
             { model: Departement, as: "departement" },

@@ -1,12 +1,15 @@
+import { useSession, getSession } from "next-auth/react"
 module.exports = {
-	isLogin : (req, res, next) => {
+	isLogin : async (req, res, next) => {
+		const session  = await getSession({req});
+		req.user = session.user
 		if(req.user)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
 	isAdmin : (req, res, next) => {
-		if(req.user && req.user.role_id == 1)
+		if(req.user && req.user.isAdmin)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
@@ -24,7 +27,7 @@ module.exports = {
 			res.status(403).send("You don't have permission to access this features")
 	},
 	isTeacher : (req, res, next) => {
-		if(req.user && req.user.role_id <= 4)
+		if(req.user && req.user.isTeacher)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
@@ -36,7 +39,7 @@ module.exports = {
 			res.status(403).send("You don't have permission to access this features")
 	},
 	isStudent : (req, res, next) => {
-		if(req.user && req.user.role_id <= 6)
+		if(req.user && req.user.isStudent)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")

@@ -1,6 +1,7 @@
 // This is an example of how to read a JSON Web Token from an API route
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
+import { isLogin, isStudent } from "./config/police";
 
 const db = require("../../models");
 const Curriculum = require("../../models/curriculum")(db.sequelize, DataTypes);
@@ -28,11 +29,15 @@ export default nextConnect()
       return res.status(500).json({ error });
     }
   })
-  .get(async (req, res) => {
+  .get( async (req, res) => {
+    let condition = {}
+    if(!req.user.isAdmin && req.user.departement_id)
+      condition.departement_id = req.user.departement_id
     if (req.query.id) {
+      condition.id = req.query.id
       try {
         const data = await Curriculum.findOne({
-          where: { id: req.query.id },
+          where: condition,
           include: [
             { model: Departement, as: "departement" },
           ],
@@ -45,6 +50,7 @@ export default nextConnect()
     } else {
       try {
         const data = await Curriculum.findAll({
+          where: condition,
           include: [
             { model: Departement, as: "departement" },
           ],

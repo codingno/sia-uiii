@@ -46,7 +46,7 @@ UserSecret.hasOne(Teacher, {
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-export default NextAuth({
+export default async (req, res) => await NextAuth(req, res, {
   // https://next-auth.js.org/configuration/providers
   providers: [
     /* EmailProvider({
@@ -149,16 +149,16 @@ export default NextAuth({
           );
           // const allowed = await bcrypt.compare(credentials.password, getUser.user_secret.pass)
           if (allowed) {
+            user = user_secret.user.dataValues;
             if (user_secret.teacher) {
-              user_secret.user.dataValues.isTeacher = true;
-              user_secret.user.dataValues.departement_id = user_secret.teacher.departement_id;
+              user.isTeacher = true;
+              user.departement_id = user_secret.teacher.departement_id;
             } else if (user_secret.student) {
-              user_secret.user.dataValues.isStudent = true;
-              user_secret.user.dataValues.departement_id = user_secret.student.departement_id;
+              user.isStudent = true;
+              user.departement_id = user_secret.student.departement_id;
             } else {
-              user_secret.user.dataValues.isAdmin = true;
+              user.isAdmin = true;
             }
-            user = user_secret.user;
           }
           // else
           // 	return null
@@ -172,10 +172,9 @@ export default NextAuth({
           throw error;
         }
 
-        // const user = { id: 1, name: "J Smith", email: "jsmith@example.com" }
+        // user = { id: 1, name: "J Smith", email: "jsmith@example.com" }
 
         if (user) {
-          // console.log({user});
           // delete user.user_secret
           // Any object returned will be saved in `user` property of the JWT
           return user;
@@ -242,20 +241,24 @@ export default NextAuth({
     // async redirect({ url, baseUrl }) { return baseUrl },
     // async session({ session, token, user }) { return session },
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
-    async jwt({ token, account }) {
+    async jwt({ token, user, account, profile, isNewUser }) {
       // Persist the OAuth access_token to the token right after signin
       if (account) {
         token.accessToken = account.access_token;
       }
+      if(user) {
+        delete user.id
+        token.user = user
+      }
       return token;
     },
-    async session({ session, token, user }) {
-      console.log(
-        `🚀 ~ file: [...nextauth].js ~ line 216 ~ session ~ session`,
-        session, user
-      );
+    async session({ session, user, token }) {
       // Send properties to the client, like an access_token from a provider.
-      session.accessToken = token.accessToken;
+      if(token) {
+        user = token.user
+        session.user = token.user
+        session.accessToken = token.accessToken;
+      }
       return session;
     },
     async redirect({ url, baseUrl }) {
@@ -273,6 +276,7 @@ export default NextAuth({
       // const user = await User.findOne({ where : {  }})
 
       // const isAllowedToSignIn = true
+      req.user = user
       const isAllowedToSignIn = true;
       if (isAllowedToSignIn) {
         return true;
