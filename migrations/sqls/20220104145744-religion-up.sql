@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `academic_krs` (
    PRIMARY KEY (`id`)
 );
 
---students table
+-- students table
 ALTER TABLE `students` 
 ADD COLUMN `mother_name` VARCHAR(100) NULL AFTER `updatedAt`,
 ADD COLUMN `father_name` VARCHAR(100) NULL AFTER `mother_name`,
@@ -57,19 +57,19 @@ ADD COLUMN `school_name` VARCHAR(50) NULL AFTER `mother_income`,
 ADD COLUMN `school_telp` VARCHAR(12) NULL AFTER `school_name`,
 ADD COLUMN `school_address` VARCHAR(45) NULL AFTER `school_telp`,
 ADD COLUMN `school_departement` VARCHAR(80) NULL AFTER `school_address`,
-ADD COLUMN `schoole_end` INT(4) NULL AFTER `school_departement`,
+ADD COLUMN `school_end` INT(4) NULL AFTER `school_departement`,
 ADD COLUMN `campus_name` VARCHAR(50) NULL AFTER `school_end`,
 ADD COLUMN `campus_telp` VARCHAR(12) NULL AFTER `campus_name`,
 ADD COLUMN `campus_address` VARCHAR(45) NULL AFTER `campus_telp`,
 ADD COLUMN `campus_departement` VARCHAR(80) NULL AFTER `campus_address`,
 ADD COLUMN `campus_end` INT(4) NULL AFTER `campus_departement`,
 ADD COLUMN `institution_name` VARCHAR(50) NULL AFTER `school_end`,
-ADD COLUMN `institution_telp` VARCHAR(12) NULL AFTER `institutioncampus_name`,
-ADD COLUMN `institution_address` VARCHAR(45) NULL AFTER `institutioncampus_telp`,
+ADD COLUMN `institution_telp` VARCHAR(12) NULL AFTER `institution_name`,
+ADD COLUMN `institution_address` VARCHAR(45) NULL AFTER `institution_telp`,
 ADD COLUMN `institution_start` INT(4) NULL AFTER `institution_address`,
 ADD COLUMN `institution_end` INT(4) NULL AFTER `institution_start`,
 ADD COLUMN `semester_active` INT(11) NULL AFTER `institution_end`;
 
---teacher marriage_status
+-- teacher marriage_status
 ALTER TABLE `teachers` 
 ADD COLUMN `marriage_status` ENUM('MARRY', 'SINGLE') NULL AFTER `departement_id`;
