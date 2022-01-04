@@ -247,7 +247,6 @@ export default async (req, res) => await NextAuth(req, res, {
         token.accessToken = account.access_token;
       }
       if(user) {
-        delete user.id
         token.user = user
       }
       return token;
@@ -256,6 +255,7 @@ export default async (req, res) => await NextAuth(req, res, {
       // Send properties to the client, like an access_token from a provider.
       if(token) {
         user = token.user
+        delete token.user.id
         session.user = token.user
         session.accessToken = token.accessToken;
       }
@@ -276,7 +276,6 @@ export default async (req, res) => await NextAuth(req, res, {
       // const user = await User.findOne({ where : {  }})
 
       // const isAllowedToSignIn = true
-      req.user = user
       const isAllowedToSignIn = true;
       if (isAllowedToSignIn) {
         return true;

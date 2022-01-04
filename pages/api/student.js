@@ -2,6 +2,7 @@
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
 import UserServices from "../../services/UserServices";
+import { isLogin, isStudent } from "./config/police";
 
 const db = require("../../models");
 const Student = require("../../models/student")(db.sequelize, DataTypes);

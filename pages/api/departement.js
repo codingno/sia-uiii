@@ -1,6 +1,7 @@
 // This is an example of how to read a JSON Web Token from an API route
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
+import { isLogin, isStudent } from "./config/police";
 
 const db = require("../../models");
 const Departement = require("../../models/departement")(db.sequelize, DataTypes);
