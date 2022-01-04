@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     nidn_code: DataTypes.INTEGER,
     title: DataTypes.STRING,
     departement_id: DataTypes.INTEGER,
+    marriage_status: {
+      type: DataTypes.ENUM,
+      values: ["MARRY", "SINGLE"],
+      defaultValue: "SINGLE",
+    },
     status: DataTypes.INTEGER,
   }, {
     sequelize,
