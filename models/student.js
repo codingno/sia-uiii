@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       school_telp: DataTypes.STRING,
       school_address: DataTypes.STRING,
       school_departement: DataTypes.STRING,
-      schoole_end: DataTypes.INTEGER,
+      school_end: DataTypes.INTEGER,
       campus_name: DataTypes.STRING,
       campus_telp: DataTypes.STRING,
       campus_address: DataTypes.STRING,
