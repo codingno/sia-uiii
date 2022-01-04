@@ -20,7 +20,6 @@ const topMenuList = [
       {
         name: "Profile",
         link: "administration/profile",
-				disable : true,
       },
       {
         name: "Card",
@@ -266,7 +265,10 @@ export default function (props) {
         )}
       </Stack>
     </Grid>
-		<UserSide />
+		{
+			router.pathname !== '/administration/profile' &&
+			<UserSide />
+		}
 		</>
   );
 }

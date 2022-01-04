@@ -4,9 +4,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 
-import FormContainer from "../../../../components/utils/FormContainer";
-import FormLayout from "../../../../components/utils/FormLayout";
-import FormParent from "../../../../components/utils/FormParent";
+import FormContainer from "../../../../../components/utils/FormContainer";
+import FormLayout from "../../../../../components/utils/FormLayout";
+import FormParent from "../../../../../components/utils/FormParent";
 
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -223,14 +223,14 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Edit">
+    <FormLayout title="Profile Contact Edit | AIS UIII" titlePage="Profile Contact Edit">
       <Stack
         mb={4}
         sx={{
           width: 640,
         }}
       >
-        <FormContainer
+        {/* <FormContainer
           label="Student Number"
           name="student_number"
           value={student_number}
@@ -300,7 +300,7 @@ export default function () {
 						</MenuItem>
 						{statusOptions.length > 0 && statusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
-				</FormParent>
+				</FormParent> */}
         <FormContainer
           label="First Name"
           name="first_name"

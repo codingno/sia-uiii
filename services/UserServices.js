@@ -35,10 +35,6 @@ export default {
           identity_type_id: data.identity_type_id || null,
         };
         const user_info = await UserInfo.create(data_user_info);
-        console.log(
-          `🚀 ~ file: UserServices.js ~ line 37 ~ user_info`,
-          user_info
-        );
         const hashed = data.pass ? await bcrypt.hash(data.pass, 10) : await bcrypt.hash('123456', 10)
         const data_user_secret = {
           user_id: user.id,
@@ -51,10 +47,6 @@ export default {
           reset_pass_expired: new Date(data.reset_pass_expired) || new Date(),
         };
         const user_secret = await UserSecret.create(data_user_secret);
-        console.log(
-          `🚀 ~ file: UserServices.js ~ line 49 ~ user_secret`,
-          user_secret
-        );
         // callback(null, user.id);
         resolve(user.id);
       } catch (error) {
@@ -63,7 +55,8 @@ export default {
       }
     });
   },
-  update: async function (data, callback) {
+  update: async function (data) {
+    return new Promise(async (resolve, reject) => {
     const user_id = data.user.id;
     const data_user = data.user;
     delete data_user.id;
@@ -73,9 +66,10 @@ export default {
       delete data_user_info.id;
       delete data_user_info.user_id;
       const user_info = await UserInfo.update(data_user_info);
-      callback(null, user_id);
-    } catch (error) {
-      callback(error);
+			resolve(user.id);
+		} catch (error) {
+			reject(error);
     }
+    });
   },
 };

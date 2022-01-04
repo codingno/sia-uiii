@@ -150,15 +150,17 @@ export default async (req, res) => await NextAuth(req, res, {
           // const allowed = await bcrypt.compare(credentials.password, getUser.user_secret.pass)
           if (allowed) {
             user = user_secret.user.dataValues;
-            if (user_secret.teacher) {
-              user.isTeacher = true;
-              user.departement_id = user_secret.teacher.departement_id;
-            } else if (user_secret.student) {
+            // if (user_secret.teacher) {
+            //   user.isTeacher = true;
+            //   user.departement_id = user_secret.teacher.departement_id;
+            // } else if (user_secret.student) {
+            //   user.isStudent = true;
+            //   user.departement_id = user_secret.student.departement_id;
+            // } else {
+            //   user.isAdmin = true;
+            // }
               user.isStudent = true;
-              user.departement_id = user_secret.student.departement_id;
-            } else {
-              user.isAdmin = true;
-            }
+							user.userID = user_secret.user_id
           }
           // else
           // 	return null

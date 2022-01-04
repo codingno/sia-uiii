@@ -13,6 +13,10 @@ const Departement = require("../../models/departement")(
   db.sequelize,
   DataTypes
 );
+const MasterStudyType = require("../../models/masterStudyType")(db.sequelize, DataTypes);
+const MasterIdentityType = require("../../models/masterIdentityType")(db.sequelize, DataTypes);
+const MasterStudentStatus = require("../../models/masterStudentStatus")(db.sequelize, DataTypes);
+const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
 Student.belongsTo(Teacher, { foreignKey: "teacher_id", as: "teacher" });
 Teacher.hasMany(Student, { foreignKey: "teacher_id" });
 Student.belongsTo(Departement, {
@@ -20,10 +24,14 @@ Student.belongsTo(Departement, {
   as: "departement",
 });
 Departement.hasMany(Student, { foreignKey: "departement_id" });
+Departement.belongsTo(MasterStudyType, { foreignKey: "study_type_id", as: "study_type" });
+Departement.belongsTo(Faculty, { foreignKey: "faculty_id", as: "faculty" });
+Student.belongsTo(MasterStudentStatus, { foreignKey: "status", as: "student_status" });
 Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
 User.hasMany(Student, { foreignKey: "user_id" });
 Student.belongsTo(UserInfo, { foreignKey: "user_id", as: "user_info", targetKey: 'user_id' });
 UserInfo.hasMany(Student, { foreignKey: "user_id", sourceKey:'user_id' });
+UserInfo.belongsTo(MasterIdentityType, { foreignKey: "identity_type_id", as: "identity_type" });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -49,15 +57,26 @@ export default nextConnect()
         }
   })
   .get(async (req, res) => {
-    if (req.query.id) {
+		const options = req.query
+    if (options.id || options.user_id) {
       try {
         const data = await Student.findOne({
-          where: { id: req.query.id },
+          where: options,
           include: [
             { model: Teacher, as: "teacher" },
-            { model: Departement, as: "departement" },
+            { model: Departement, as: "departement",
+							include: [
+								{ model : Faculty, as: "faculty" },
+								{ model : MasterStudyType, as: "study_type" },
+							]
+						},
             { model: User, as: "user" },
-            { model: UserInfo, as: "user_info" },
+            { model: UserInfo, as: "user_info",
+							include: [
+								{ model : MasterIdentityType, as: "identity_type" },
+							]
+						},
+						{ model : MasterStudentStatus, as: "student_status" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
@@ -90,21 +109,30 @@ export default nextConnect()
     const body = req.body;
     const id = body.id;
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
-    delete body.id;
-    UserServices.update(body, async function (err, data) {
-      if(err) 
-        res.status(500).json({err})
-      else {
-        try {
-          const data = await Student.update(body, {
-            where: { id: id },
-          });
-          return res.status(200).json({ message: "success update data" });
-        } catch (error) {
-          return res.status(500).json({ error });
-        }
-      }  
-    })
+    // delete body.id;
+    // UserServices.update(body, async function (err, data) {
+    //   if(err) 
+    //     res.status(500).json({err})
+    //   else {
+    //     try {
+    //       const data = await Student.update(body, {
+    //         where: { id: id },
+    //       });
+    //       return res.status(200).json({ message: "success update data" });
+    //     } catch (error) {
+    //       return res.status(500).json({ error });
+    //     }
+    //   }  
+    // })
+		try {
+			await UserServices.update(body)
+			const data = await Student.update(body, {
+				where: { id: id },
+			});
+			return res.status(200).json({ message: "success update data" });
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
   })
   .delete(async (req, res) => {
     const body = req.body;
