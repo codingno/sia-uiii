@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS `academic_schedule` (
   `teacher_id` int(11) NOT NULL,
   `semester` int(11) NOT NULL,
   `start_time` varchar(9) NOT NULL,
-  `end_time` varchar(9) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+  `end_time` varchar(9) NOT NULL,
+   PRIMARY KEY (`id`)
+);
 -- add column religion
 ALTER TABLE `user_info` 
 ADD COLUMN `religion` VARCHAR(15) NULL AFTER `gender`;
@@ -42,8 +43,9 @@ CREATE TABLE IF NOT EXISTS `academic_krs` (
   `id` int(11) NOT NULL,
   `student_number` varchar(10) NOT NULL,
   `schedule_id` int(11) NOT NULL,
-  `semester` int(11) NOT NULL COMMENT 'semester mahasiswa waktu pengambilan krs'
-) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=latin1;
+  `semester` int(11) NOT NULL COMMENT 'semester mahasiswa waktu pengambilan krs',
+   PRIMARY KEY (`id`)
+);
 
 --students table
 ALTER TABLE `students` 
