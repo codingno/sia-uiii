@@ -4,14 +4,14 @@
 
 CREATE TABLE IF NOT EXISTS `religion` (
   `id` int(11) NOT NULL,
-  `keterangan` varchar(15) COLLATE utf8_bin DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `name` varchar(15) COLLATE utf8_bin DEFAULT NULL
+);
 
 --
 -- Dumping data untuk tabel `religion`
 --
 
-INSERT INTO `religion` (`id`, `keterangan`) VALUES
+INSERT INTO `religion` (`id`, `name`) VALUES
 (1, 'Islam'),
 (2, 'Kristen'),
 (3, 'Katolik'),
@@ -66,7 +66,7 @@ ADD COLUMN `campus_end` INT(4) NULL AFTER `campus_departement`,
 ADD COLUMN `institution_name` VARCHAR(50) NULL AFTER `school_end`,
 ADD COLUMN `institution_telp` VARCHAR(12) NULL AFTER `institutioncampus_name`,
 ADD COLUMN `institution_address` VARCHAR(45) NULL AFTER `institutioncampus_telp`,
-ADD COLUMN `institution_start` INT(4)) NULL AFTER `institution_address`,
+ADD COLUMN `institution_start` INT(4) NULL AFTER `institution_address`,
 ADD COLUMN `institution_end` INT(4) NULL AFTER `institution_start`,
 ADD COLUMN `semester_active` INT(11) NULL AFTER `institution_end`;
 
