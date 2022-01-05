@@ -48,7 +48,27 @@ export default nextConnect()
             entry_semester: body.entry_semester,
             entry_status: body.entry_status,
             departement_id: body.departement_id,
-            status: body.status 
+            status: body.status, 
+            mother_name: body.mother_name,
+            father_name: body.father_name,
+            father_income: body.father_income,
+            mother_income: body.mother_income,
+            school_name: body.school_name,
+            school_telp: body.school_telp,
+            school_address: body.school_address,
+            school_departement: body.school_departement,
+            school_end: body.school_end,
+            campus_name: body.campus_name,
+            campus_telp: body.campus_telp,
+            campus_address: body.campus_address,
+            campus_departement: body.campus_departement,
+            campus_end: body.campus_end,
+            institution_name: body.institution_name,
+            institution_telp: body.institution_telp,
+            institution_address: body.institution_address,
+            institution_start: body.institution_start,
+            institution_end: body.institution_end,
+            semester_active: body.semester_active || 1,
           }
           const data = await Student.create(data_student);
           return res.status(200).json({ data });

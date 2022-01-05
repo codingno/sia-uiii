@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   const AcademicSchedule = sequelize.define(
     "academic_schedule",
     {
-      academic_year: DataTypes.INTEGER,
+      academic_year_id: DataTypes.INTEGER,
       departement_id: DataTypes.INTEGER,
       course_id: DataTypes.INTEGER,
       day_id: DataTypes.INTEGER,

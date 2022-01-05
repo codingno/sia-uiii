@@ -22,6 +22,7 @@ export default nextConnect()
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
       body.student_number = req.user.student_number
+      body.semester = req.user.semester_active
       const data = await AcademicKrs.create(body);
       return res.status(200).json({ data });
     } catch (error) {

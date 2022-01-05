@@ -35,6 +35,7 @@ export default nextConnect()
 					nidn_code: body.nidn_code,
 					title: body.title,
 					departement_id: body.departement_id,
+          marriage_status: body.marriage_status || 2,
 					status: body.status
 				}
         const data = await Teacher.create(data_teacher);

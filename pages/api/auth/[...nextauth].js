@@ -155,7 +155,8 @@ export default async (req, res) => await NextAuth(req, res, {
               user.departement_id = user_secret.teacher.departement_id;
             } else if (user_secret.student) {
               user.isStudent = true;
-              user.student_number = user_secret.student.student_number
+              user.student_number = user_secret.student.student_number;
+              user.semester_active = user_secret.student.semester_active;
               user.departement_id = user_secret.student.departement_id;
             } else {
               user.isAdmin = true;
