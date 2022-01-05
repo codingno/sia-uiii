@@ -6,6 +6,7 @@ import { isLogin, isPublic } from "./config/police";
 const db = require("../../models");
 const AcademicSchedule = require("../../models/academic_schedule")(db.sequelize, DataTypes);
 const Departement = require("../../models/departement")(db.sequelize, DataTypes);
+const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
 const Course = require("../../models/course")(db.sequelize, DataTypes);
 const Day = require("../../models/day")(
   db.sequelize,
@@ -19,11 +20,19 @@ const Teacher = require("../../models/teacher")(
   db.sequelize,
   DataTypes
 );
+const UserInfo = require("../../models/userinfo")(
+  db.sequelize,
+  DataTypes
+);
 AcademicSchedule.belongsTo(Departement, {
   foreignKey: "departement_id",
   as: "departement",
 });
 Departement.hasMany(AcademicSchedule, { foreignKey: "departement_id" });
+Departement.belongsTo(Faculty, {
+  foreignKey: "faculty_id",
+  as: "faculty",
+});
 AcademicSchedule.belongsTo(Course, {
   foreignKey: "course_id",
   as: "course",
@@ -44,6 +53,7 @@ AcademicSchedule.belongsTo(Teacher, {
   as: "teacher",
 });
 Teacher.hasMany(AcademicSchedule, { foreignKey: "teacher_id" });
+Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -72,29 +82,45 @@ export default nextConnect()
             { model: Course, as: "course" },
             { model: Departement, as: "departement" },
             { model: Room, as: "room" },
-            { model: Teacher, as: "teacher" },
+            { model: Teacher, as: "teacher",
+							include: [
+            		{ model: UserInfo, as: "user_info" },
+							],
+						},
             { model: Day, as: "day" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-        return res.status(200).json({ data }).end();
+        return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });
       }
     } else {
       try {
-        const data = await AcademicSchedule.findAll({
+        const preparedData = await AcademicSchedule.findAll({
           where: condition,
           include: [
             { model: Course, as: "course" },
             { model: Departement, as: "departement" },
             { model: Room, as: "room" },
-            { model: Teacher, as: "teacher" },
+            { model: Teacher, as: "teacher",
+							include: [
+            		{ model: UserInfo, as: "user_info" },
+							],
+						},
             { model: Day, as: "day" },
           ],
         });
-        if (data.length == 0)
+        if (preparedData.length == 0)
           return res.status(404).json({ error: "Data not found", data });
+				let data = JSON.parse(JSON.stringify(preparedData))
+				data.map(item => {
+					item.name = item.course.name
+					item.credits = item.course.credits
+					item.teacher_name = item.teacher.user_info.first_name + ' ' + item.teacher.user_info.middle_name + ' ' + item.teacher.user_info.last_name
+					item.day_name = item.day.name
+					item.room_name = item.room.name
+				}) 
         return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });

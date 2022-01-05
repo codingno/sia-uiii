@@ -35,12 +35,12 @@ User.hasOne(UserSecret, { as: "user_secret", foreignKey: "user_id" });
 UserSecret.hasOne(Student, {
   as: "student",
   foreignKey: "user_id",
-  targetKey: "user_id",
+  sourceKey: "user_id",
 });
 UserSecret.hasOne(Teacher, {
   as: "teacher",
   foreignKey: "user_id",
-  targetKey: "user_id",
+  sourceKey: "user_id",
 });
 // console.log(`🚀 ~ file: [...nextauth].js ~ line 19 ~ db`, db.sequelize)
 
@@ -141,6 +141,7 @@ export default async (req, res) => await NextAuth(req, res, {
             ],
             // raw: true,
           });
+          console.log(`🚀 ~ file: [...nextauth].js ~ line 144 ~ authorize ~ user_secret`, user_secret)
           // return null
           // user = await db.sequelize.models.user.findAll()
           const allowed = await bcrypt.compare(
@@ -157,7 +158,7 @@ export default async (req, res) => await NextAuth(req, res, {
               user.isStudent = true;
               user.student_number = user_secret.student.student_number;
               user.semester_active = user_secret.student.semester_active;
-              user.departement_id = user_secret.student.departement_id;
+              user.departementID = user_secret.student.departement_id;
             } else {
               user.isAdmin = true;
             }

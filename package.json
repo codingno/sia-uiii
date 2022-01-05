@@ -45,6 +45,7 @@
     "dotenv": "^10.0.0",
     "formik": "^2.2.9",
     "material-ui-popup-state": "^2.0.0",
+    "moment": "^2.29.1",
     "mysql2": "^2.3.3",
     "next": "^12.0.7",
     "next-auth": "^4.0.5",

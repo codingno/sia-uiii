@@ -28,8 +28,7 @@ const topMenuList = [
       },
       {
         name: "Courses Selection",
-        link: "administration/course-selection",
-				disable : true,
+        link: "administration/courses-selection",
       },
       {
         name: "Grade",
@@ -58,6 +57,10 @@ const topMenuList = [
       {
         name: "Courses",
         link: "academic/course",
+      },
+      {
+        name: "Academic Schedule",
+        link: "academic/schedule",
       },
     ],
   },
@@ -141,7 +144,7 @@ function ChildMenu({ child }) {
 	const router = useRouter()
   const renderChild = child.map((item, index) => {
     return (
-      <>
+      <Stack key={index}>
         <Typography
           variant="subtitle1"
           noWrap
@@ -158,7 +161,7 @@ function ChildMenu({ child }) {
           {item.name}
         </Typography>
         {index != child.length - 1 && <Divider />}
-      </>
+      </Stack>
     );
   });
   return <Box sx={{ my: 1.5, px: 2.5 }}>{renderChild}</Box>;
@@ -212,11 +215,12 @@ export default function (props) {
   return (
 		<>
     <Grid
+			item
       xs={12}
       py={3}
 			px={1}
-      spacing={0}
-      direction="row"
+      // spacing={0}
+      // direction="row"
       justifyContent="space-between"
       alignItems="center"
       alignContent="center"

@@ -1,8 +1,11 @@
+import BasicLayout from "../../../components/utils/BasicLayout";
+
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import plusFill from "@iconify/icons-eva/plus-fill";
+import editFill from "@iconify/icons-eva/edit-fill";
 // material
 import {
   Card,
@@ -22,14 +25,16 @@ import {
   TablePagination,
   CircularProgress,
 } from "@mui/material";
-import Scrollbar from "./Scrollbar";
-import SearchNotFound from "./SearchNotFound";
-import { CategoryListHead } from "./course";
-import TopMenu from "./TopMenu";
-import MoreMenu from "./MoreMenu";
-import ListToolbar from "./ListToolbar";
+// import Scrollbar from "../../../components/utils/Scrollbar";
+import Scrollbar from "../../../components/utils/Scrollbar";
+import SearchNotFound from "../../../components/utils/SearchNotFound";
+import { CategoryListHead } from "../../../components/utils/courses-selection";
+import TopMenu from "../../../components/utils/TopMenu";
+import MoreMenu from "../../../components/utils/MoreMenu";
+import ListToolbar from "../../../components/utils/ListToolbarCourseSelection";
 
 import axios from "axios";
+import { useSession } from "next-auth/react"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -73,9 +78,36 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export default function List(props) {
-  const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
-    props;
+export default function (props) {
+  // const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
+    // props;
+		const { data: session, status : statusSession } = useSession()
+		const { isUserList } = props
+
+		const
+        title="Course Selection",
+        name="Selection",
+        getUrl="/api/academic-krs",
+        addLink="/administration/courses-selection/create",
+        tableHead=[
+          { id: "name", label: "Course", alignRight: false },
+          { id: "credits", label: "Credits", alignRight: false },
+          { id: "semester", label: "Semester", alignRight: false },
+          { id: "day_name", label: "Day", alignRight: false },
+          { id: "room_name", label: "Room", alignRight: false },
+          { id: "teacher_name", label: "Teacher", alignRight: false },
+          { id: "" },
+        ],
+        moremenu=[
+          {
+            name: "Edit",
+            link: "/administration/courses-selection/edit/",
+          },
+        ],
+        deleteOptions={
+          link: "/api/academic-krs/",
+          note: "Are you sure to delete this item?",
+        };
 
   const router = useRouter();
 
@@ -87,6 +119,10 @@ export default function List(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [isLoading, setLoading] = useState(false);
+	
+	const [mode, setMode] = useState(0)
+  const [dataList, setDataList] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -96,7 +132,7 @@ export default function List(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = courses.map((n) => n.code);
+      const newSelecteds = dataList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -134,16 +170,45 @@ export default function List(props) {
     setFilterName(event.target.value);
   };
 
-  const [dataList, setDataList] = useState([]);
+	async function saveCourseSelection() {
+		try {
+			const preparedData = dataList.filter(function(item) { 
+				return this.indexOf(item.id) >= 0 
+			}, selected).map(item => {
+				return {
+					// student_number : session.user.student_number,
+					// semester : item.semester,
+					schedule_id : item.id,
+				}
+			})
+			console.log(preparedData);
+			const { data } = axios.post('/api/academic-krs', preparedData)
+      console.log(`🚀 ~ file: index.jsx ~ line 185 ~ saveCourseSelection ~ data`, data)
+		} catch (error) {
+      console.log(`🚀 ~ file: index.jsx ~ line 186 ~ saveCourseSelection ~ error`, error)
+			alert(error)	
+		}	
+	}
 
   useEffect(() => {
-    if (dataList.length == 0) getDataList();
-  }, [dataList]);
+    getDataList();
+  }, [mode]);
 
   async function getDataList() {
     try {
-      const { data, error } = await axios.get(getUrl);
-      setDataList(data.data);
+      const { data, error } = await axios.get(mode ? `/api/academic-schedule` : getUrl);
+			if(mode) {
+      	setDataList(data.data);
+				setSelected(selectedSchedule)
+			}
+			else {
+				const list = data.data.map(item => item.schedule)
+        console.log(`🚀 ~ file: index.jsx ~ line 203 ~ getDataList ~ list`, list)
+      	setDataList(list);
+				const ids = list.map(item => item.id)
+				setSelectedSchedule(ids)
+				setSelected([])
+			}
     } catch (error) {
       if (error.response) {
         if ((error.response.status = 404)) return;
@@ -183,7 +248,7 @@ export default function List(props) {
       : [];
   const isUserNotFound = filteredUsers.length === 0;
   return (
-    <>
+    <BasicLayout title="Course Selection">
       <Grid item xs={9} p={1}>
         <Card>
           <Stack
@@ -197,10 +262,14 @@ export default function List(props) {
             </Typography>
             <Button
               variant="contained"
-              onClick={() => router.push(addLink)}
-              startIcon={<Icon icon={plusFill} />}
+              onClick={() => setMode(!mode)}
+              startIcon={!mode && <Icon icon={editFill} />}
             >
-              Add {name}
+							{
+								mode ?
+								'Close Edit' :
+              	'Edit ' + name
+							}
             </Button>
           </Stack>
           <Divider />
@@ -210,6 +279,7 @@ export default function List(props) {
             filterName={filterName}
             onFilterName={handleFilterByName}
             toolbarName={name}
+						saveCourseSelection={saveCourseSelection}
             // refresh={() => dispatch({type : 'refresh_start'})}
           />
 
@@ -257,23 +327,24 @@ export default function List(props) {
                           user_enrollment,
                           createdBy,
                         } = row;
-                        const isItemSelected = selected.indexOf(code) !== -1;
+                        const isItemSelected = selected.indexOf(id) !== -1;
+												let tempRow = JSON.parse(JSON.stringify(row))
 
-                        delete row.id;
+                        // delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
-                        Object.keys(row).map((item) => {
+                        Object.keys(tempRow).map((item) => {
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')
 															row.name = row.user.name
-														delete row[item];
+														delete tempRow[item];
 													}
                         });
-												const arrayRow = Object.keys(row)
+												const arrayRow = Object.keys(tempRow)
 												if(isUserList) {
 													arrayRow.unshift(arrayRow[arrayRow.length - 1])
 													arrayRow.pop()
 												}
-                        const columCell = arrayRow.map(
+                        const columCell = tableHeadId.map(
                           (item, index) => {
                             return (
                               <TableCell align="left" key={index}>
@@ -283,7 +354,7 @@ export default function List(props) {
                                   spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
-                                    {row[item]}
+                                    {tempRow[item]}
                                   </Typography>
                                 </Stack>
                               </TableCell>
@@ -306,7 +377,7 @@ export default function List(props) {
                             <TableCell padding="checkbox" key="uniqueKey1">
                               <Checkbox
                                 checked={isItemSelected}
-                                onChange={(event) => handleClick(event, code)}
+                                onChange={(event) => handleClick(event, id)}
                               />
                             </TableCell>
                             {columCell}
@@ -362,6 +433,6 @@ export default function List(props) {
           />
         </Card>
       </Grid>
-    </>
+		</BasicLayout>
   );
 }
