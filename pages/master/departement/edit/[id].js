@@ -52,7 +52,9 @@ export default function () {
 				setLabel(data.data.label)
 				setStudyType(data.data.study_type_id)
 				setFaculty(data.data.faculty_id)
-				setStatus(data.data.status)
+				// setStatus(data.data.status)
+				const statusGet = statusOptions.filter(item => item.label == data.data.status)[0].value
+  			setStatus(statusGet);
 				setCourseCredits(data.data.course_credits)
       } catch (error) {
         if (error.response) {

@@ -4,7 +4,7 @@ module.exports = {
 		const session  = await getSession({req});
 		req.user = session.user
 		if(req.user)
-			next()
+			return next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
