@@ -4,7 +4,7 @@ export default function (Model) {
   return nextConnect()
     .post(async (req, res) => {
       const body = req.body;
-      if (!body.name || !body.description)
+      if (!body.name)
         return res.status(400).json({ message: "Incomplete parameters" });
 
       try {

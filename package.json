@@ -57,6 +57,7 @@
     "sequelize": "^6.11.0",
     "sequelize-cli": "^6.3.0",
     "simplebar-react": "^2.3.6",
+    "styled-components": "^5.3.3",
     "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },

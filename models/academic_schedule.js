@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "academic_schedule",
+	    freezeTableName: true,
     }
   );
   return AcademicSchedule;

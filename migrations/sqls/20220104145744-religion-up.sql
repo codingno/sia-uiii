@@ -4,7 +4,10 @@
 
 CREATE TABLE IF NOT EXISTS `religion` (
   `id` int(11) NOT NULL,
-  `name` varchar(15) COLLATE utf8_bin DEFAULT NULL
+  `name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
+	`createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`updatedAt` DATETIME NULL,
+   PRIMARY KEY (`id`)
 );
 
 --
@@ -24,15 +27,17 @@ INSERT INTO `religion` (`id`, `name`) VALUES
 
 CREATE TABLE IF NOT EXISTS `academic_schedule` (
   `id` int(11) NOT NULL,
-  `academic_year_id` int(11) NOT NULL,
-  `departement_id` int(11) NOT NULL,
-  `course_id` int(11) NOT NULL,
-  `day_id` int(11) NOT NULL,
-  `room_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  `semester` int(11) NOT NULL,
-  `start_time` varchar(9) NOT NULL,
-  `end_time` varchar(9) NOT NULL,
+  `academic_year_id` int(11) NULL,
+  `departement_id` int(11) NULL,
+  `course_id` int(11) NULL,
+  `day_id` int(11) NULL,
+  `room_id` int(11) NULL,
+  `teacher_id` int(11) NULL,
+  `semester` int(11) NULL,
+  `start_time` varchar(9) NULL,
+  `end_time` varchar(9) NULL,
+	`createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`updatedAt` DATETIME NULL,
    PRIMARY KEY (`id`)
 );
 -- add column religion
@@ -41,9 +46,11 @@ ADD COLUMN `religion` VARCHAR(15) NULL AFTER `gender`;
 
 CREATE TABLE IF NOT EXISTS `academic_krs` (
   `id` int(11) NOT NULL,
-  `student_number` varchar(10) NOT NULL,
-  `schedule_id` int(11) NOT NULL,
-  `semester` int(11) NOT NULL COMMENT 'semester mahasiswa waktu pengambilan krs',
+  `student_number` varchar(10) NULL,
+  `schedule_id` int(11) NULL,
+  `semester` int(11) NULL COMMENT 'semester mahasiswa waktu pengambilan krs',
+	`createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+	`updatedAt` DATETIME NULL,
    PRIMARY KEY (`id`)
 );
 

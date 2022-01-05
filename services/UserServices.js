@@ -32,6 +32,7 @@ export default {
           date_of_birth: new Date(data.date_of_birth),
           gender: data.gender || 1,
           identity_id: data.identity_id || null,
+          religion: data.religion || null,
           identity_type_id: data.identity_type_id || null,
         };
         const user_info = await UserInfo.create(data_user_info);
