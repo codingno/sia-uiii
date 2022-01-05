@@ -145,7 +145,8 @@ export default function () {
       router.back();
     } catch (error) {
       if (error.response) {
-        alert(error.response.data);
+        console.log(`🚀 ~ file: create.js ~ line 148 ~ submitCourse ~ error.response`, error.response)
+        alert(error.response.error);
       }
       alert(error);
     }

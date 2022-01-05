@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   // };
   // Course.init({
   const Course= sequelize.define('course',{
+		id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
     departement_id: DataTypes.INTEGER,
     curriculum_id: DataTypes.INTEGER,
     name: DataTypes.STRING,

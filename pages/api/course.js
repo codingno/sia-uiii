@@ -41,6 +41,7 @@ export default nextConnect()
   .use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
+    console.log(`🚀 ~ file: course.js ~ line 44 ~ .post ~ body`, body)
     if (!body.name)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {

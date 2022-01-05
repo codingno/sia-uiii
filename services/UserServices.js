@@ -63,9 +63,10 @@ export default {
     try {
       const user = await User.update(data_user, { where: { id: user_id } });
       const data_user_info = data.user_info;
+      console.log(`🚀 ~ file: UserServices.js ~ line 66 ~ returnnewPromise ~ data_user_info`, data_user_info)
       delete data_user_info.id;
       delete data_user_info.user_id;
-      const user_info = await UserInfo.update(data_user_info);
+      const user_info = await UserInfo.update(data_user_info, { where : { id : parseInt(data.user_info.id)}});
 			resolve(user.id);
 		} catch (error) {
 			reject(error);

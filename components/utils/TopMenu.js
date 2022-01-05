@@ -42,7 +42,7 @@ const topMenuList = [
 				disable : true,
       },
       {
-        name: "VISA",
+        name: "Visa/Kitas Report",
         link: "administration/visa",
 				disable : true,
       },
@@ -88,7 +88,19 @@ const topMenuList = [
   },
   {
     name: "Portfolio Academics",
-		link: "portfolio",
+		// link: "portfolio",
+    child: [
+      {
+        name: "Input and Upload",
+        link: "portfolio/manage",
+				disable : true,
+      },
+      {
+        name: "Inquiry Portfolio",
+        link: "portfolio/inquiry",
+				disable : true,
+      },
+		],
 	},
   {
     name: "Admin",
@@ -186,6 +198,8 @@ function ItemMenu({ menu }) {
 }
 
 function ParentMenu({ menu }) {
+	// const { data: session, status } = useSession()
+	// const filterMenu = menu.filter(item => item.name != 'Administrations' && !session.user.isAdmin)
   const renderMenu = menu.map((item, index) => (
     <ItemMenu key={index} menu={item} />
   ));

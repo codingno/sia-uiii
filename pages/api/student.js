@@ -131,6 +131,7 @@ export default nextConnect()
 			});
 			return res.status(200).json({ message: "success update data" });
 		} catch (error) {
+      console.log(`🚀 ~ file: student.js ~ line 135 ~ .patch ~ error`, error)
 			return res.status(500).json({ error });
 		}
   })

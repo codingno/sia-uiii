@@ -23,6 +23,7 @@ export default function MoreMenu(props) {
 			try {
 				const { data } = await axios.delete(deleteOptions.link, { data : {id}})	
 				alert(data.message)
+				router.reload()
 			} catch (error) {
 				if(error.response) {
 					console.log(error.response.data);

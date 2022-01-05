@@ -35,8 +35,6 @@ export default function profile() {
     setValue(newValue);
   };
 
-  console.log(`🚀 ~ file: index.jsx ~ line 22 ~ profile ~ userData`, userData)
-
 	useEffect(() => {
 		if(status == `authenticated`)
 			getStudentData()

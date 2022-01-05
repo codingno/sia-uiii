@@ -69,6 +69,8 @@ export default function () {
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
 
+	const [teacherData, setteacherData] = useState({})
+
   useEffect(() => {
     getTeacherData();
   }, [id]);
@@ -93,6 +95,7 @@ export default function () {
   			setTitle(data.data.title);
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
+				setteacherData(data.data)
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -160,6 +163,7 @@ export default function () {
 	async function submitTeacher() {
 		try {
 			const sendData = {
+				id,
 				place_of_birth,
 				date_of_birth,
 				gender,
@@ -172,7 +176,18 @@ export default function () {
 				departement_id,
 				status,
 			}	
-			const { data } = await axios.patch('/api/teacher', sendData)
+			let prepareData = {
+				...teacherData,
+				user_info : {
+					...sendData,
+				},
+				user : {
+					...teacherData.user,
+					name : first_name + ' ' + middle_name + ' ' + last_name,
+				},
+				...sendData,
+			}
+			const { data } = await axios.patch('/api/teacher', prepareData)
 			alert("Teacher successfully updated.")
 			router.back()
 		} catch (error) {

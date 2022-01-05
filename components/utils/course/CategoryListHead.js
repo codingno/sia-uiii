@@ -29,8 +29,18 @@ export default function CategoryListHead({
   };
 
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead
+			sx={{
+				bgcolor : '#003B5C',
+				color : '#fff',
+			}}
+		>
+      <TableRow
+				sx={{
+					bgcolor : '#003B5C',
+					color : '#fff',
+				}}
+			>
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -49,6 +59,13 @@ export default function CategoryListHead({
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+							sx={{
+								bgcolor : '#003B5C',
+								color : '#fff',
+								'&.Mui-active' : {
+									color : '#E3A130',
+								}
+							}}
             >
               {headCell.label}
               {orderBy === headCell.id ? (
