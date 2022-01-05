@@ -7,10 +7,10 @@ export default function () {
   const router = useRouter();
 
   return (
-    <BasicLayout title="Departements">
+    <BasicLayout title="Program Studies">
       <List
-        title="Departements"
-        name="Departement"
+        title="Program Studies"
+        name="Program Study"
         getUrl="/api/departement"
         addLink="/master/departement/create"
         tableHead={[

@@ -80,7 +80,7 @@ export default function () {
           value={name}
           setValue={setName}
         />
-				<FormParent label="Departement">
+				<FormParent label="Program Study">
 					<Select
 						displayEmpty
 						value={departement_id}

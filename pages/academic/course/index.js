@@ -16,7 +16,7 @@ export default function () {
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
           { id: "course_type_id", label: "Course Type", alignRight: false },
-          { id: "departement_id", label: "Departement", alignRight: false },
+          { id: "departement_id", label: "Program Study", alignRight: false },
           { id: "" },
         ]}
         moremenu={[

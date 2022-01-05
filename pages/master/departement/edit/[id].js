@@ -133,7 +133,7 @@ export default function () {
 
 
   return (
-    <FormLayout title="Departement Create | AIS UIII" titlePage="Departement Create">
+    <FormLayout title="Program Study Edit | AIS UIII" titlePage="Program Study Edit">
       <Stack
         mb={4}
         sx={{

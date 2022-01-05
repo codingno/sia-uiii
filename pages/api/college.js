@@ -9,7 +9,7 @@ const College = require("../../models/college")(db.sequelize, DataTypes);
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
-.use(isLogin())
+.use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
     if (

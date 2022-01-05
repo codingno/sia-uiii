@@ -73,7 +73,7 @@ const topMenuList = [
         link: "master/faculty",
       },
       {
-        name: "Departement",
+        name: "Program Study",
         link: "master/departement",
       },
       {

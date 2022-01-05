@@ -209,7 +209,7 @@ export default function () {
           width: 640,
         }}
       >
-        <FormParent label="Departement">
+        <FormParent label="Program Study">
           <Select
             displayEmpty
             value={departement_id}

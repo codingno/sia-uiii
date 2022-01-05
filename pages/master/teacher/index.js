@@ -16,7 +16,7 @@ export default function () {
 				isUserList={true}
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
-          { id: "departement_id", label: "Departement", alignRight: false },
+          { id: "departement_id", label: "Program Study", alignRight: false },
           { id: "status", label: "Status", alignRight: false },
           { id: "" },
         ]}

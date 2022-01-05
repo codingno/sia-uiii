@@ -105,7 +105,7 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-    <FormLayout title="Departement Create | AIS UIII" titlePage="Departement Create">
+    <FormLayout title="Program Study Create | AIS UIII" titlePage="Program Study Create">
       <Stack
         mb={4}
         sx={{
