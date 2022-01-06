@@ -1,6 +1,6 @@
 /* Replace with your SQL commands */
 CREATE TABLE IF NOT EXISTS `days` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(15) NULL,
   `nama` varchar(15) NULL,
   `createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
@@ -13,18 +13,18 @@ CREATE TABLE IF NOT EXISTS `days` (
 --
 
 INSERT INTO `days` (`id`, `name`, `nama`) VALUES
-(0, 'not set', ''),
-(1, 'monday', 'senin'),
-(2, 'tuesday', 'selasa'),
-(3, 'wednesday', 'rabu'),
-(4, 'thursday', 'kamis'),
-(5, 'friday', 'jumat'),
-(6, 'saturday', 'sabtu'),
-(7, 'monday', 'minggu');
+(1, 'not set', ''),
+(2, 'monday', 'senin'),
+(3, 'tuesday', 'selasa'),
+(4, 'wednesday', 'rabu'),
+(5, 'thursday', 'kamis'),
+(6, 'friday', 'jumat'),
+(7, 'saturday', 'sabtu'),
+(8, 'monday', 'minggu');
 
 
 CREATE TABLE IF NOT EXISTS `rooms` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NULL,
   `capacity` int(11) NULL,
   `description` varchar(100) NULL,
@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 );
 
 INSERT INTO `rooms` (`id`, `name`, `capacity`, `description`) VALUES
-(0, 'not set', 0, ''),
-(1, 'L1.R06',  25, ''),
-(2, 'L1.R05', 25, ''),
-(3, 'L1.R02', 60, ''),
-(4, 'L1.R07', 25, ''),
-(5, 'L1.R08', 50, ''),
-(6, 'L1.R09', 25, '');
+(1, 'not set', 0, ''),
+(2, 'L1.R06',  25, ''),
+(3, 'L1.R05', 25, ''),
+(4, 'L1.R02', 60, ''),
+(5, 'L1.R07', 25, ''),
+(6, 'L1.R08', 50, ''),
+(7, 'L1.R09', 25, '');
 

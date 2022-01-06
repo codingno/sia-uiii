@@ -2,8 +2,8 @@
 -- Struktur dari tabel `religion`
 --
 
-CREATE TABLE IF NOT EXISTS `religion` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `religion` 
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
 	`createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
 	`updatedAt` DATETIME NULL,
@@ -26,7 +26,7 @@ INSERT INTO `religion` (`id`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `academic_schedule` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `academic_year_id` int(11) NULL,
   `departement_id` int(11) NULL,
   `course_id` int(11) NULL,
@@ -45,7 +45,7 @@ ALTER TABLE `user_info`
 ADD COLUMN `religion` VARCHAR(15) NULL AFTER `gender`;
 
 CREATE TABLE IF NOT EXISTS `academic_krs` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `student_number` varchar(10) NULL,
   `schedule_id` int(11) NULL,
   `semester` int(11) NULL COMMENT 'semester mahasiswa waktu pengambilan krs',
