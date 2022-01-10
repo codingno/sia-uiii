@@ -214,17 +214,18 @@ export default function (props) {
 	const { data: session, status } = useSession()
   return (
 		<>
+		<Grid item xs={2.5}></Grid>
     <Grid
 			item
-      xs={12}
+      xs={7}
       py={3}
 			px={1}
       // spacing={0}
       // direction="row"
-      justifyContent="space-between"
+      justifyContent="center"
       alignItems="center"
       alignContent="center"
-      // wrap="wrap"
+      wrap="wrap"
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Image
@@ -283,6 +284,7 @@ export default function (props) {
         )}
       </Stack>
     </Grid>
+		<Grid item xs={2.5}></Grid>
 		{
 			router.pathname !== '/administration/profile' &&
 			<UserSide />

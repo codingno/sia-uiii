@@ -18,7 +18,7 @@ const Settings = () => (
         py: 8
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <Typography
           sx={{ mb: 3 }}
           variant="h4"

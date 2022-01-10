@@ -143,6 +143,7 @@ export default function List(props) {
   async function getDataList() {
     try {
       const { data, error } = await axios.get(getUrl);
+      console.log(`🚀 ~ file: List.jsx ~ line 146 ~ getDataList ~ data`, typeof(data.data), data.data)
       setDataList(data.data);
     } catch (error) {
       if (error.response) {

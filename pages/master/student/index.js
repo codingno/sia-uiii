@@ -16,7 +16,12 @@ export default function () {
 				isUserList={true}
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
+          { id: "student_number", label: "NIM", alignRight: false },
+          { id: "faculty_name", label: "Faculty", alignRight: false },
+          { id: "student_program", label: "Program", alignRight: false },
           { id: "entry_year", label: "Entry Year", alignRight: false },
+          { id: "teacher_name", label: "Teacher", alignRight: false },
+          { id: "citizen", label: "Citizen", alignRight: false },
           { id: "status", label: "Status", alignRight: false },
           { id: "" },
         ]}

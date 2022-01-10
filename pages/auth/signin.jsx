@@ -292,7 +292,7 @@ export default function SignIn({ csrfToken }) {
         </SectionStyle>
       </MHidden>
 
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         <ContentStyle>
           <FormStyle>
             <Stack sx={{ mb: 5 }}>

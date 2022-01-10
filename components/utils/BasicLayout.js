@@ -29,7 +29,7 @@ export default function ({ title, children }) {
           content="initial-scale=1, width=device-width"
         />
       </Head>
-      <Container maxWidth="lg"
+      <Container maxWidth="xl"
 				sx={{
 					bgcolor : '#C7C9C7'
 				}}

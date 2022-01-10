@@ -53,7 +53,7 @@ export default function () {
 								</Typography>
 							}
 							sx={{
-								pb : 5,
+								pb : 17.3,
 							}}
             />
 						<Divider />

@@ -15,6 +15,10 @@ export default function () {
         addLink="/master/departement/create"
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
+          { id: "code", label: "Code", alignRight: false },
+          { id: "teacher_name", label: "Head", alignRight: false },
+          { id: "study_type_name", label: "Study Level", alignRight: false },
+          { id: "accreditation", label: "Accreditation", alignRight: false },
           { id: "status", label: "Status", alignRight: false },
           { id: "" },
         ]}
