@@ -214,10 +214,10 @@ export default function (props) {
 	const { data: session, status } = useSession()
   return (
 		<>
-		<Grid item xs={2.5}></Grid>
+		{/* <Grid item xs={2.5}></Grid> */}
     <Grid
 			item
-      xs={7}
+      xs={12}
       py={3}
 			px={1}
       // spacing={0}
@@ -284,7 +284,7 @@ export default function (props) {
         )}
       </Stack>
     </Grid>
-		<Grid item xs={2.5}></Grid>
+		{/* <Grid item xs={2.5}></Grid> */}
 		{
 			router.pathname !== '/administration/profile' &&
 			<UserSide />

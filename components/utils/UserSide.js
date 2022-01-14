@@ -20,7 +20,7 @@ export default function () {
       {!session || router.pathname == '/master/college' ? (
         ""
       ) : (
-        <Grid item xs={3} p={1}>
+        <Grid item xs={2} p={1}>
           <Card
             sx={{
               height: 400,

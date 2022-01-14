@@ -88,6 +88,8 @@ export default function List(props) {
 
   const [isLoading, setLoading] = useState(false);
 
+  const [dataList, setDataList] = useState([]);
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -96,18 +98,18 @@ export default function List(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = courses.map((n) => n.code);
+      const newSelecteds = dataList.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -134,7 +136,6 @@ export default function List(props) {
     setFilterName(event.target.value);
   };
 
-  const [dataList, setDataList] = useState([]);
 
   useEffect(() => {
     if (dataList.length == 0) getDataList();
@@ -185,7 +186,7 @@ export default function List(props) {
   const isUserNotFound = filteredUsers.length === 0;
   return (
     <>
-      <Grid item xs={9} p={1}>
+      <Grid item xs={10} p={1}>
         <Card>
           <Stack
             direction="row"
@@ -245,7 +246,7 @@ export default function List(props) {
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                      .map((row, indexRow) => {
+                      .map((initialRow, indexRow) => {
                         const {
                           id,
                           name,
@@ -257,8 +258,9 @@ export default function List(props) {
                           image_url,
                           user_enrollment,
                           createdBy,
-                        } = row;
-                        const isItemSelected = selected.indexOf(code) !== -1;
+                        } = initialRow;
+                        const isItemSelected = selected.indexOf(id) !== -1;
+												let row = JSON.parse(JSON.stringify(initialRow))
 
                         delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
@@ -307,7 +309,7 @@ export default function List(props) {
                             <TableCell padding="checkbox" key="uniqueKey1">
                               <Checkbox
                                 checked={isItemSelected}
-                                onChange={(event) => handleClick(event, code)}
+                                onChange={(event) => handleClick(event, id)}
                               />
                             </TableCell>
                             {columCell}

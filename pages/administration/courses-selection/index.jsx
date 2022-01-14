@@ -249,7 +249,7 @@ export default function (props) {
   const isUserNotFound = filteredUsers.length === 0;
   return (
     <BasicLayout title="Course Selection">
-      <Grid item xs={9} p={1}>
+      <Grid item xs={10} p={1}>
         <Card>
           <Stack
             direction="row"
@@ -332,6 +332,7 @@ export default function (props) {
 
                         // delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
+                        tableHeadId.pop()
                         Object.keys(tempRow).map((item) => {
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')

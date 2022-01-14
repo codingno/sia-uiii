@@ -80,7 +80,7 @@ export default function () {
 					}}
 				>
 					<TopMenu />
-					<Grid xs={9}>
+					<Grid xs={10}>
 						<Card
 							sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
 							>
