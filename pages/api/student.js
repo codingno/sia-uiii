@@ -32,6 +32,7 @@ User.hasMany(Student, { foreignKey: "user_id" });
 Student.belongsTo(UserInfo, { foreignKey: "user_id", as: "user_info", targetKey: 'user_id' });
 UserInfo.hasMany(Student, { foreignKey: "user_id", sourceKey:'user_id' });
 UserInfo.belongsTo(MasterIdentityType, { foreignKey: "identity_type_id", as: "identity_type" });
+Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -83,7 +84,13 @@ export default nextConnect()
         const data = await Student.findOne({
           where: options,
           include: [
-            { model: Teacher, as: "teacher" },
+            { model: Teacher, as: "teacher",
+              include:[
+                {
+                  model: UserInfo, as: 'user_info'
+                }
+              ]
+            },
             { model: Departement, as: "departement",
 							include: [
 								{ model : Faculty, as: "faculty" },
@@ -100,26 +107,58 @@ export default nextConnect()
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-        return res.status(200).json({ data });
+        if(data){
+          let new_data = JSON.parse(JSON.stringify(data))
+          new_data.name = data.user_info ? (data.user_info.first_name +( data.user_info.middle_name ? (' ' + data.user_info.middle_name + ' ') : ' ')  + data.user_info.last_name) : null
+          new_data.teacher_name = data.teacher?.user_info ? (data.teacher.user_info.first_name +( data.teacher.user_info.middle_name ? (' ' + data.teacher.user_info.middle_name + ' ') : ' ')  + data.teacher.user_info.last_name) : null
+        }
+        return res.status(200).json({ data: new_data });
       } catch (error) {
         return res.status(500).json({ error });
       }
     } else {
       try {
+        let condition = {}
+        if(req.user.isTeacher)
+          condition = {
+            teacher_id: req.user.id
+          }
         const data = await Student.findAll({
+          where: condition,
           include: [
-            {
-              model: Teacher,
-              as: "teacher",
+            { model: Teacher, as: "teacher",
+              include:[
+                {
+                  model: UserInfo, as: 'user_info'
+                }
+              ]
             },
-            { model: Departement, as: "departement" },
+            { model: Departement, as: "departement",
+							include: [
+								{ model : Faculty, as: "faculty" },
+								{ model : MasterStudyType, as: "study_type" },
+							]
+						},
             { model: User, as: "user" },
-            { model: UserInfo, as: "user_info" },
+            { model: UserInfo, as: "user_info",
+							include: [
+								{ model : MasterIdentityType, as: "identity_type" },
+							]
+						},
+						{ model : MasterStudentStatus, as: "student_status" },
           ],
         });
         if (data.length == 0)
           return res.status(404).json({ error: "Data not found", data });
-        return res.status(200).json({ data });
+        else {
+          let result = JSON.parse(JSON.stringify(data))
+          result.map((student) => {
+            student.name = student.user_info ? (student.user_info.first_name +( student.user_info.middle_name ? (' ' + student.user_info.middle_name + ' ') : ' ')  + student.user_info.last_name) : null
+            student.teacher_name = student.teacher && student.teacher.user_info ? (student.teacher.user_info.first_name +( student.teacher.user_info.middle_name ? (' ' + student.teacher.user_info.middle_name + ' ') : ' ')  + student.teacher.user_info.last_name) : null
+            return student
+          })
+          return res.status(200).json({ data: result });
+        }
       } catch (error) {
         return res.status(500).json({ error });
       }

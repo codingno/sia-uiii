@@ -93,11 +93,31 @@ export default nextConnect()
         const data = await AcademicKrs.findOne({
           where: condition,
           include: [
-            { model: AcademicSchedule, as: "schedule" },
+            { model: AcademicSchedule, as: "schedule", 
+							include: [
+								{ model: Course, as: "course" },
+								{ model: Departement, as: "departement" },
+								{ model: Room, as: "room" },
+								{ model: Teacher, as: "teacher",
+									include: [
+										{ model: UserInfo, as: "user_info" },
+									],
+								},
+								{ model: Day, as: "day" },
+							],
+            },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-        return res.status(200).json({ data }).end();
+          let new_data = JSON.parse(JSON.stringify(data))
+					new_data.name = data.schedule.course.name
+					new_data.schedule.name = data.schedule.course.name
+					new_data.schedule.credits = data.schedule.course.credits
+					new_data.schedule.teacher_name = data.schedule.teacher.user_info.first_name + ' ' + data.schedule.teacher.user_info.middle_name + ' ' + data.schedule.teacher.user_info.last_name
+					new_data.schedule.day_name = data.schedule.day.name
+					new_data.schedule.room_name = data.schedule.room.name
+
+        return res.status(200).json({ data: new_data }).end();
       } catch (error) {
         return res.status(500).json({ error });
       }

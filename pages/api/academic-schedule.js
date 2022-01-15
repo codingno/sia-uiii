@@ -91,6 +91,13 @@ export default nextConnect()
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
+        let new_data = JSON.parse(JSON.stringify(data))
+          new_data.name = data.course.name
+					new_data.credits = data.course.credits
+					new_data.teacher_name = data.teacher.user_info ? (data.teacher.user_info.first_name + ' ' + data.teacher.user_info.middle_name + ' ' + data.teacher.user_info.last_name) : ''
+					new_data.day_name = data.day.name
+					new_data.room_name = data.room.name
+
         return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });
