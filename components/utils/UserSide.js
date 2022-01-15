@@ -25,38 +25,37 @@ export default function () {
             sx={{
               height: 400,
 							bgcolor : 'primary.main',
+							py : 5,
             }}
           >
-            <CardHeader
-              avatar={
-                <Avatar aria-label="">
-                  {session.user.image && (
-                    <Image
-                      src={session.user.image}
-                      alt={session.user.name}
-                      width={40}
-                      height={20}
-                    />
-                  )}
-                </Avatar>
-              }
-              action={<IconButton aria-label=""></IconButton>}
-              title={
-								<Typography variant="h6" color="background.default">
-								{session.user.name}
-								</Typography>
-							}
-							// title={session.user.name}
-              subheader={
-								<Typography variant="body1" color="primary.dark">
-									{session.user.email}
-								</Typography>
-							}
+          <Stack
+            direction="column	"
+            alignItems="center"
+            justifyContent="center"
+          >
+						<Avatar aria-label=""
 							sx={{
-								pb : 17.3,
+									width:100,
+									height:100,
+									mb : 5,
 							}}
-            />
-						<Divider />
+						>
+							{session.user.image && (
+								<Image
+									src={session.user.image}
+									alt={session.user.name}
+									width={150}
+									height={75}
+								/>
+							)}
+						</Avatar>
+						<Typography variant="h6" color="background.default">
+						{session.user.name}
+						</Typography>
+						<Typography variant="body1" color="primary.dark">
+							{session.user.email}
+						</Typography>
+					</Stack>
           </Card>
         </Grid>
       )}

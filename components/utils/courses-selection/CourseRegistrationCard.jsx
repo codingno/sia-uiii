@@ -1,0 +1,573 @@
+import React from "react";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Image from "next/image";
+
+const dummyTable = [
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+	{
+		course_code : 'ISL0101',
+		course_name : 'Digital Islam',
+		credits : 3,
+		teacher_name : 'Prof. Dr. Muammar Kadafi',
+	},
+]
+
+const sumCredits = dummyTable.reduce((prev, cur) => prev + cur.credits, 0)
+
+export default function CourseRegistrationCard() {
+  return (
+    <Grid
+      container
+      spacing={1}
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      alignContent="center"
+      wrap="wrap"
+    >
+      <Grid item xs={10} mt={10} mx={10}>
+        <Box>
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            alignContent="stretch"
+            wrap="wrap"
+          >
+            <Grid item xs={2}>
+              <Image
+                src="/static/logo.png"
+                alt="Picture of the author"
+                width={70}
+                height={70}
+                onClick={() => router.push("/")}
+              />
+            </Grid>
+            <Grid item xs={10}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: "700",
+                  }}
+                >
+                  INDONESIAN INTERNATIONAL ISLAMIC UNIVERSITY
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    color: "#00778B",
+                    py: 0.7,
+                  }}
+                >
+                  Faculty of Islamic Studies
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "8px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Jl. Raya Bogor No. 33.5 Cimanggis Depok, Jawa Barat
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "8px",
+                    fontWeight: "500",
+                  }}
+                >
+                  Phone : (021)-7776378, Fax: (021)-7777778, email :
+                  academic@uiii.ac.id
+                </Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+          <div
+            style={{
+              backgroundColor: "#000",
+              height: "1px",
+              width: "100%",
+              marginTop: "10px",
+              marginBottom: "2px",
+            }}
+          ></div>
+          <div
+            style={{
+              backgroundColor: "#000",
+              height: "3px",
+              width: "100%",
+            }}
+          ></div>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Box>
+					<Grid
+						container
+						spacing={1}
+						direction="row"
+						justifyContent="center"
+						alignItems="center"
+						alignContent="center"
+						wrap="wrap"
+					>
+            <Grid item xs={12}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    pt: 1,
+                    pb: 5,
+                  }}
+                >
+                  COURSE REGISTRATION CARD
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={1}>
+            </Grid>
+            <Grid item xs={2.5}>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Name 
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Faculty 
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Study Program 
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={3}>
+            </Grid>
+            <Grid item xs={2}>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Program
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Semester
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="space-between"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    px: 1,
+                  }}
+                >
+									Year
+                </Typography>
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "700",
+                  }}
+                >
+									:
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={2}>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+      <Grid item xs={10} mt={3} mx={10}>
+        <Box>
+          <Grid
+            container
+            spacing={1}
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            alignContent="stretch"
+            wrap="wrap"
+          >
+            <Grid item xs={12}>
+							<table 
+								className="course-registration"
+							style={{ 
+									fontSize : '10px',
+								}}>
+								<thead>
+									<tr>
+										<td width="5%">No</td>
+										<td>Course Code</td>
+										<td width="33%">Course</td>
+										<td>Credit</td>
+										<td width="37%">Supervising Lecturer</td>
+									</tr>
+								</thead>
+								<tbody>
+									{
+										dummyTable.map((item, index) => {
+											return (
+												<tr
+													style={{
+														backgroundColor : index % 2 == 0 ? '#E0E0E0' : '#fff',
+													}}
+												>
+													<td>{index+30}</td>
+													<td>{item.course_code}</td>
+													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.course_name}</td>
+													<td>{item.credits}</td>
+													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.teacher_name}</td>
+												</tr>
+											)
+										})
+									}
+									<tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td
+											style={{
+												fontWeight : '700',
+											}}
+										>
+											{sumCredits}
+										</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Box>
+					<Grid
+						container
+						spacing={1}
+						direction="row"
+						justifyContent="flex-end"
+						alignItems="flex-end"
+						alignContent="center"
+						wrap="wrap"
+					>
+            <Grid item xs={10}>
+              <Stack
+                direction="row"
+                alignItems="flex-end"
+                justifyContent="flex-end"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "500",
+                    pt: 3,
+                  }}
+                >
+									Depok, ............................... {new Date().getFullYear()}
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={1.7}>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Box
+					pt={1.5}
+				>
+					<Grid
+						container
+						spacing={1}
+						direction="row"
+						justifyContent="center"
+						alignItems="center"
+						alignContent="center"
+						wrap="wrap"
+					>
+            <Grid item xs={1.7}>
+            </Grid>
+            <Grid item xs={4.3}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "500",
+                    pt: 3,
+                  }}
+                >
+									Head of the study program,
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+								height={50}
+              >
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "500",
+                    pt: 3,
+                  }}
+                >
+									(...............................)
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={4.3}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "500",
+                    pt: 3,
+                    pl: 3,
+                  }}
+                >
+									Student,
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+								height={50}
+              >
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Typography
+                  variant="string"
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "500",
+                    pt: 3,
+                    pl: 3,
+                  }}
+                >
+									(...............................)
+                </Typography>
+              </Stack>
+            </Grid>
+            <Grid item xs={1.7}>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </Grid>
+  );
+}
