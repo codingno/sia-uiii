@@ -159,6 +159,7 @@ export default async (req, res) => await NextAuth(req, res, {
               user.student_number = user_secret.student.student_number;
               user.semester_active = user_secret.student.semester_active;
               user.departementID = user_secret.student.departement_id;
+							user.studentData = user_secret.student;
             } else {
               user.isAdmin = true;
             }

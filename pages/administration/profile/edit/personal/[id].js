@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
 
 import FormContainer from "../../../../../components/utils/FormContainer";
 import FormLayout from "../../../../../components/utils/FormLayout";
@@ -62,6 +68,11 @@ export default function () {
   const [identity_id, setIdentityID] = useState("");
   const [identity_type_id, setIdentityType] = useState("");
 
+  const [father_name, setFatherName] = useState("");
+  const [mother_name, setMotherName] = useState("");
+  const [father_income, setFatherIncome] = useState("");
+  const [mother_income, setMotherIncome] = useState("");
+
   const [user_id, setUserID] = useState("");
   const [student_number, setStudentNumber] = useState("");
   const [teacher_id, setTeacherID] = useState("");
@@ -103,6 +114,10 @@ export default function () {
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
 				setstudentData(data.data)
+				setFatherName(data.data.father_name)
+				setMotherName(data.data.mother_name)
+				setFatherIncome(data.data.father_income)
+				setMotherIncome(data.data.mother_income)
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -206,6 +221,10 @@ export default function () {
 				entry_status,
 				departement_id,
 				status,
+				father_name,
+				mother_name,
+				father_income,
+				mother_income,
 			}	
 			let prepareData = {
 				...studentData,
@@ -237,14 +256,25 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Edit">
+    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Personal Edit">
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="flex-start"
+				alignItems="flex-start"
+				alignContent="stretch"
+				wrap="wrap"
+				
+			>
+				<Grid	item xs={6}	>
       <Stack
         mb={4}
         sx={{
-          width: 640,
+          width: "100%",
         }}
       >
-        <FormContainer
+        {/* <FormContainer
           label="Student Number"
           name="student_number"
           value={student_number}
@@ -314,7 +344,7 @@ export default function () {
 						</MenuItem>
 						{statusOptions.length > 0 && statusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
-				</FormParent>
+				</FormParent> */}
         <FormContainer
           label="First Name"
           name="first_name"
@@ -339,12 +369,28 @@ export default function () {
           value={place_of_birth}
           setValue={setPlaceOfBirth}
         />
-        <FormContainer
+        {/* <FormContainer
           label="Date Of Birth"
           name="date_of_birth"
           value={date_of_birth}
           setValue={setDateOfBirth}
-        />
+        /> */}
+				<FormParent label="Date Of Birth">
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DesktopDatePicker
+								inputFormat="MM/dd/yyyy"
+								// label="Date Of Birth"
+								name="date_of_birth"
+								value={date_of_birth}
+								onChange={setDateOfBirth}
+								renderInput={(params) => <TextField {...params} 
+								sx={{
+									width : '65%',
+								}}
+								/>}
+							/>
+					</LocalizationProvider>
+				</FormParent>
 				<FormParent label="Gender">
 					<Select
 						displayEmpty
@@ -394,6 +440,40 @@ export default function () {
           </Button>
         </Stack>
       </Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+				<Stack
+					mb={4}
+				>
+        <FormContainer
+          label="Father Name"
+          name="father_name"
+          value={father_name}
+          setValue={setFatherName}
+        />
+        <FormContainer
+          label="Father Income"
+          name="father_income"
+					type="number"
+          value={father_income}
+          setValue={setFatherIncome}
+        />
+        <FormContainer
+          label="Mother Name"
+          name="mother_name"
+          value={mother_name}
+          setValue={setMotherName}
+        />
+        <FormContainer
+          label="Mother Income"
+          name="mother_income"
+					type="number"
+          value={mother_income}
+          setValue={setMotherIncome}
+        />
+				</Stack>
+			</Grid>
+			</Grid>
     </FormLayout>
   );
 }

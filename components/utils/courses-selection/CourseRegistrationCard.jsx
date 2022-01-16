@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
@@ -57,9 +57,36 @@ const dummyTable = [
 	},
 ]
 
-const sumCredits = dummyTable.reduce((prev, cur) => prev + cur.credits, 0)
+// const sumCredits = dummyTable.reduce((prev, cur) => prev + cur.credits, 0)
+
+import axios from "axios";
+import { useSession } from "next-auth/react"
+
 
 export default function CourseRegistrationCard() {
+	const [courseData, setCourseData] = useState([])
+	const [sumCredits, setSumCredits] = useState(0)
+	const { data: session, status : statusSession } = useSession()
+
+  useEffect(() => {
+    getDataList();
+  }, []);
+
+  async function getDataList() {
+    try {
+      const { data, error } = await axios.get("/api/academic-krs");
+      console.log(`🚀 ~ file: CourseRegistrationCard.jsx ~ line 77 ~ getDataList ~ data`, data.data)
+      setCourseData(data.data);
+			setSumCredits(data.data.reduce((prev, cur) => prev + cur.schedule.course.credits, 0))
+    } catch (error) {
+      if (error.response) {
+        if ((error.response.status = 404)) return;
+      }
+      alert(error);
+    }
+  }
+	if(courseData.length == 0)
+		return ""
   return (
     <Grid
       container
@@ -395,7 +422,7 @@ export default function CourseRegistrationCard() {
 								</thead>
 								<tbody>
 									{
-										dummyTable.map((item, index) => {
+										courseData.map((item, index) => {
 											return (
 												<tr
 													style={{
@@ -403,10 +430,10 @@ export default function CourseRegistrationCard() {
 													}}
 												>
 													<td>{index+30}</td>
-													<td>{item.course_code}</td>
-													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.course_name}</td>
-													<td>{item.credits}</td>
-													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.teacher_name}</td>
+													<td>{item.schedule.course.code}</td>
+													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.name}</td>
+													<td>{item.schedule.course.credits}</td>
+													<td style={{ paddingLeft : '10px', textAlign : 'left'}}>{item.schedule.teacher_name}</td>
 												</tr>
 											)
 										})
@@ -557,9 +584,11 @@ export default function CourseRegistrationCard() {
                     fontWeight: "500",
                     pt: 3,
                     pl: 3,
+										textDecoration: 'underline',
                   }}
                 >
-									(...............................)
+									{/* (...............................) */}
+									{session.user.name}
                 </Typography>
               </Stack>
             </Grid>

@@ -176,7 +176,7 @@ export default function List(props) {
   ];
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courses.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0;
 
   // const filteredUsers = courseList ? applySortFilter(courseList, getComparator(order, orderBy), filterName) : [];
   const filteredUsers =
@@ -187,12 +187,17 @@ export default function List(props) {
   return (
     <>
       <Grid item xs={10} p={1}>
-        <Card>
+        <Card
+					sx={{
+						maxHeight : `calc(100vh + ${-120 + (emptyRows * 47) + 52}px)`,
+					}}
+				>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
             p={5}
+						pb={1}
           >
             <Typography variant="h5" gutterBottom>
               {title}
@@ -215,7 +220,7 @@ export default function List(props) {
             // refresh={() => dispatch({type : 'refresh_start'})}
           />
 
-          <Scrollbar>
+          {/* <Scrollbar> */}
             {isLoading ? (
               <div
                 style={{
@@ -306,12 +311,12 @@ export default function List(props) {
                               bgcolor: indexRow % 2 > 0 ? "#F4F4F4" : "#E9E9E9",
                             }}
                           >
-                            <TableCell padding="checkbox" key="uniqueKey1">
+                            {/* <TableCell padding="checkbox" key="uniqueKey1">
                               <Checkbox
                                 checked={isItemSelected}
                                 onChange={(event) => handleClick(event, id)}
                               />
-                            </TableCell>
+                            </TableCell> */}
                             {columCell}
                             {/* <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
@@ -334,11 +339,11 @@ export default function List(props) {
                           </TableRow>
                         );
                       })}
-                    {emptyRows > 0 && (
+                    {/* {emptyRows > 0 && (
                       <TableRow style={{ height: 53 * emptyRows }}>
                         <TableCell colSpan={6} />
                       </TableRow>
-                    )}
+                    )} */}
                   </TableBody>
                   {isUserNotFound && (
                     <TableBody>
@@ -352,7 +357,7 @@ export default function List(props) {
                 </Table>
               </TableContainer>
             )}
-          </Scrollbar>
+          {/* </Scrollbar> */}
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}

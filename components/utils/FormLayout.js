@@ -65,7 +65,7 @@ export default function (props) {
 					
 				<TopMenu />
         <Grid 
-				xs={9}
+				xs={10}
 				p={1}
 				>
           <Card

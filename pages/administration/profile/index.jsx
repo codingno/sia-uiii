@@ -24,6 +24,15 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 
+const routeName = [
+	null,
+	null,
+	'personal/',
+	'history/',
+	null,
+	'contact/',
+]
+
 export default function profile() {
 	const router = useRouter()
   const { data: session, status } = useSession();
@@ -44,6 +53,7 @@ export default function profile() {
 		try {
       const { data } = await axios.get(`/api/student?user_id=${session.user.userID}`);
       setuserData(data.data)
+      console.log(`🚀 ~ file: index.jsx ~ line 48 ~ getStudentData ~ data.data`, data.data)
 
 		} catch (error) {
 			
@@ -55,7 +65,7 @@ export default function profile() {
 			router.push('/auth/signin')
 	},[session, status])	
 
-	if(status === 'loading' || status === 'unauthenticated')
+	if(status === 'loading' || status === 'unauthenticated' || !userData.user)
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
 	return (
@@ -112,7 +122,7 @@ export default function profile() {
             />
 					}
 					{
-						value !== '1' &&
+						value !== '1' && routeName[value] &&
 					<Button
 						variant="contained"
 						color="primary"
@@ -123,7 +133,8 @@ export default function profile() {
 						// 	mr : 3
 						// }}
 						onClick={() => {
-							router.push('/administration/profile/edit/'+ ( value == 2 ? 'personal/' : 'contact/' ) + userData.id)
+							// router.push('/administration/profile/edit/'+ ( value == 2 ? 'personal/' : 'contact/' ) + userData.id)
+							router.push('/administration/profile/edit/'+ routeName[value] + userData.id)
 						}}
 					>
 						Edit	
@@ -137,7 +148,8 @@ export default function profile() {
 								<TabList onChange={handleChange} aria-label="lab API tabs example">
 									<Tab label="Academic" value="1" />
 									<Tab label="Personal" value="2" />
-									<Tab label="Contact" value="3" />
+									<Tab label="School History" value="3" />
+									<Tab label="Contact" value="4" />
 								</TabList>
 							</Box>
 							<TabPanel value="1">
@@ -154,17 +166,63 @@ export default function profile() {
 								}
 							</TabPanel>
 							<TabPanel value="2">
-								{
-									userData.user_info &&
-									<>
-										<StackContainer label="Identity ID" value={`${userData.user_info.identity_id} (${userData.user_info.identity_type.name})`} />
-										<StackContainer label="Place Of Birth" value={`${userData.user_info.place_of_birth}`} />
-										<StackContainer label="Date Of Birth" value={`${userData.user_info.date_of_birth}`} />
-										<StackContainer label="Gender" value={`${userData.user_info.gender}`} />
-									</>
-								}
+								<Grid
+									container
+									spacing={1}
+									direction="row"
+									justifyContent="flex-start"
+									alignItems="flex-start"
+									alignContent="stretch"
+									wrap="wrap"
+									
+								>
+									<Grid	item xs={6}	>
+									{
+										userData.user_info &&
+										<>
+											<StackContainer label="Identity ID" width="100%" leftWidth="50%" value={`${userData.user_info.identity_id} (${userData.user_info.identity_type.name})`} />
+											<StackContainer label="Place Of Birth" width="100%" leftWidth="50%" value={`${userData.user_info.place_of_birth}`} />
+											<StackContainer label="Date Of Birth" width="100%" leftWidth="50%" value={`${userData.user_info.date_of_birth}`} />
+											<StackContainer label="Gender" width="100%" leftWidth="50%" value={`${userData.user_info.gender}`} />
+										</>
+									}
+									</Grid>
+									<Grid	item xs={6}	>
+											<StackContainer label="Father Name"  width="100%" leftWidth="50%"value={`${userData.user_info.identity_id} (${userData.father_name})`} />
+											<StackContainer label="Father Income"  width="100%" leftWidth="50%"value={`${userData.father_income}`} />
+											<StackContainer label="Mother Name"  width="100%" leftWidth="50%"value={`${userData.mother_name}`} />
+											<StackContainer label="Mother Income"  width="100%" leftWidth="50%"value={`${userData.mother_income}`} />
+									</Grid>
+								</Grid>
 							</TabPanel>
 							<TabPanel value="3">
+								<Grid
+									container
+									spacing={1}
+									direction="row"
+									justifyContent="flex-start"
+									alignItems="flex-start"
+									alignContent="stretch"
+									wrap="wrap"
+									
+								>
+									<Grid	item xs={6}	>
+											<StackContainer label="School Name" width="100%" leftWidth="50%" value={`${userData.school_name || ''}`} />
+											<StackContainer label="School Phone" width="100%" leftWidth="50%" value={`${userData.school_telp || ''}`} />
+											<StackContainer label="School Address" width="100%" leftWidth="50%" value={`${userData.school_address || ''}`} />
+											<StackContainer label="School Departement" width="100%" leftWidth="50%" value={`${userData.school_departement || ''}`} />
+											<StackContainer label="School End" width="100%" leftWidth="50%" value={`${userData.school_end || ''}`} />
+									</Grid>
+									<Grid	item xs={6}	>
+											<StackContainer label="Campus Name" width="100%" leftWidth="50%" value={`${userData.campus_name || ''}`} />
+											<StackContainer label="Campus Phone" width="100%" leftWidth="50%" value={`${userData.campus_telp || ''}`} />
+											<StackContainer label="Campus Address" width="100%" leftWidth="50%" value={`${userData.campus_address || ''}`} />
+											<StackContainer label="Campus Departement" width="100%" leftWidth="50%" value={`${userData.campus_departement || ''}`} />
+											<StackContainer label="Campus End" width="100%" leftWidth="50%" value={`${userData.campus_end || ''}`} />
+									</Grid>
+								</Grid>
+							</TabPanel>
+							<TabPanel value="4">
 								{
 									userData.user_info &&
 									<>

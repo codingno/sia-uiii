@@ -27,10 +27,6 @@ const topMenuList = [
 				disable : true,
       },
       {
-        name: "Courses Selection",
-        link: "administration/courses-selection",
-      },
-      {
         name: "Grade",
         link: "administration/grade",
 				disable : true,
@@ -61,6 +57,10 @@ const topMenuList = [
       {
         name: "Academic Schedule",
         link: "academic/schedule",
+      },
+      {
+        name: "Courses Selection",
+        link: "academic/courses-selection",
       },
     ],
   },
@@ -218,7 +218,7 @@ export default function (props) {
     <Grid
 			item
       xs={12}
-      py={3}
+      pt={3}
 			px={1}
       // spacing={0}
       // direction="row"

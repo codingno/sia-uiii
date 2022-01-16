@@ -69,15 +69,15 @@ export default function () {
 			>
 				<Grid
 					container
-					spacing={0}
+					spacing={1}
 					direction="row"
 					justifyContent="center"
 					alignItems="center"
 					alignContent="center"
 					wrap="wrap"
-					sx={{
-						py: 3,
-					}}
+					// sx={{
+					// 	pt: 3,
+					// }}
 				>
 					<TopMenu />
 					<Grid xs={10}>

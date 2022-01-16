@@ -237,7 +237,7 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Edit">
+    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Contact Edit">
       <Stack
         mb={4}
         sx={{

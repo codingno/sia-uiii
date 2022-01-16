@@ -10,7 +10,7 @@ export default function FormContainer(props) {
       alignItems="center"
       ml={5}
       mt={1}
-      sx={{ width: "80%", display: "flex", justifyContent: "flex-start" }}
+      sx={{ width: props.width || "80%", display: "flex", justifyContent: "flex-start" }}
     >
       <span style={{ width: "35%" }}>{props.label}</span>
       <FormControl sx={{ width: "65%" }} variant="outlined">

@@ -55,6 +55,20 @@ export default function () {
 						<Typography variant="body1" color="primary.dark">
 							{session.user.email}
 						</Typography>
+						{
+							session.user.student_number &&
+							<>
+							<Typography variant="body1" color="background.default" mt={3}>
+								{session.user.student_number}
+							</Typography>
+							<Typography variant="body1" color="background.default">
+								{session.user.studentData.entry_year}
+							</Typography>
+							<Typography variant="body1" color="background.default">
+								Semester {session.user.semester_active}
+							</Typography>
+							</>
+						}
 					</Stack>
           </Card>
         </Grid>

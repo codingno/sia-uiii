@@ -24,7 +24,6 @@ export default function CategoryListHead({
   onRequestSort,
   onSelectAllClick
 }) {
-  console.log("🚀 ~ file: CategoryListHead.js ~ line 27 ~ headLabel", headLabel)
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
