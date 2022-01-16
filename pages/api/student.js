@@ -134,6 +134,7 @@ export default nextConnect()
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
+          console.log(`🚀 ~ file: student.js ~ line 137 ~ .get ~ data`, data)
           let new_data = JSON.parse(JSON.stringify(data));
           new_data.name = data.user
             ? data.user.name
@@ -156,6 +157,7 @@ export default nextConnect()
             data.departement && data.departement.study_type
               ? data.departement.study_type.name
               : null;
+					new_data.studentData = data.user.student
           return res.status(200).json({ data: new_data });
       } catch (error) {
         console.log({ error });
