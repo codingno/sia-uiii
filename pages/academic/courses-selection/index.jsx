@@ -1,8 +1,13 @@
+import BasicLayout from "../../../components/utils/BasicLayout";
+
 import { filter } from "lodash";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import PrintIcon from '@mui/icons-material/Print';
+import Box from "@mui/material/Box";
 import plusFill from "@iconify/icons-eva/plus-fill";
+import editFill from "@iconify/icons-eva/edit-fill";
 // material
 import {
   Card,
@@ -22,14 +27,16 @@ import {
   TablePagination,
   CircularProgress,
 } from "@mui/material";
-import Scrollbar from "./Scrollbar";
-import SearchNotFound from "./SearchNotFound";
-import { CategoryListHead } from "./course";
-import TopMenu from "./TopMenu";
-import MoreMenu from "./MoreMenu";
-import ListToolbar from "./ListToolbar";
+// import Scrollbar from "../../../components/utils/Scrollbar";
+import Scrollbar from "../../../components/utils/Scrollbar";
+import SearchNotFound from "../../../components/utils/SearchNotFound";
+import { CategoryListHead } from "../../../components/utils/courses-selection";
+import TopMenu from "../../../components/utils/TopMenu";
+import MoreMenu from "../../../components/utils/MoreMenu";
+import ListToolbar from "../../../components/utils/ListToolbarCourseSelection";
 
 import axios from "axios";
+import { useSession } from "next-auth/react"
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -73,9 +80,36 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
-export default function List(props) {
-  const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
-    props;
+export default function (props) {
+  // const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
+    // props;
+		const { data: session, status : statusSession } = useSession()
+		const { isUserList } = props
+
+		const
+        title="Course Selection",
+        name="Selection",
+        getUrl="/api/academic-krs",
+        addLink="/academic/courses-selection/create",
+        tableHead=[
+          { id: "name", label: "Course", alignRight: false },
+          { id: "credits", label: "Credits", alignRight: false },
+          { id: "semester", label: "Semester", alignRight: false },
+          { id: "day_name", label: "Day", alignRight: false },
+          { id: "room_name", label: "Room", alignRight: false },
+          { id: "teacher_name", label: "Teacher", alignRight: false },
+          { id: "" },
+        ],
+        moremenu=[
+          {
+            name: "Edit",
+            link: "/academic/courses-selection/edit/",
+          },
+        ],
+        deleteOptions={
+          link: "/api/academic-krs/",
+          note: "Are you sure to delete this item?",
+        };
 
   const router = useRouter();
 
@@ -87,8 +121,10 @@ export default function List(props) {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [isLoading, setLoading] = useState(false);
-
+	
+	const [mode, setMode] = useState(0)
   const [dataList, setDataList] = useState([]);
+  const [selectedSchedule, setSelectedSchedule] = useState([]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -98,18 +134,18 @@ export default function List(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = dataList.map((n) => n.id);
+      const newSelecteds = dataList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -136,16 +172,45 @@ export default function List(props) {
     setFilterName(event.target.value);
   };
 
+	async function saveCourseSelection() {
+		try {
+			const preparedData = dataList.filter(function(item) { 
+				return this.indexOf(item.id) >= 0 
+			}, selected).map(item => {
+				return {
+					// student_number : session.user.student_number,
+					// semester : item.semester,
+					schedule_id : item.id,
+				}
+			})
+			console.log(preparedData);
+			const { data } = axios.post('/api/academic-krs', preparedData)
+      console.log(`🚀 ~ file: index.jsx ~ line 185 ~ saveCourseSelection ~ data`, data)
+		} catch (error) {
+      console.log(`🚀 ~ file: index.jsx ~ line 186 ~ saveCourseSelection ~ error`, error)
+			alert(error)	
+		}	
+	}
 
   useEffect(() => {
-    if (dataList.length == 0) getDataList();
-  }, [dataList]);
+    getDataList();
+  }, [mode]);
 
   async function getDataList() {
     try {
-      const { data, error } = await axios.get(getUrl);
-      console.log(`🚀 ~ file: List.jsx ~ line 146 ~ getDataList ~ data`, typeof(data.data), data.data)
-      setDataList(data.data);
+      const { data, error } = await axios.get(mode ? `/api/academic-schedule` : getUrl);
+			if(mode) {
+      	setDataList(data.data);
+				setSelected(selectedSchedule)
+			}
+			else {
+				const list = data.data.map(item => item.schedule)
+        console.log(`🚀 ~ file: index.jsx ~ line 203 ~ getDataList ~ list`, list)
+      	setDataList(list);
+				const ids = list.map(item => item.id)
+				setSelectedSchedule(ids)
+				setSelected([])
+			}
     } catch (error) {
       if (error.response) {
         if ((error.response.status = 404)) return;
@@ -185,7 +250,7 @@ export default function List(props) {
       : [];
   const isUserNotFound = filteredUsers.length === 0;
   return (
-    <>
+    <BasicLayout title="Course Selection">
       <Grid item xs={10} p={1}>
         <Card
 					sx={{
@@ -202,13 +267,32 @@ export default function List(props) {
             <Typography variant="h5" gutterBottom>
               {title}
             </Typography>
+						<Box>
+
+							{
+								!mode &&
             <Button
               variant="contained"
-              onClick={() => router.push(addLink)}
-              startIcon={<Icon icon={plusFill} />}
+							color="secondary"
+              onClick={() => router.push(router.pathname + '/pdf')}
+              startIcon={!mode && <Icon icon={PrintIcon} />}
+							sx={{ m : 1 }}
             >
-              Add {name}
+							Course Registration Card
             </Button>
+							}
+            <Button
+              variant="contained"
+              onClick={() => setMode(!mode)}
+              startIcon={!mode && <Icon icon={editFill} />}
+            >
+							{
+								mode ?
+								'Close Edit' :
+              	'Edit ' + name
+							}
+            </Button>
+						</Box>
           </Stack>
           <Divider />
 
@@ -217,10 +301,11 @@ export default function List(props) {
             filterName={filterName}
             onFilterName={handleFilterByName}
             toolbarName={name}
+						saveCourseSelection={saveCourseSelection}
             // refresh={() => dispatch({type : 'refresh_start'})}
           />
 
-          {/* <Scrollbar> */}
+          <Scrollbar>
             {isLoading ? (
               <div
                 style={{
@@ -251,7 +336,7 @@ export default function List(props) {
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
-                      .map((initialRow, indexRow) => {
+                      .map((row, indexRow) => {
                         const {
                           id,
                           name,
@@ -263,26 +348,26 @@ export default function List(props) {
                           image_url,
                           user_enrollment,
                           createdBy,
-                        } = initialRow;
+                        } = row;
                         const isItemSelected = selected.indexOf(id) !== -1;
-												let row = JSON.parse(JSON.stringify(initialRow))
+												let tempRow = JSON.parse(JSON.stringify(row))
 
-                        delete row.id;
+                        // delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
-                        console.log(`🚀 ~ file: List.jsx ~ line 272 ~ .map ~ tableHeadId`, tableHeadId)
-                        Object.keys(row).map((item) => {
+                        tableHeadId.pop()
+                        Object.keys(tempRow).map((item) => {
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')
 															row.name = row.user.name
-														delete row[item];
+														delete tempRow[item];
 													}
                         });
-												const arrayRow = Object.keys(row)
+												const arrayRow = Object.keys(tempRow)
 												if(isUserList) {
 													arrayRow.unshift(arrayRow[arrayRow.length - 1])
 													arrayRow.pop()
 												}
-                        const columCell = arrayRow.map(
+                        const columCell = tableHeadId.map(
                           (item, index) => {
                             return (
                               <TableCell align="left" key={index}>
@@ -292,7 +377,7 @@ export default function List(props) {
                                   spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
-                                    {row[item]}
+                                    {tempRow[item]}
                                   </Typography>
                                 </Stack>
                               </TableCell>
@@ -312,12 +397,12 @@ export default function List(props) {
                               bgcolor: indexRow % 2 > 0 ? "#F4F4F4" : "#E9E9E9",
                             }}
                           >
-                            {/* <TableCell padding="checkbox" key="uniqueKey1">
+                            <TableCell padding="checkbox" key="uniqueKey1">
                               <Checkbox
                                 checked={isItemSelected}
                                 onChange={(event) => handleClick(event, id)}
                               />
-                            </TableCell> */}
+                            </TableCell>
                             {columCell}
                             {/* <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
@@ -358,7 +443,7 @@ export default function List(props) {
                 </Table>
               </TableContainer>
             )}
-          {/* </Scrollbar> */}
+          </Scrollbar>
 
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
@@ -371,6 +456,6 @@ export default function List(props) {
           />
         </Card>
       </Grid>
-    </>
+		</BasicLayout>
   );
 }
