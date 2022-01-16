@@ -15,8 +15,12 @@ export default function () {
         addLink="/academic/course/create"
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
-          { id: "course_type_id", label: "Course Type", alignRight: false },
-          { id: "departement_id", label: "Program Study", alignRight: false },
+          { id: "code", label: "Code", alignRight: false },
+          { id: "departement_name", label: "Program Study", alignRight: false },
+          { id: "credits", label: "Credits", alignRight: false },
+          { id: "semester", label: "Semester", alignRight: false },
+          { id: "course_type_name", label: "Course Type", alignRight: false },
+          { id: "status", label: "Status", alignRight: false },
           { id: "" },
         ]}
         moremenu={[

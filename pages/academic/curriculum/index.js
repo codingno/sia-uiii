@@ -15,6 +15,7 @@ export default function () {
         addLink="/academic/curriculum/create"
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
+          { id: "code", label: "Code", alignRight: false },
           { id: "year", label: "Year", alignRight: false },
           { id: "" },
         ]}

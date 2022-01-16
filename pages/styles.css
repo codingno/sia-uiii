@@ -152,3 +152,21 @@ iframe {
 	margin: 0;
 	width: 250px;
 }
+
+@keyframes my-animation {        
+  from {
+		transform: rotate(-360deg)
+  }
+  to {
+		transform: rotate(0deg)
+  }      
+}
+
+.spin-animation{
+  position: relative;
+  animation: my-animation 2s ease;
+}
+
+#renew-create-password {
+	transition: ease 2s;
+}

@@ -20,9 +20,7 @@ export default function FormContainer(props) {
           value={props.value}
           onChange={(e) => props.setValue(e.target.value)}
 					sx={{
-						// "& .MuiFilledInput-root": {
-							background: "#E0E0E0"
-						// }
+						background: "#E0E0E0"
 					}}
         />
 				{ props.helper && <FormHelperText>{props.helper}</FormHelperText> }

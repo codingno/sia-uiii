@@ -1,8 +1,30 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import { Icon } from '@iconify/react';
+import eyeFill from '@iconify/icons-eva/eye-fill';
+import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
 
 import FormContainer from "../../../components/utils/FormContainer";
 import FormLayout from "../../../components/utils/FormLayout";
@@ -11,6 +33,8 @@ import FormParent from "../../../components/utils/FormParent";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react"
+import generator from 'generate-password';
+
 
 export default function () {
   const router = useRouter();
@@ -70,6 +94,16 @@ export default function () {
   const [entry_status, setEntryStatus] = useState(entryStatusOptions[0].id);
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+	const generatePassword = () => generator.generate({
+		length: 10,
+		numbers: true
+	});
 
   useEffect(() => {
     if (teacherOptions.length == 0) getTeacher();
@@ -168,6 +202,8 @@ export default function () {
         entry_status,
         departement_id,
         status,
+				username,
+				password,
       };
       const { data } = await axios.post("/api/student", sendData);
       alert("Student successfully created.");
@@ -189,12 +225,36 @@ export default function () {
 
   return (
     <FormLayout title="Student Create | AIS UIII" titlePage="Student Create">
-      <Stack
+      {/* <Stack
         mb={4}
         sx={{
           width: 640,
         }}
+      > */}
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="flex-start"
+				alignItems="flex-start"
+				alignContent="stretch"
+				wrap="wrap"
+				
+			>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
       >
+				{/* <FormControl component="fieldset">
+					<FormLabel component="legend"></FormLabel>
+					<FormGroup>
+						
+					</FormGroup>
+					<FormHelperText></FormHelperText>
+				</FormControl> */}
         <FormContainer
           label="Student Number"
           name="student_number"
@@ -204,6 +264,7 @@ export default function () {
         <FormContainer
           label="Entry Year"
           name="entry_year"
+					type="number"
           value={entry_year}
           setValue={setEntryYear}
         />
@@ -282,6 +343,94 @@ export default function () {
           </Select>
         </FormParent>
         <FormContainer
+          label="Username"
+          name="username"
+          value={username}
+          setValue={setUsername}
+        />
+        <FormParent label="Password">
+				 {/* <TextField
+					 id="password"
+					 type={ showPassword ? "password" : "text" }
+					 value={password}
+					 onChange={e => setPassword(e.target.value)}
+					 
+				 />
+					<IconButton className="show-password" onClick={() => setShowPassword(!showPassword)} edge="end" sx={{position:'absolute', padding:'0.35rem'}}>
+						<Icon icon={showPassword ? eyeFill : eyeOffFill} />
+					</IconButton> */}
+      <FormControl sx={{ width: "65%" }} variant="outlined">
+					<OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={e => setShowPassword(!showPassword)}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+									<CopyToClipboard 
+										text={password} >
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={e => setCopied(!copied)}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											<Tooltip
+												open={copied}
+												title={"Copied to clipboard!"}
+												leaveDelay={1500}
+												onClose={() => setCopied(false)}
+											>
+											<ContentCopyIcon />
+								</Tooltip>
+										</IconButton>
+									</CopyToClipboard>
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={e => {
+										setPassword(generatePassword())
+										document.getElementById('renew-create-password').classList.add('spin-animation')	
+										console.log("jalan sini");
+										setTimeout(() => {
+											document.getElementById('renew-create-password').classList.remove('spin-animation')	
+											console.log("jalan sana");
+										}, 1000)
+									}}
+                  // onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+									<AutorenewIcon id="renew-create-password" />
+                </IconButton>
+              </InputAdornment>
+            }
+						inputProps={{
+								autoComplete: 'new-password'
+						}}
+						autocomplete="new-password"
+						sx={{
+							background: "#E0E0E0"
+						}}
+          />
+			</FormControl>
+        </FormParent>
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
+        <FormContainer
           label="First Name"
           name="first_name"
           value={first_name}
@@ -305,12 +454,28 @@ export default function () {
           value={place_of_birth}
           setValue={setPlaceOfBirth}
         />
-        <FormContainer
+        {/* <FormContainer
           label="Date Of Birth"
           name="date_of_birth"
           value={date_of_birth}
           setValue={setDateOfBirth}
-        />
+        /> */}
+				<FormParent label="Date Of Birth">
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DesktopDatePicker
+								inputFormat="MM/dd/yyyy"
+								// label="Date Of Birth"
+								name="date_of_birth"
+								value={date_of_birth}
+								onChange={setDateOfBirth}
+								renderInput={(params) => <TextField {...params} 
+								sx={{
+									width : '65%',
+								}}
+								/>}
+							/>
+					</LocalizationProvider>
+				</FormParent>
         <FormParent label="Gender">
           <Select
             displayEmpty
@@ -366,6 +531,8 @@ export default function () {
           </Button>
         </Stack>
       </Stack>
+			</Grid>
+			</Grid>
     </FormLayout>
   );
 }

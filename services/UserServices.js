@@ -25,9 +25,9 @@ export default {
         console.log(`🚀 ~ file: UserServices.js ~ line 24 ~ user`, user);
         const data_user_info = {
           user_id: user.id,
-          first_name: data.first_name || null,
-          middle_name: data.middle_name || null,
-          last_name: data.last_name | null,
+          first_name: data.first_name || "",
+          middle_name: data.middle_name || "",
+          last_name: data.last_name | "",
           place_of_birth: data.place_of_birth,
           date_of_birth: new Date(data.date_of_birth),
           gender: data.gender || 1,
@@ -36,7 +36,7 @@ export default {
           identity_type_id: data.identity_type_id || null,
         };
         const user_info = await UserInfo.create(data_user_info);
-        const hashed = data.pass ? await bcrypt.hash(data.pass, 10) : await bcrypt.hash('123456', 10)
+        const hashed = data.password ? await bcrypt.hash(data.password, 10) : await bcrypt.hash('123456', 10)
         const data_user_secret = {
           user_id: user.id,
           pass: hashed,

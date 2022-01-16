@@ -51,7 +51,7 @@ export default function CategoryListHead({
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.alignRight ? 'right' : 'left'}
+            align={headCell.alignRight ? 'right' :  (headCell.center || 'left')}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel

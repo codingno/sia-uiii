@@ -277,11 +277,14 @@ export default function List(props) {
 														delete row[item];
 													}
                         });
-												const arrayRow = Object.keys(row)
-												if(isUserList) {
-													arrayRow.unshift(arrayRow[arrayRow.length - 1])
-													arrayRow.pop()
-												}
+												// const arrayRow = Object.keys(row)
+												let arrayRow = []
+												Object.keys(row).map(item => arrayRow[tableHeadId.indexOf(item)] = item)
+                        console.log(`🚀 ~ file: List.jsx ~ line 281 ~ .map ~ arrayRow`, arrayRow)
+												// if(isUserList) {
+												// 	arrayRow.unshift(arrayRow[arrayRow.length - 1])
+												// 	arrayRow.pop()
+												// }
                         const columCell = arrayRow.map(
                           (item, index) => {
                             return (
