@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'ACTIVE',
 		},
     course_credits: DataTypes.INTEGER,
+    accreditation: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'departement',

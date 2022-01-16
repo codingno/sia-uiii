@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       student_number: DataTypes.STRING,
       schedule_id: DataTypes.INTEGER,
       semester: DataTypes.INTEGER,
+      confirmation: DataTypes.BOOLEAN
     },
     {
       sequelize,
