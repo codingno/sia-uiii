@@ -40,6 +40,14 @@ module.exports = (sequelize, DataTypes) => {
         ],
         defaultValue: 'MAN',
 		},
+		nationality: {
+			type: DataTypes.ENUM,
+        values: [
+          'WNI',
+          'WNA',
+        ],
+        defaultValue: 'WNI',
+		},
     identity_id: DataTypes.STRING,
     identity_type_id: DataTypes.INTEGER,
   }, {

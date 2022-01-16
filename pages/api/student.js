@@ -13,9 +13,18 @@ const Departement = require("../../models/departement")(
   db.sequelize,
   DataTypes
 );
-const MasterStudyType = require("../../models/masterStudyType")(db.sequelize, DataTypes);
-const MasterIdentityType = require("../../models/masterIdentityType")(db.sequelize, DataTypes);
-const MasterStudentStatus = require("../../models/masterStudentStatus")(db.sequelize, DataTypes);
+const MasterStudyType = require("../../models/masterStudyType")(
+  db.sequelize,
+  DataTypes
+);
+const MasterIdentityType = require("../../models/masterIdentityType")(
+  db.sequelize,
+  DataTypes
+);
+const MasterStudentStatus = require("../../models/masterStudentStatus")(
+  db.sequelize,
+  DataTypes
+);
 const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
 Student.belongsTo(Teacher, { foreignKey: "teacher_id", as: "teacher" });
 Teacher.hasMany(Student, { foreignKey: "teacher_id" });
@@ -24,139 +33,206 @@ Student.belongsTo(Departement, {
   as: "departement",
 });
 Departement.hasMany(Student, { foreignKey: "departement_id" });
-Departement.belongsTo(MasterStudyType, { foreignKey: "study_type_id", as: "study_type" });
+Departement.belongsTo(MasterStudyType, {
+  foreignKey: "study_type_id",
+  as: "study_type",
+});
 Departement.belongsTo(Faculty, { foreignKey: "faculty_id", as: "faculty" });
-Student.belongsTo(MasterStudentStatus, { foreignKey: "status", as: "student_status" });
+Student.belongsTo(MasterStudentStatus, {
+  foreignKey: "status",
+  as: "student_status",
+});
 Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
 User.hasMany(Student, { foreignKey: "user_id" });
-Student.belongsTo(UserInfo, { foreignKey: "user_id", as: "user_info", targetKey: 'user_id' });
-UserInfo.hasMany(Student, { foreignKey: "user_id", sourceKey:'user_id' });
-UserInfo.belongsTo(MasterIdentityType, { foreignKey: "identity_type_id", as: "identity_type" });
-Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
+Student.belongsTo(UserInfo, {
+  foreignKey: "user_id",
+  as: "user_info",
+  targetKey: "user_id",
+});
+UserInfo.hasMany(Student, { foreignKey: "user_id", sourceKey: "user_id" });
+UserInfo.belongsTo(MasterIdentityType, {
+  foreignKey: "identity_type_id",
+  as: "identity_type",
+});
+Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey: "user_id" });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
-  .use(isLogin)
+  // .use(isLogin)
   .post(async (req, res) => {
     const body = req.body;
-        try {
-					const user_id = await UserServices.create(body)
-          const data_student = {
-            user_id: user_id,
-            student_number: body.student_number,
-            teacher_id: body.teacher_id,
-            entry_year: body.entry_year,
-            entry_semester: body.entry_semester,
-            entry_status: body.entry_status,
-            departement_id: body.departement_id,
-            status: body.status, 
-            mother_name: body.mother_name,
-            father_name: body.father_name,
-            father_income: body.father_income,
-            mother_income: body.mother_income,
-            school_name: body.school_name,
-            school_telp: body.school_telp,
-            school_address: body.school_address,
-            school_departement: body.school_departement,
-            school_end: body.school_end,
-            campus_name: body.campus_name,
-            campus_telp: body.campus_telp,
-            campus_address: body.campus_address,
-            campus_departement: body.campus_departement,
-            campus_end: body.campus_end,
-            institution_name: body.institution_name,
-            institution_telp: body.institution_telp,
-            institution_address: body.institution_address,
-            institution_start: body.institution_start,
-            institution_end: body.institution_end,
-            semester_active: body.semester_active || 1,
-          }
-          const data = await Student.create(data_student);
-          return res.status(200).json({ data });
-        } catch (error) {
-          return res.status(500).json({ error });
-        }
+    try {
+      const user_id = await UserServices.create(body);
+      const data_student = {
+        user_id: user_id,
+        student_number: body.student_number,
+        teacher_id: body.teacher_id,
+        entry_year: body.entry_year,
+        entry_semester: body.entry_semester,
+        entry_status: body.entry_status,
+        departement_id: body.departement_id,
+        status: body.status,
+        mother_name: body.mother_name,
+        father_name: body.father_name,
+        father_income: body.father_income,
+        mother_income: body.mother_income,
+        school_name: body.school_name,
+        school_telp: body.school_telp,
+        school_address: body.school_address,
+        school_departement: body.school_departement,
+        school_end: body.school_end,
+        campus_name: body.campus_name,
+        campus_telp: body.campus_telp,
+        campus_address: body.campus_address,
+        campus_departement: body.campus_departement,
+        campus_end: body.campus_end,
+        institution_name: body.institution_name,
+        institution_telp: body.institution_telp,
+        institution_address: body.institution_address,
+        institution_start: body.institution_start,
+        institution_end: body.institution_end,
+        semester_active: body.semester_active || 1,
+      };
+      const data = await Student.create(data_student);
+      return res.status(200).json({ data });
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
   })
   .get(async (req, res) => {
-		const options = req.query
+    const options = req.query;
     if (options.id || options.user_id) {
       try {
         const data = await Student.findOne({
           where: options,
           include: [
-            { model: Teacher, as: "teacher",
-              include:[
+            {
+              model: Teacher,
+              as: "teacher",
+              include: [
                 {
-                  model: UserInfo, as: 'user_info'
-                }
-              ]
+                  model: UserInfo,
+                  as: "user_info",
+                },
+              ],
             },
-            { model: Departement, as: "departement",
-							include: [
-								{ model : Faculty, as: "faculty" },
-								{ model : MasterStudyType, as: "study_type" },
-							]
-						},
+            {
+              model: Departement,
+              as: "departement",
+              include: [
+                { model: Faculty, as: "faculty" },
+                { model: MasterStudyType, as: "study_type" },
+              ],
+            },
             { model: User, as: "user" },
-            { model: UserInfo, as: "user_info",
-							include: [
-								{ model : MasterIdentityType, as: "identity_type" },
-							]
-						},
-						{ model : MasterStudentStatus, as: "student_status" },
+            {
+              model: UserInfo,
+              as: "user_info",
+              include: [{ model: MasterIdentityType, as: "identity_type" }],
+            },
+            { model: MasterStudentStatus, as: "student_status" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-        if(data){
-          let new_data = JSON.parse(JSON.stringify(data))
-          new_data.name = data.user_info ? (data.user_info.first_name +( data.user_info.middle_name ? (' ' + data.user_info.middle_name + ' ') : ' ')  + data.user_info.last_name) : null
-          new_data.teacher_name = data.teacher?.user_info ? (data.teacher.user_info.first_name +( data.teacher.user_info.middle_name ? (' ' + data.teacher.user_info.middle_name + ' ') : ' ')  + data.teacher.user_info.last_name) : null
+        if (data) {
+          let new_data = JSON.parse(JSON.stringify(data));
+          new_data.name = data.user
+            ? data.user.name
+            : null;
+          new_data.teacher_name = data.teacher?.user_info
+            ? data.teacher.user_info.first_name +
+              (data.teacher.user_info.middle_name
+                ? " " + data.teacher.user_info.middle_name + " "
+                : " ") +
+              data.teacher.user_info.last_name
+            : null;
+          new_data.departement_name = data.departement
+            ? data.departement.name
+            : null;
+          new_data.faculty_name =
+            data.departement && data.departement.faculty
+              ? data.departement.faculty.name
+              : null;
+          new_data.study_type_name =
+            data.departement && data.departement.study_type
+              ? data.departement.study_type.name
+              : null;
+          return res.status(200).json({ data: new_data });
         }
-        return res.status(200).json({ data: new_data });
       } catch (error) {
+        console.log({ error });
         return res.status(500).json({ error });
       }
     } else {
       try {
-        let condition = {}
-        if(req.user.isTeacher)
+        let condition = {};
+        if (req.user && req.user.isTeacher)
           condition = {
-            teacher_id: req.user.id
-          }
+            teacher_id: req.user.id,
+          };
         const data = await Student.findAll({
           where: condition,
           include: [
-            { model: Teacher, as: "teacher",
-              include:[
+            {
+              model: Teacher,
+              as: "teacher",
+              include: [
                 {
-                  model: UserInfo, as: 'user_info'
-                }
-              ]
+                  model: UserInfo,
+                  as: "user_info",
+                },
+              ],
             },
-            { model: Departement, as: "departement",
-							include: [
-								{ model : Faculty, as: "faculty" },
-								{ model : MasterStudyType, as: "study_type" },
-							]
-						},
+            {
+              model: Departement,
+              as: "departement",
+              include: [
+                { model: Faculty, as: "faculty" },
+                { model: MasterStudyType, as: "study_type" },
+              ],
+            },
             { model: User, as: "user" },
-            { model: UserInfo, as: "user_info",
-							include: [
-								{ model : MasterIdentityType, as: "identity_type" },
-							]
-						},
-						{ model : MasterStudentStatus, as: "student_status" },
+            {
+              model: UserInfo,
+              as: "user_info",
+              include: [{ model: MasterIdentityType, as: "identity_type" }],
+            },
+            { model: MasterStudentStatus, as: "student_status" },
           ],
         });
         if (data.length == 0)
           return res.status(404).json({ error: "Data not found", data });
         else {
-          let result = JSON.parse(JSON.stringify(data))
+          let result = JSON.parse(JSON.stringify(data));
           result.map((student) => {
-            student.name = student.user_info ? (student.user_info.first_name +( student.user_info.middle_name ? (' ' + student.user_info.middle_name + ' ') : ' ')  + student.user_info.last_name) : null
-            student.teacher_name = student.teacher && student.teacher.user_info ? (student.teacher.user_info.first_name +( student.teacher.user_info.middle_name ? (' ' + student.teacher.user_info.middle_name + ' ') : ' ')  + student.teacher.user_info.last_name) : null
-            return student
-          })
+            student.name = student.user_info
+              ? student.user_info.first_name +
+                (student.user_info.middle_name
+                  ? " " + student.user_info.middle_name + " "
+                  : " ") +
+                student.user_info.last_name
+              : null;
+            student.teacher_name =
+              student.teacher && student.teacher.user_info
+                ? student.teacher.user_info.first_name +
+                  (student.teacher.user_info.middle_name
+                    ? " " + student.teacher.user_info.middle_name + " "
+                    : " ") +
+                  student.teacher.user_info.last_name
+                : null;
+            student.departement_name = student.departement
+              ? student.departement.name
+              : null;
+            student.faculty_name =
+              student.departement && student.departement.faculty
+                ? student.departement.faculty.name
+                : null;
+            student.study_type_name =
+              student.departement && student.departement.study_type
+                ? student.departement.study_type.name
+                : null;
+            return student;
+          });
           return res.status(200).json({ data: result });
         }
       } catch (error) {
@@ -170,7 +246,7 @@ export default nextConnect()
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
     // delete body.id;
     // UserServices.update(body, async function (err, data) {
-    //   if(err) 
+    //   if(err)
     //     res.status(500).json({err})
     //   else {
     //     try {
@@ -181,18 +257,18 @@ export default nextConnect()
     //     } catch (error) {
     //       return res.status(500).json({ error });
     //     }
-    //   }  
+    //   }
     // })
-		try {
-			await UserServices.update(body)
-			const data = await Student.update(body, {
-				where: { id: id },
-			});
-			return res.status(200).json({ message: "success update data" });
-		} catch (error) {
-      console.log(`🚀 ~ file: student.js ~ line 135 ~ .patch ~ error`, error)
-			return res.status(500).json({ error });
-		}
+    try {
+      await UserServices.update(body);
+      const data = await Student.update(body, {
+        where: { id: id },
+      });
+      return res.status(200).json({ message: "success update data" });
+    } catch (error) {
+      console.log(`🚀 ~ file: student.js ~ line 135 ~ .patch ~ error`, error);
+      return res.status(500).json({ error });
+    }
   })
   .delete(async (req, res) => {
     const body = req.body;
