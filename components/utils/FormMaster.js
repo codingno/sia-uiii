@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react"
 
 export default function (props) {
-	const { title, titlePage, submitUrl, method } = props
+	const { title, titlePage, submitUrl, method, additionalForm } = props
 
 	const router = useRouter()
   const { id } = router.query
@@ -21,6 +21,7 @@ export default function (props) {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+	const [additional, setAdditional] = useState({});
 
 	useEffect(() => {
 		getData()
@@ -32,6 +33,10 @@ export default function (props) {
 				const { data } = await axios.get(submitUrl + `?id=${id}`)
 				setName(data.data.name)
 				setDescription(data.data.description)
+				let { data: result } = data
+				delete result.name
+				delete result.description
+				setAdditional(result)
 			} catch (error) {
 				if(error.response) {
 					alert(error.response.data)
@@ -48,6 +53,7 @@ export default function (props) {
 					id,
 					name, 
 					description,
+					...additional,
 				})	
 			} else {
 				const data = await axios.post(submitUrl, {
@@ -89,6 +95,23 @@ export default function (props) {
           value={description}
           setValue={setDescription}
         />
+				{
+					additionalForm &&
+					additionalForm.map(item => {
+						return (
+							<FormContainer
+								label={item.label}
+								name={item.name}
+								value={additional[item.value]}
+								setValue={(value) => {
+									let newAdditional = additional
+									newAdditional[item.value] = value
+									setAdditional(newAdditional)
+								}}
+							/>
+						)
+					})
+				}
         <Stack
           direction="row"
           alignItems="center"

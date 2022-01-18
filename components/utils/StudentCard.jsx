@@ -1,0 +1,177 @@
+import React from "react";
+import { useSession } from "next-auth/react";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Image from "next/image";
+
+export default function StudentCard() {
+  const { data: session, status: statusSession } = useSession();
+  console.log(
+    `🚀 ~ file: StudentCard.jsx ~ line 7 ~ StudentCard ~ session`,
+    session
+  );
+  return (
+    <div style={{ width: "100%", height: "100%",
+                    boxShadow: "5px 5px 5px #bbb",
+										border: "1px solid #bbb",
+										borderRadius: "20px",
+										overflow : 'hidden',
+		 }}>
+      <Grid
+        container
+        spacing={0}
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
+        alignContent="stretch"
+        wrap="wrap"
+        style={{ width: "100%", height: "100%", p: 0, m: 0 }}
+      >
+        <Grid
+          item
+          xs={10.5}
+          sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+        >
+          <Grid
+            container
+            sx={{
+              bgcolor: "#004F66",
+              width: "100%",
+              height: "75%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              pl: 4,
+							pt: 8
+            }}
+          >
+            <Grid item xs={8}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+                mb={3}
+              >
+                <Typography variant="h4" gutterBottom color="#E5FFFF" 
+								// sx={{ fontWeight : 500 }}
+								>
+                  {session.user.name}
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+              >
+                <Typography variant="h5" gutterBottom color="#A1A893" 
+								fontWeight={700}
+								>
+                  {session.user.studentData.student_number}
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+                mb={3}
+              >
+                <Typography variant="h5" color="#A1A893" gutterBottom 
+								fontWeight={700}
+								>
+                  {session.user.studentData.departement.faculty.name}
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="flex-start"
+              >
+                <Box width={150} height={150} sx={{ bgcolor: "white" }}></Box>
+              </Stack>
+            </Grid>
+            <Grid item xs={3}>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-start"
+            width="100%"
+            m="auto"
+          >
+            {/* <Image
+              src="/static/logo-uiii.png"
+              alt="Picture of the author"
+              width={200}
+              height={300}
+              onClick={() => router.push("/")}
+            /> */}
+             <Box width={200} height={250} sx={{ bgcolor: "white" }}></Box>
+          </Stack>
+            </Grid>
+          </Grid>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="flex-start"
+            width="100%"
+            my="auto"
+            pl={8}
+          >
+            <Image
+              src="/static/logo-uiii.png"
+              alt="Picture of the author"
+              width={300}
+              height={77.25}
+              onClick={() => router.push("/")}
+            />
+          </Stack>
+        </Grid>
+        <Grid item xs={1.5} sx={{ height: "100%",
+							overflow: 'visible',
+			 }}>
+					<Stack
+						direction="row"
+						alignItems="center"
+						justifyContent="flex-start"
+						sx={{
+							height : '60%',
+							whiteSpace : 'nowrap',
+							// transform : 'translate(-80px)',
+							transform : 'rotate(90deg)',
+							overflow: 'visible',
+							// position: 'static',
+							mt: '100px',
+						}}
+					>
+						<Box
+							sx={{
+								// transform : 'rotate(90deg)',
+								transform : 'translate(-80px)',
+							overflow: 'visible',
+							ml: '-100px',
+								// position : 'absolute',
+							}}
+						>
+						<Typography variant="h2" gutterBottom color="#0D475C"
+						>
+							Student Card
+						</Typography>
+						</Box>
+					</Stack>
+					<Stack
+						direction="row"
+						alignItems="center"
+						justifyContent="center"
+						m="auto"
+						height="25%"
+					>
+						<Typography variant="h3" gutterBottom color="#0D475C" m={0}>
+							{session.user.studentData.entry_year}
+						</Typography>
+					</Stack>
+				</Grid>
+      </Grid>
+    </div>
+  );
+}

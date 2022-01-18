@@ -24,7 +24,6 @@ const topMenuList = [
       {
         name: "Card",
         link: "administration/card",
-				disable : true,
       },
       {
         name: "Grade",
@@ -62,6 +61,21 @@ const topMenuList = [
         name: "Courses Selection",
         link: "academic/courses-selection",
       },
+      {
+        name: "Calendar Academic",
+        link: "academic/calendar",
+				disable : true,
+      },
+      {
+        name: "Academic Guides",
+        link: "academic/guide",
+				disable : true,
+      },
+      {
+        name: "Academic News",
+        link: "academic/news",
+				disable : true,
+      },
     ],
   },
   {
@@ -91,16 +105,46 @@ const topMenuList = [
   },
   {
     name: "Portfolio Academics",
-		// link: "portfolio",
+		width: 380,
     child: [
       {
-        name: "Input and Upload",
-        link: "portfolio/manage",
+        name: "Professional Development",
+        link: "portfolio/professional",
 				disable : true,
       },
       {
-        name: "Inquiry Portfolio",
-        link: "portfolio/inquiry",
+        name: "Degree Candidacy",
+        link: "portfolio/candidacy",
+				disable : true,
+      },
+      {
+        name: "Academic Advising",
+        link: "portfolio/advising",
+				disable : true,
+      },
+      {
+        name: "Thesis/Disertation",
+        link: "portfolio/thesis_dissertation",
+				disable : true,
+      },
+      {
+        name: "Application for Student Exchange",
+        link: "portfolio/student_exchange",
+				disable : true,
+      },
+      {
+        name: "Application for Research Financial Support",
+        link: "portfolio/financial_support",
+				disable : true,
+      },
+      {
+        name: "Study Leave",
+        link: "portfolio/leave",
+				disable : true,
+      },
+      {
+        name: "Approval for Study Leave",
+        link: "portfolio/leave_approval",
 				disable : true,
       },
 		],
@@ -129,12 +173,20 @@ const topMenuList = [
         link: "master-admin/course-group",
       },
       {
+        name: "Rooms",
+        link: "master-admin/room",
+      },
+      {
         name: "Teacher Status",
         link: "master-admin/teacher-status",
       },
       {
         name: "Student Status",
         link: "master-admin/student-status",
+      },
+      {
+        name: "Financial Status",
+        link: "master-admin/finance-status",
       },
     ],
   },
@@ -191,7 +243,7 @@ function ItemMenu({ menu }) {
           open={open}
           onClose={() => setOpen(false)}
           anchorEl={anchorRef.current}
-          sx={{ width: 220 }}
+          sx={{ width: menu.width || 220 }}
         >
           <ChildMenu child={menu.child} />
         </MenuPopover>
