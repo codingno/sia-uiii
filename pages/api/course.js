@@ -68,11 +68,13 @@ export default nextConnect()
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-        data.curriculum_name = data.curriculum ? data.curriculum.name : null
-        data.departement_name = data.departement ? data.departement.name : null
-        data.course_gorup_name = data.course_gorup ? data.course_gorup.name : null
-        data.course_type = data.course_type ? data.course_type.name : null
-        return res.status(200).json({ data });
+        let new_data = JSON.parse(JSON.stringify(data))
+        new_data.curriculum_name = data.curriculum ? data.curriculum.name : null
+        new_data.departement_name = data.departement ? data.departement.name : null
+        new_data.course_gorup_name = data.course_gorup ? data.course_gorup.name : null
+        new_data.course_type_name = data.course_type ? data.course_type.name : null
+        new_data.status = 'active'
+        return res.status(200).json({ data: new_data });
       } catch (error) {
         return res.status(500).json({ error });
       }
@@ -89,14 +91,16 @@ export default nextConnect()
         });
         if (data.length == 0)
           return res.status(404).json({ error: "Data not found", data });
-        data.map(dt => {
+        let new_data = JSON.parse(JSON.stringify(data))
+        new_data.map(dt => {
           dt.curriculum_name = dt.curriculum ? dt.curriculum.name : null
           dt.departement_name = dt.departement ? dt.departement.name : null
           dt.course_gorup_name = dt.course_gorup ? dt.course_gorup.name : null
-          dt.course_type = dt.course_type ? dt.course_type.name : null
+          dt.course_type_name = dt.course_type ? dt.course_type.name : null
+          dt.status = 'active'
           return dt
         })
-        return res.status(200).json({ data });
+        return res.status(200).json({ data: new_data });
       } catch (error) {
         return res.status(500).json({ error });
       }

@@ -97,6 +97,8 @@ export default nextConnect()
 					new_data.teacher_name = data.teacher.user_info ? (data.teacher.user_info.first_name + ' ' + data.teacher.user_info.middle_name + ' ' + data.teacher.user_info.last_name) : ''
 					new_data.day_name = data.day.name
 					new_data.room_name = data.room.name
+          new_data.course_code = data.course.code
+          new_data.departement_name = data.departement.name
 
         return res.status(200).json({ data });
       } catch (error) {
@@ -127,6 +129,8 @@ export default nextConnect()
 					item.teacher_name = item.teacher.user_info.first_name + ' ' + item.teacher.user_info.middle_name + ' ' + item.teacher.user_info.last_name
 					item.day_name = item.day.name
 					item.room_name = item.room.name
+          item.course_code = item.course.code,
+          item.departement_name = item.departement.name
 				}) 
         return res.status(200).json({ data });
       } catch (error) {
