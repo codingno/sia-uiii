@@ -188,6 +188,10 @@ const topMenuList = [
         name: "Financial Status",
         link: "master-admin/finance-status",
       },
+      {
+        name: "Religion",
+        link: "master-admin/religion",
+      },
     ],
   },
 ];
@@ -264,6 +268,7 @@ function ParentMenu({ menu }) {
 export default function (props) {
 	const router = useRouter()
 	const { data: session, status } = useSession()
+	
   return (
 		<>
 		{/* <Grid item xs={2.5}></Grid> */}
@@ -289,6 +294,7 @@ export default function (props) {
         />
         {session && (
           <>
+						{session.user.isStudent && session.user.studentData.status ?
             <Grid
               container
               spacing={0}
@@ -311,7 +317,20 @@ export default function (props) {
               >
                 <ParentMenu menu={topMenuList} />
               </ButtonGroup>
-            </Grid>
+            </Grid> : 
+            <Grid
+              container
+              spacing={0}
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              alignContent="stretch"
+              wrap="wrap"
+              sx={{
+                py: 3,
+              }}
+            ></Grid>
+						}
             <Button
               variant="contained"
               onClick={() => signOut({callbackUrl : '/auth/signin'})}
@@ -339,7 +358,8 @@ export default function (props) {
 		{/* <Grid item xs={2.5}></Grid> */}
 		{
 			router.pathname !== '/administration/profile' &&
-			<UserSide />
+			session && session.user.isStudent && session.user.studentData.status ?
+			<UserSide /> : ""
 		}
 		</>
   );

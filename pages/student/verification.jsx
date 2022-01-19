@@ -4,14 +4,18 @@ import Grid from "@mui/material/Grid";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
-import FormContainer from "../../../../components/utils/FormContainer";
-import FormLayout from "../../../../components/utils/FormLayout";
-import FormParent from "../../../../components/utils/FormParent";
+import FormContainer from "../../components/utils/FormContainer";
+import FormLayout from "../../components/utils/FormLayout";
+import FormParent from "../../components/utils/FormParent";
 
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 
 export default function () {
 	const router = useRouter()
@@ -80,12 +84,12 @@ export default function () {
 
   useEffect(() => {
     getStudentData();
-  }, [id]);
+  }, [session]);
 
   async function getStudentData() {
-    if (id) {
+    if (session) {
       try {
-        const { data } = await axios.get(`/api/student?id=${id}`);
+        const { data } = await axios.get(`/api/student?id=${session.user.studentData.id}`);
         console.log(`🚀 ~ file: [id].js ~ line 80 ~ getStudentData ~ data`, data)
   			setFirstName(data.data.user_info.first_name);
   			setLastName(data.data.user_info.last_name);
@@ -231,10 +235,10 @@ export default function () {
   }
 
 	async function submitStudent() {
-		if(window.confirm("Do you sure to save data?")) {
+		if(window.confirm("Are you sure to confirm?")) 
 		try {
 			const sendData = {
-				id,
+				id : session.user.studentData.id,
 				first_name,
 				last_name,
 				middle_name,
@@ -250,11 +254,10 @@ export default function () {
 				entry_semester,
 				entry_status,
 				departement_id,
-				status,
+				status : 1,
 				financial_type_id: financeStatus,
 				religion,
 			}	
-        console.log(`🚀 ~ file: [id].js ~ line 253 ~ submitStudent ~ religion`, religion)
 			let prepareData = {
 				...studentData,
 				user_info : {
@@ -268,14 +271,14 @@ export default function () {
 			}
 			const { data } = await axios.patch('/api/student', prepareData)
 			alert("Student successfully updated.")
-			router.back()
+			signOut({callbackUrl : '/auth/signin'})
+			router.push("/auth/signin")
 		} catch (error) {
 			if(error.response) {
 				alert(error.response.data)
 			}	
 			alert(error)
 		}	
-		}
 	}
 
 	useEffect(() => {
@@ -286,7 +289,7 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Edit">
+    <FormLayout title="Student Verification | AIS UIII" titlePage="Student Verification">
       {/* <Stack
         mb={4}
         sx={{
@@ -368,7 +371,7 @@ export default function () {
 						{teacherOptions.length > 0 && teacherOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
-				<FormParent label="Status">
+				{/* <FormParent label="Status">
 					<Select
 						displayEmpty
 						value={status}
@@ -380,7 +383,7 @@ export default function () {
 						</MenuItem>
 						{statusOptions.length > 0 && statusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
-				</FormParent>
+				</FormParent> */}
         <FormParent label="Finance Status">
           <Select
             displayEmpty
@@ -436,6 +439,22 @@ export default function () {
           value={date_of_birth}
           setValue={setDateOfBirth}
         />
+				<FormParent label="Date Of Birth">
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DesktopDatePicker
+								inputFormat="MM/dd/yyyy"
+								// label="Date Of Birth"
+								name="date_of_birth"
+								value={date_of_birth}
+								onChange={setDateOfBirth}
+								renderInput={(params) => <TextField {...params} 
+								sx={{
+									width : '65%',
+								}}
+								/>}
+							/>
+					</LocalizationProvider>
+				</FormParent>
 				<FormParent label="Gender">
 					<Select
 						displayEmpty
@@ -497,7 +516,7 @@ export default function () {
             startIcon={() => <></>}
 						onClick={submitStudent}
           >
-            Submit
+						Confirm
           </Button>
         </Stack>
       </Stack>

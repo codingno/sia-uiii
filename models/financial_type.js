@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'financial_type',
+		freezeTableName: true,
   });
   return FinancialType;
 };

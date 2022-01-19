@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
     identity_id: DataTypes.STRING,
     identity_type_id: DataTypes.INTEGER,
+    religion : DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'user_info',

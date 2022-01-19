@@ -6,59 +6,6 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
 
-const dummyTable = [
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-	{
-		course_code : 'ISL0101',
-		course_name : 'Digital Islam',
-		credits : 3,
-		teacher_name : 'Prof. Dr. Muammar Kadafi',
-	},
-]
-
-// const sumCredits = dummyTable.reduce((prev, cur) => prev + cur.credits, 0)
-
 import axios from "axios";
 import { useSession } from "next-auth/react"
 

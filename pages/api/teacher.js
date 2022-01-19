@@ -13,6 +13,10 @@ const Departement = require("../../models/departement")(
   db.sequelize,
   DataTypes
 );
+const MasterTeacherStatus = require("../../models/masterTeacherStatus")(
+  db.sequelize,
+  DataTypes
+);
 Teacher.belongsTo(Departement, {
   foreignKey: "departement_id",
   as: "departement",
@@ -28,6 +32,10 @@ Teacher.belongsTo(UserInfo, {
   targetKey: "user_id",
 });
 UserInfo.hasMany(Teacher, { foreignKey: "user_id", sourceKey: "user_id" });
+Teacher.belongsTo(MasterTeacherStatus, {
+  foreignKey: "status",
+  as: "teacher_status",
+});
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -64,6 +72,7 @@ export default nextConnect()
             },
             { model: User, as: "user" },
             { model: UserInfo, as: "user_info" },
+            { model: MasterTeacherStatus, as: "teacher_status" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
@@ -75,17 +84,17 @@ export default nextConnect()
                 ? " " + data.user_info.middle_name + " "
                 : " ") +
               data.user_info.last_name
-            : null;
+            : "";
           new_data.citizen = data.user_info
             ? data.user_info.nationality
-            : null;
+            : "";
           new_data.departement_name = data.departement
             ? data.departement.name
-            : null;
+            : "";
           new_data.faculty_name =
             data.departement && data.departement.faculty
               ? data.departement.faculty.name
-              : null;
+              : "";
           return res.status(200).json({ data: new_data });
         }
       } catch (error) {
@@ -103,6 +112,7 @@ export default nextConnect()
             },
             { model: User, as: "user" },
             { model: UserInfo, as: "user_info" },
+            { model: MasterTeacherStatus, as: "teacher_status" },
           ],
         });
         if (data.length == 0)
@@ -116,17 +126,21 @@ export default nextConnect()
                   ? " " + teacher.user_info.middle_name + " "
                   : " ") +
                 teacher.user_info.last_name
-              : null;
+              : "";
             teacher.name = teacher.user_info
               ? teacher.user_info.nationality 
-              : null;
+              : "";
             teacher.departement_name = teacher.departement
               ? teacher.departement.name
-              : null;
+              : "";
             teacher.faculty_name =
               teacher.departement && teacher.departement.faculty
                 ? teacher.departement.faculty.name
-                : null;
+                : "";
+						teacher.nidn = teacher.nidn_code
+						teacher.citizen = teacher.user_info.nationality
+						teacher.status = teacher.teacher_status.name
+						teacher.employment_name = ""
             return teacher;
           });
           return res.status(200).json({ data: result });

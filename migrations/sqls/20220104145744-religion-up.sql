@@ -2,7 +2,7 @@
 -- Struktur dari tabel `religion`
 --
 
-CREATE TABLE IF NOT EXISTS `religion` 
+CREATE TABLE IF NOT EXISTS `religion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(15) COLLATE utf8_bin DEFAULT NULL,
 	`createdAt` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,

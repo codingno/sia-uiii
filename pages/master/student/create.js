@@ -71,9 +71,11 @@ export default function () {
     },
   ];
   const [identityTypeOptions, setIdentityTypeOptions] = useState([]);
+  const [religionOptions, setReligionOptions] = useState([]);
   const [departementOptions, setDepartementOptions] = useState([]);
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
+  const [financeStatusOptions, setFinanceStatusOptions] = useState([]);
 
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -83,6 +85,7 @@ export default function () {
   const [gender, setGender] = useState(genderOptions[0].id);
   const [identity_id, setIdentityID] = useState("");
   const [identity_type_id, setIdentityType] = useState("");
+  const [religion, setReligion] = useState("");
 
   const [user_id, setUserID] = useState("");
   const [student_number, setStudentNumber] = useState("");
@@ -94,6 +97,7 @@ export default function () {
   const [entry_status, setEntryStatus] = useState(entryStatusOptions[0].id);
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
+  const [financeStatus, setFinanceStatus] = useState("");
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -183,6 +187,40 @@ export default function () {
     }
   }
 
+  useEffect(() => {
+    if (financeStatusOptions.length == 0) getFinanceStatus();
+  }, [financeStatusOptions]);
+
+  async function getFinanceStatus() {
+    try {
+      const { data } = await axios.get("/api/finance-status");
+      setFinanceStatusOptions(data.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status == 404) return;
+        alert(error.response.data);
+      }
+      alert(error);
+    }
+  }
+
+  useEffect(() => {
+    if (religionOptions.length == 0) getReligion();
+  }, [religionOptions]);
+
+  async function getReligion() {
+    try {
+      const { data } = await axios.get("/api/religion");
+      setReligionOptions(data.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status == 404) return;
+        alert(error.response.data);
+      }
+      alert(error);
+    }
+  }
+
   async function submitStudent() {
     try {
       const sendData = {
@@ -204,6 +242,8 @@ export default function () {
         status,
 				username,
 				password,
+				financial_type_id: financeStatus,
+				religion,
       };
       const { data } = await axios.post("/api/student", sendData);
       alert("Student successfully created.");
@@ -338,6 +378,22 @@ export default function () {
             </MenuItem>
             {statusOptions.length > 0 &&
               statusOptions.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+          </Select>
+        </FormParent>
+        <FormParent label="Finance Status">
+          <Select
+            displayEmpty
+            value={financeStatus}
+            onChange={(e) => setFinanceStatus(e.target.value)}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={""}>
+              <em>None</em>
+            </MenuItem>
+            {financeStatusOptions.length > 0 &&
+              financeStatusOptions.map((item) => (
                 <MenuItem value={item.id}>{item.name}</MenuItem>
               ))}
           </Select>
@@ -485,6 +541,22 @@ export default function () {
           >
             {genderOptions.length > 0 &&
               genderOptions.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+          </Select>
+        </FormParent>
+        <FormParent label="Religion">
+          <Select
+            displayEmpty
+            value={religion}
+            onChange={(e) => setReligion(e.target.value)}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={""}>
+              <em>None</em>
+            </MenuItem>
+            {religionOptions.length > 0 &&
+              religionOptions.map((item) => (
                 <MenuItem value={item.id}>{item.name}</MenuItem>
               ))}
           </Select>

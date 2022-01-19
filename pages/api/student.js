@@ -25,6 +25,10 @@ const MasterStudentStatus = require("../../models/masterStudentStatus")(
   db.sequelize,
   DataTypes
 );
+const FinancialType = require("../../models/financial_type")(
+  db.sequelize,
+  DataTypes
+);
 const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
 Student.belongsTo(Teacher, { foreignKey: "teacher_id", as: "teacher" });
 Teacher.hasMany(Student, { foreignKey: "teacher_id" });
@@ -55,7 +59,8 @@ UserInfo.belongsTo(MasterIdentityType, {
   as: "identity_type",
 });
 Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey: "user_id" });
-// console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
+Student.belongsTo(FinancialType, { foreignKey: "financial_type_id", as: "financial_type" });
+FinancialType.hasMany(Student, { foreignKey: "financial_type_id" });
 
 export default nextConnect()
   // .use(isLogin)
@@ -131,6 +136,7 @@ export default nextConnect()
               include: [{ model: MasterIdentityType, as: "identity_type" }],
             },
             { model: MasterStudentStatus, as: "student_status" },
+            { model: FinancialType, as: "financial_type" },
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
@@ -198,6 +204,7 @@ export default nextConnect()
               include: [{ model: MasterIdentityType, as: "identity_type" }],
             },
             { model: MasterStudentStatus, as: "student_status" },
+            { model: FinancialType, as: "financial_type" },
           ],
         });
         if (data.length == 0)
@@ -231,11 +238,15 @@ export default nextConnect()
               student.departement && student.departement.study_type
                 ? student.departement.study_type.name
                 : null;
+						student.status = student.student_status.name
+						student.citizen = student.user_info.nationality
+						student.student_program = student.financial_type ? student.financial_type.name : ""
             return student;
           });
           return res.status(200).json({ data: result });
         }
       } catch (error) {
+        console.log(`🚀 ~ file: student.js ~ line 248 ~ .get ~ error`, error)
         return res.status(500).json({ error });
       }
     }
