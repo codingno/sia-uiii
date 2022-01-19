@@ -239,7 +239,7 @@ export default nextConnect()
                 ? student.departement.study_type.name
                 : null;
 						student.status = student.student_status.name
-						student.citizen = student.user_info.nationality
+						student.citizen = student.user_info ? student.user_info.nationality : ""
 						student.student_program = student.financial_type ? student.financial_type.name : ""
             return student;
           });

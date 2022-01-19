@@ -138,7 +138,7 @@ export default nextConnect()
                 ? teacher.departement.faculty.name
                 : "";
 						teacher.nidn = teacher.nidn_code
-						teacher.citizen = teacher.user_info.nationality
+						teacher.citizen = teacher.user_info ? teacher.user_info.nationality : ""
 						teacher.status = teacher.teacher_status.name
 						teacher.employment_name = ""
             return teacher;
