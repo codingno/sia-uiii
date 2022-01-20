@@ -338,7 +338,7 @@ export default function () {
 						{entryStatusOptions.length > 0 && entryStatusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
-				<FormParent label="Departement">
+				<FormParent label="Program Study">
 					<Select
 						displayEmpty
 						value={departement_id}

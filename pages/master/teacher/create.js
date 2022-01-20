@@ -177,7 +177,7 @@ export default function () {
           value={title}
           setValue={setTitle}
         />
-				<FormParent label="Departement">
+				<FormParent label="Program Study">
 					<Select
 						displayEmpty
 						value={departement_id}

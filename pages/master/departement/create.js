@@ -86,7 +86,7 @@ export default function () {
 				course_credits : courseCredits,
 			}	
 			const { data } = await axios.post('/api/departement', sendData)
-			alert("Departement successfully created.")
+			alert("Program Study successfully created.")
 			router.back()
 		} catch (error) {
 			if(error.response) {

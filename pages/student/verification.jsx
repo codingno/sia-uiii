@@ -5,6 +5,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -82,6 +87,11 @@ export default function () {
 
 	const [studentData, setstudentData] = useState({})
 
+	const [tabValue, setTabValue] = useState("1")
+  console.log(`🚀 ~ file: verification.jsx ~ line 91 ~ tabValue`, tabValue)
+
+	const [studentHistory, setStudentHistory] = useState({})
+
   useEffect(() => {
     getStudentData();
   }, [session]);
@@ -114,6 +124,23 @@ export default function () {
   			setFinanceStatus(data.data.financial_type_id);
   			setReligion(data.data.user_info.religion || "");
 				setstudentData(data.data)
+				const history = {
+					school_name : data.data.school_name,
+					school_address : data.data.school_address,
+					school_telp : data.data.school_telp,
+					school_departement : data.data.school_departement,
+					school_end : data.data.school_end,
+					campus_name : data.data.campus_name,
+					campus_address : data.data.campus_address,
+					campus_telp : data.data.campus_telp,
+					campus_departement : data.data.campus_departement,
+					campus_end : data.data.campus_end,
+					father_name : data.data.father_name,
+					father_income : data.data.father_income,
+					mother_name : data.data.mother_name,
+					mother_income : data.data.mother_income,
+				}
+				setStudentHistory(history)
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -257,6 +284,7 @@ export default function () {
 				status : 1,
 				financial_type_id: financeStatus,
 				religion,
+				...studentHistory,
 			}	
 			let prepareData = {
 				...studentData,
@@ -269,10 +297,14 @@ export default function () {
 				},
 				...sendData,
 			}
-			const { data } = await axios.patch('/api/student', prepareData)
+			await axios.patch('/api/student', prepareData)
 			alert("Student successfully updated.")
-			signOut({callbackUrl : '/auth/signin'})
-			router.push("/auth/signin")
+			// await update((prev) => { return {...prev, user : { ...prev.user, status : 1,  }}})
+			// signOut({callbackUrl : '/auth/signin'})
+			// router.push("/")
+			const { data } = await axios.get("/api/auth/session?update")
+      console.log(`🚀 ~ file: verification.jsx ~ line 306 ~ submitStudent ~ data`, data)
+			router.reload()
 		} catch (error) {
 			if(error.response) {
 				alert(error.response.data)
@@ -284,9 +316,15 @@ export default function () {
 	useEffect(() => {
 		if(!session && statusSession == `unauthenticated`)
 			router.push('/auth/signin')
+		if(session)
+			if(session.user.studentData.status)
+				router.push('/')
 	},[session, statusSession])	
 	if(statusSession === 'loading' || statusSession === 'unauthenticated')
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
+	if(statusSession === 'authenticated')
+		if(session.user.studentData.status)
+			return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
     <FormLayout title="Student Verification | AIS UIII" titlePage="Student Verification">
@@ -296,6 +334,17 @@ export default function () {
           width: 640,
         }}
       > */}
+			<Box sx={{ width: '100%', typography: 'body1' }}>
+				<TabContext value={tabValue}>
+					{/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+						<TabList onChange={setTabValue} aria-label="lab API tabs example">
+							<Tab label="Academic" value="1" />
+							<Tab label="Personal" value="2" />
+							<Tab label="School History" value="3" />
+							<Tab label="Contact" value="4" />
+						</TabList>
+					</Box> */}
+			<TabPanel value="1">
 			<Grid
 				container
 				spacing={1}
@@ -345,7 +394,7 @@ export default function () {
 						{entryStatusOptions.length > 0 && entryStatusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
-				<FormParent label="Departement">
+				<FormParent label="Program Study">
 					<Select
 						displayEmpty
 						value={departement_id}
@@ -400,6 +449,32 @@ export default function () {
               ))}
           </Select>
         </FormParent>
+        <FormContainer
+          label="Father Name"
+          name="father_name"
+          value={studentHistory.father_name}
+          setValue={(v) => setStudentHistory({ ...studentHistory, father_name: v})}
+        />
+        <FormContainer
+          label="Father Income"
+          name="father_income"
+					type="number"
+          value={studentHistory.father_income}
+          setValue={(v) => setStudentHistory({ ...studentHistory, father_income: v})}
+        />
+        <FormContainer
+          label="Mother Name"
+          name="mother_name"
+          value={studentHistory.mother_name}
+          setValue={(v) => setStudentHistory({ ...studentHistory, mother_name: v})}
+        />
+        <FormContainer
+          label="Mother Income"
+          name="mother_income"
+					type="number"
+          value={studentHistory.mother_income}
+          setValue={(v) => setStudentHistory({ ...studentHistory, mother_income: v})}
+        />
 				</Stack>
 				</Grid>
 				<Grid	item xs={6}	>
@@ -439,7 +514,8 @@ export default function () {
           value={date_of_birth}
           setValue={setDateOfBirth}
         />
-				<FormParent label="Date Of Birth">
+				<FormParent label="Date Of Birth"
+				>
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 							<DesktopDatePicker
 								inputFormat="MM/dd/yyyy"
@@ -455,7 +531,8 @@ export default function () {
 							/>
 					</LocalizationProvider>
 				</FormParent>
-				<FormParent label="Gender">
+				<FormParent label="Gender"
+				>
 					<Select
 						displayEmpty
 						value={gender}
@@ -465,7 +542,8 @@ export default function () {
 						{genderOptions.length > 0 && genderOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
-        <FormParent label="Religion">
+        <FormParent label="Religion"
+				>
           <Select
             displayEmpty
             value={religion}
@@ -487,7 +565,8 @@ export default function () {
           value={identity_id}
           setValue={setIdentityID}
         />
-				<FormParent label="Identity Type">
+				<FormParent label="Identity Type"
+				>
 					<Select
 						displayEmpty
 						value={identity_type_id}
@@ -500,6 +579,182 @@ export default function () {
 						{identityTypeOptions.length > 0 && identityTypeOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
+      </Stack>
+			</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          ml={5}
+          mt={3}
+          sx={{ width: "60%", display: "flex", justifyContent: "flex-start" }}
+        >
+          {/* <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: 150,
+            }}
+            startIcon={() => <></>}
+						onClick={() => setTabValue(tabValue-1)}
+          >
+						Before
+          </Button> */}
+        </Stack>
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
+      <Stack
+        mb={4}
+        sx={{
+          width: "80%",
+					// ml:5,
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          ml={5}
+          mt={3}
+          sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: 150,
+            }}
+            startIcon={() => <></>}
+						onClick={() => setTabValue((parseInt(tabValue)+1).toString())}
+          >
+						Next
+          </Button>
+        </Stack>
+				</Stack>
+				</Stack>
+				</Grid>
+			</Grid>
+			</TabPanel>
+			<TabPanel value="2">
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="flex-start"
+				alignItems="flex-start"
+				alignContent="stretch"
+				wrap="wrap"
+				
+			>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
+        <FormContainer
+          label="School Name"
+          name="school_name"
+          value={studentHistory.school_name}
+          setValue={(v) => setStudentHistory({ ...studentHistory, school_name : v})}
+					width="90%"
+        />
+        <FormContainer
+          label="School Phone"
+          name="school_telp"
+          value={studentHistory.school_telp}
+          setValue={(v) => setStudentHistory({ ...studentHistory, school_telp: v})}
+					width="90%"
+        />
+        <FormContainer
+          label="School Address"
+          name="school_address"
+          value={studentHistory.school_address}
+          setValue={(v) => setStudentHistory({ ...studentHistory, school_address: v})}
+					width="90%"
+        />
+        <FormContainer
+          label="School Departement"
+          name="school_departement"
+          value={studentHistory.school_departement}
+          setValue={(v) => setStudentHistory({ ...studentHistory, school_departement: v})}
+					width="90%"
+        />
+        <FormContainer
+          label="School End"
+          name="school_end"
+          value={studentHistory.school_end}
+          setValue={(v) => setStudentHistory({ ...studentHistory, school_end: v})}
+					width="90%"
+        />
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+				<Stack
+					mb={4}
+				>
+        <FormContainer
+          label="Campus Name"
+          name="campus_name"
+          value={studentHistory.campus_name}
+          setValue={(v) => setStudentHistory({ ...studentHistory, campus_name: v})}
+					justifyContent="flex-end"
+					width="90%"
+        />
+        <FormContainer
+          label="Campus Phone"
+          name="campus_telp"
+          value={studentHistory.campus_telp}
+          setValue={(v) => setStudentHistory({ ...studentHistory, campus_telp: v})}
+					justifyContent="flex-end"
+					width="90%"
+        />
+        <FormContainer
+          label="Campus Address"
+          name="campus_address"
+          value={studentHistory.campus_address}
+          setValue={(v) => setStudentHistory({ ...studentHistory, campus_address: v})}
+					justifyContent="flex-end"
+					width="90%"
+        />
+        <FormContainer
+          label="Campus Departement"
+          name="campus_departement"
+          value={studentHistory.campus_departement}
+          setValue={(v) => setStudentHistory({ ...studentHistory, campus_departement: v})}
+					justifyContent="flex-end"
+					width="90%"
+        />
+        <FormContainer
+          label="Campus End"
+          name="campus_end"
+          value={studentHistory.campus_end}
+          setValue={(v) => setStudentHistory({ ...studentHistory, campus_end: v})}
+					justifyContent="flex-end"
+					width="90%"
+        />
+				</Stack>
+			</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
         <Stack
           direction="row"
           alignItems="center"
@@ -514,14 +769,52 @@ export default function () {
               width: 150,
             }}
             startIcon={() => <></>}
+						onClick={() => setTabValue((parseInt(tabValue)-1).toString())}
+          >
+						Before
+          </Button>
+        </Stack>
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
+      <Stack
+        mb={4}
+        sx={{
+          width: "90%",
+					ml:5,
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          mt={3}
+          sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: 150,
+            }}
+            startIcon={() => <></>}
 						onClick={submitStudent}
           >
 						Confirm
           </Button>
         </Stack>
-      </Stack>
+				</Stack>
+			</Stack>
+				</Grid>
 			</Grid>
-			</Grid>
+			</TabPanel>
+			</TabContext>
+			</Box>
     </FormLayout>
   );
 }

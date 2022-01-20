@@ -16,15 +16,10 @@ export async function middleware(req) {
     // if (!session) return NextResponse.redirect("/api/auth/signin")
 
 		// if(status == 'authenticated') 
-  console.log(`🚀 ~ file: _middleware.js ~ line 20 ~ middleware ~ req.nextUrl.pathname !== /api/g`, req.nextUrl.pathname)
-  console.log(`🚀 ~ file: _middleware.js ~ line 20 ~ middleware ~ req.nextUrl.pathname !== /api/g`, /api/.test(req.nextUrl.pathname))
 	const staticFile = /favicon/.test(req.nextUrl.pathname) ||  /static/.test(req.nextUrl.pathname) ||  /auth/.test(req.nextUrl.pathname) || /api/.test(req.nextUrl.pathname)
 	if(staticFile)
 		return
-  console.log(`🚀 ~ file: _middleware.js ~ line 22 ~ middleware ~ staticFile`, staticFile)
-  console.log(`🚀 ~ file: _middleware.js ~ line 24 ~ middleware ~ req.nextUrl.pathname !== '/'`, req.nextUrl.pathname !== '/')
   if (session && req.nextUrl.pathname !== "/student/verification" && !/api/.test(req.nextUrl.pathname)) {
-  console.log(`🚀 ~ file: _middleware.js ~ line 23 ~ middleware ~ req.nextUrl.pathname !== "/student/verification" && !/api/.test(req.nextUrl.pathname) && staticFile`, req.nextUrl.pathname !== "/student/verification" && !/api/.test(req.nextUrl.pathname) && staticFile)
 		if(session.user.isStudent) 
 			if(!session.user.studentData.status)
 				return NextResponse.redirect('/student/verification')	

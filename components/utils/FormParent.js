@@ -7,7 +7,7 @@ export default function FormParent(props) {
       alignItems="center"
       ml={5}
       mt={2}
-      sx={{ width: "80%", display: "flex", justifyContent: "flex-start" }}
+      sx={{ width: props.width || "80%", display: "flex", justifyContent: props.justifyContent || "flex-start" }}
     >
       <span style={{ width: "35%" }}>{props.label}</span>
 			{props.children}

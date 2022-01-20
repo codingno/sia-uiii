@@ -334,7 +334,7 @@ export default function () {
               ))}
           </Select>
         </FormParent>
-        <FormParent label="Departement">
+        <FormParent label="Program Study">
           <Select
             displayEmpty
             value={departement_id}

@@ -277,6 +277,12 @@ export default async (req, res) => await NextAuth(req, res, {
     // async jwt({ token, user, account, profile, isNewUser }) { return token }
     async jwt({ token, user, account, profile, isNewUser }) {
       // Persist the OAuth access_token to the token right after signin
+			if (req.url === "/api/auth/session?update") {
+         // hit the DB and return token with updated values
+				if(token.user.isStudent)
+					if(!token.user.studentData.status)
+						token.user.studentData.status = 1
+      }
       if (account) {
         token.accessToken = account.access_token;
       }
