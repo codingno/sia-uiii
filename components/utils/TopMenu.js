@@ -294,7 +294,7 @@ export default function (props) {
         />
         {session && (
           <>
-						{session.user.isStudent && session.user.studentData.status ?
+						{(session.user.isStudent && session.user.studentData.status) || !session.user.isStudent ?
             <Grid
               container
               spacing={0}
@@ -358,7 +358,7 @@ export default function (props) {
 		{/* <Grid item xs={2.5}></Grid> */}
 		{
 			router.pathname !== '/administration/profile' &&
-			session && session.user.isStudent && session.user.studentData.status ?
+			session && (( session.user.isStudent && session.user.studentData.status ) || !session.user.isStudent) ?
 			<UserSide /> : ""
 		}
 		</>
