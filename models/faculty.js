@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   // Faculty.init({
   const Faculty = sequelize.define('faculty',{
     college_id: DataTypes.INTEGER,
+    teacher_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     code: DataTypes.STRING,
     accreditation: DataTypes.STRING,

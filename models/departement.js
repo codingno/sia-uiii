@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     code: DataTypes.STRING,
     label: DataTypes.STRING,
     study_type_id: DataTypes.INTEGER,
+    teacher_id: DataTypes.INTEGER,
 		status: {
 			type: DataTypes.ENUM,
         values: [

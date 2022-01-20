@@ -219,6 +219,9 @@ export default nextConnect()
                   : " ") +
                 student.user_info.last_name
               : null;
+            student.citizen = student.user_info
+              ? student.user_info.nationality
+              : null;
             student.teacher_name =
               student.teacher && student.teacher.user_info
                 ? student.teacher.user_info.first_name +
