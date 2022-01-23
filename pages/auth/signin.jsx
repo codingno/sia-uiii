@@ -12,7 +12,7 @@ import { Card, Stack, Link, Container, Typography, CircularProgress } from '@mui
 // import LoginForm from '../components/authentication/login/LoginFormLms';
 // import AuthSocial from '../components/authentication/AuthSocial';
 // import { mockImgCover } from '../utils/mockImages';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
@@ -24,6 +24,8 @@ import {
   IconButton,
   InputAdornment, Grid,
 } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
 
@@ -79,11 +81,14 @@ import Image from 'next/image'
 
 export default function SignIn({ csrfToken }) {
 	const { data: session, status } = useSession()
-	 const router = useRouter()
+	const router = useRouter()
+	const rootRef = useRef(null);
+
 
 	// const dispatch = useDispatch();
 	// const { user } = useSelector(state => state)
 	// const navigate = useNavigate();
+	const [openModal, setOpenModal] = useState(false)
 	const [showPassword, setShowPassword] = useState(0)
 	const [popUpForgotPassword, setPopUpForgotPassword] = useState(0)
 	const [email, setEmail] = useState("")
@@ -92,6 +97,12 @@ export default function SignIn({ csrfToken }) {
 	const [disableReset, setDisableReset] = useState(false)
 	const [userInfo, setuserInfo] = useState({})
 	const forgotPassword = (bool) => setPopUpForgotPassword(bool)
+
+	useEffect(() => {
+		if(router.query.error)
+			setOpenModal(true)
+	},[])
+
 	const signInOld = async (e) => {
 		e.preventDefault()
 		// const data = JSON.stringify({email, password})
@@ -186,6 +197,46 @@ export default function SignIn({ csrfToken }) {
         </Link> */}
       {/* </AuthLayout> */}
 			<div className="container-login">
+				<Modal
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+        open={openModal}
+        aria-labelledby="server-modal-title"
+        aria-describedby="server-modal-description"
+        sx={{
+          display: 'flex',
+          p: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        container={() => rootRef.current}
+      >
+        <Card
+          sx={{
+            position: 'relative',
+            width: 400,
+            // bgcolor: 'background.paper',
+            bgcolor: '#00778B',
+            // border: '2px solid #F00',
+            boxShadow: (theme) => theme.shadows[5],
+            px: 4,
+            py: 7,
+						textAlign: 'center',
+          }}
+        >
+					<IconButton onClick={() => setOpenModal(false)} edge="end" sx={{position:'absolute', padding:'0.35rem', width : 30, height: 30, right: '13px', top : '2px', color : 'white', }}>
+						{/* <Icon icon={CancelIcon} /> */}
+						<CancelIcon />
+					</IconButton>
+          <Typography id="server-modal-title" variant="h6" component="h2" color="#E3A130">
+						Username of Password does'nt match
+          </Typography>
+          <Typography id="server-modal-description" sx={{ pt: 2, color : 'white', }}>
+						Please rechek your form for sure.
+          </Typography>
+        </Card>
+      </Modal>
 			<Grid
 				container
 				spacing={1}

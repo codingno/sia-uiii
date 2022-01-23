@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
 
 import FormContainer from "../../../../components/utils/FormContainer";
 import FormLayout from "../../../../components/utils/FormLayout";
@@ -203,10 +204,21 @@ export default function () {
       title="Course Edit | AIS UIII"
       titlePage="Course Edit"
     >
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="flex-start"
+				alignItems="flex-start"
+				alignContent="stretch"
+				wrap="wrap"
+				
+			>
+				<Grid	item xs={6}	>
       <Stack
         mb={4}
         sx={{
-          width: 640,
+          width: "100%",
         }}
       >
         <FormParent label="Program Study">
@@ -283,6 +295,15 @@ export default function () {
           value={semester}
           setValue={setSemester}
         />
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
         <FormParent label="Course Type">
           <Select
             displayEmpty
@@ -386,7 +407,9 @@ export default function () {
             Submit
           </Button>
         </Stack>
-      </Stack>
+				</Stack>
+				</Grid>
+				</Grid>
     </FormLayout>
   );
 }

@@ -19,6 +19,7 @@ export default {
         email: data.email || null,
         email_verified: new Date(),
         image: data.image || null,
+				role_id: data.role_id,
       };
       try {
         const user = await User.create(data_user);
@@ -34,6 +35,7 @@ export default {
           identity_id: data.identity_id || null,
           religion: data.religion || null,
           identity_type_id: data.identity_type_id || null,
+					role_id: data.role_id,
         };
         const user_info = await UserInfo.create(data_user_info);
         const hashed = data.password ? await bcrypt.hash(data.password, 10) : await bcrypt.hash('123456', 10)

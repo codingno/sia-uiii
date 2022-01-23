@@ -108,7 +108,7 @@ export default function () {
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
   			setFinanceStatus(data.data.financial_type_id);
-  			setReligion(data.data.user_info.religion || "");
+  			setReligion(data.data.user_info.religion || 1);
 				setstudentData(data.data)
       } catch (error) {
         if (error.response) {

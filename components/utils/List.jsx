@@ -287,6 +287,15 @@ export default function List(props) {
 												// }
                         const columCell = arrayRow.map(
                           (item, index) => {
+														console.log(tableHead[index])
+														let render = row[item]
+														if(tableHead[index].type == 'Date' && render) {
+															const options = { year: 'numeric', month: 'long', day: 'numeric', hour : 'numeric', minute : 'numeric', hour12 : false };
+															render = new Date(row[item]).toLocaleString('default', options)
+														}
+														else if(tableHead[index].type == 'Time' && render) {
+															render = new Date(row[item]).toTimeString().split('GMT')[0]
+														}
                             return (
                               <TableCell align="left" key={index}>
                                 <Stack
@@ -295,7 +304,8 @@ export default function List(props) {
                                   spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
-                                    {row[item]}
+                                    {/* {row[item]} */}
+																		{render}
                                   </Typography>
                                 </Stack>
                               </TableCell>

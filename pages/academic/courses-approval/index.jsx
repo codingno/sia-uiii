@@ -30,7 +30,7 @@ import {
 // import Scrollbar from "../../../components/utils/Scrollbar";
 import Scrollbar from "../../../components/utils/Scrollbar";
 import SearchNotFound from "../../../components/utils/SearchNotFound";
-import { CategoryListHead } from "../../../components/utils/courses-selection";
+import { CategoryListHead } from "../../../components/utils/courses-approval";
 import TopMenu from "../../../components/utils/TopMenu";
 import MoreMenu from "../../../components/utils/MoreMenu";
 import ListToolbar from "../../../components/utils/ListToolbarCourseSelection";
@@ -87,20 +87,18 @@ export default function (props) {
 		const { isUserList } = props
 
 		const
-        title="Course Selection",
+        title="Course Approval",
         name="Selection",
         getUrl="/api/academic-krs",
         addLink="/academic/courses-selection/create",
         tableHead=[
           { id: "name", label: "Course", alignRight: false },
+          { id: "student_name", label: "Student", alignRight: false },
           { id: "credits", label: "Credits", alignRight: false },
           { id: "semester", label: "Semester", alignRight: false },
           { id: "day_name", label: "Day", alignRight: false },
-          { id: "start_time", label: "Start At",alignRight: false, type : "Time" },
-          { id: "end_time", label: "End At",alignRight: false, type : "Time" },
           { id: "room_name", label: "Room", alignRight: false },
-          { id: "teacher_name", label: "Teacher", alignRight: false },
-          { id: "confirm", label: "Status", center : 'center' },
+          { id: "confirm", label: "Confirmation", center : 'center' },
           { id: "" },
         ],
         moremenu=[
@@ -125,7 +123,7 @@ export default function (props) {
 
   const [isLoading, setLoading] = useState(false);
 	
-	const [mode, setMode] = useState(false)
+	const [mode, setMode] = useState(0)
   const [dataList, setDataList] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState([]);
 
@@ -176,7 +174,6 @@ export default function (props) {
   };
 
 	async function saveCourseSelection() {
-		if(window.confirm('Are you sure for selected item?'))
 		try {
 			const preparedData = dataList.filter(function(item) { 
 				return this.indexOf(item.id) >= 0 
@@ -189,7 +186,6 @@ export default function (props) {
 			})
 			console.log(preparedData);
 			const { data } = axios.post('/api/academic-krs', preparedData)
-			setMode(false)
       console.log(`🚀 ~ file: index.jsx ~ line 185 ~ saveCourseSelection ~ data`, data)
 		} catch (error) {
       console.log(`🚀 ~ file: index.jsx ~ line 186 ~ saveCourseSelection ~ error`, error)
@@ -205,19 +201,19 @@ export default function (props) {
   async function getDataList() {
     try {
       const { data, error } = await axios.get(mode ? `/api/academic-schedule` : getUrl);
-			if(mode) {
-				const filterSemesterAndDepartement = data.data.filter(item => item.course.semester == session.user.semester_active && item.departement_id == session.user.departementID)
-      	setDataList(filterSemesterAndDepartement);
-				setSelected(selectedSchedule)
-			}
-			else {
-				const list = data.data.map(item => item = { ...item, ...item.schedule})
+      console.log(`🚀 ~ file: index.jsx ~ line 202 ~ getDataList ~ data`, data)
+			// if(mode) {
+      // 	setDataList(data.data);
+			// 	setSelected(selectedSchedule)
+			// }
+			// else {
+				const list = data.data.filter(item => item.schedule.teacher_id == session.user.teacherData.id).map(item => item = { ...item, ...item.schedule })
         console.log(`🚀 ~ file: index.jsx ~ line 203 ~ getDataList ~ list`, list)
       	setDataList(list);
 				const ids = list.map(item => item.id)
 				setSelectedSchedule(ids)
 				setSelected([])
-			}
+			// }
     } catch (error) {
       if (error.response) {
         if ((error.response.status = 404)) return;
@@ -225,6 +221,21 @@ export default function (props) {
       alert(error);
     }
   }
+
+	async function approvalStudent(row, confirm) {
+		if(window.confirm(`Are you sure to ${confirm ? 'Approve' : 'Reject'} this item?`))
+		try {
+			await axios.patch('/api/academic-krs', {
+				...row,
+				confirm,
+			})	
+		} catch (error) {
+			if(error.response)	
+				alert(error.response)
+			else
+				alert(error)
+		}	
+	}
 
   const courseList = [
     {
@@ -257,7 +268,7 @@ export default function (props) {
       : [];
   const isUserNotFound = filteredUsers.length === 0;
   return (
-    <BasicLayout title="Course Selection">
+    <BasicLayout title="Course Approval">
       <Grid item xs={10} p={1}>
         <Card
 					sx={{
@@ -275,7 +286,7 @@ export default function (props) {
               {title}
             </Typography>
 						<Box>
-
+{/* 
 							{
 								!mode &&
             <Button
@@ -287,10 +298,10 @@ export default function (props) {
             >
 							Course Registration Card
             </Button>
-							}
-            <Button
+							} */}
+            {/* <Button
               variant="contained"
-              onClick={() => { setDataList([]); setMode(!mode)}}
+              onClick={() => setMode(!mode)}
               startIcon={!mode && <Icon icon={editFill} />}
             >
 							{
@@ -298,7 +309,7 @@ export default function (props) {
 								'Close Edit' :
               	'Edit ' + name
 							}
-            </Button>
+            </Button> */}
 						</Box>
           </Stack>
           <Divider />
@@ -336,7 +347,6 @@ export default function (props) {
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
-										mode={mode}
                   />
                   <TableBody>
                     {filteredUsers
@@ -356,49 +366,32 @@ export default function (props) {
                           image_url,
                           user_enrollment,
                           createdBy,
+													confirm,
                         } = row;
                         const isItemSelected = selected.indexOf(id) !== -1;
 												let tempRow = JSON.parse(JSON.stringify(row))
 
                         // delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
-                        tableHeadId.pop()
                         Object.keys(tempRow).map((item) => {
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')
 															row.name = row.user.name
 														delete tempRow[item];
-													} 
+													}
                         });
 												const arrayRow = Object.keys(tempRow)
 												if(isUserList) {
 													arrayRow.unshift(arrayRow[arrayRow.length - 1])
 													arrayRow.pop()
 												}
+                        tableHeadId.pop()
                         const columCell = tableHeadId.map(
                           (item, index) => {
-														let render = row[item]
-														if(tableHead[index].type == 'Date' && render) {
-															const options = { year: 'numeric', month: 'long', day: 'numeric', hour : 'numeric', minute : 'numeric', hour12 : false };
-															render = new Date(row[item]).toLocaleString('default', options)
-														}
-														else if(tableHead[index].type == 'Time' && render) {
-															render = new Date(row[item]).toTimeString().split('GMT')[0]
-														}
-
-														if(item == 'confirm') {
-															if(mode)
-																return ""
-                            return (
-                              <TableCell align="center" key={index}>
-                                <Stack
-                                  direction="row"
-                                  alignItems="center"
-																	justifyContent="center"
-                                  spacing={1}
-                                >
-                                  <Typography variant="subtitle2" noWrap>
-																		{
+														if(item == 'confirm')
+															return (
+																<TableCell align="center" key={index} sx={{ display : 'flex', justifyContent : 'space-around'}}>
+																	{
 																		row[item] !== null ?
 																		<Button
 																			variant="contained"
@@ -411,23 +404,31 @@ export default function (props) {
 																		>
 																			{row[item] ? 'Approved' : 'Rejected'}
 																		</Button> :
-																		<Button
-																			variant="contained"
-																			color={row[item] ? 'success' : 'error'}
-																			size="small"
-																			disabled
-																			// sx={{
-																			// 	'&.Mui-disabled' : { backgroundColor: row[item] ? '#0E8074' : '#922E2E', color : '#FFF' }
-																			// }}
-																		>
-																			Pending
-																		</Button> 
-																		}
-                                  </Typography>
-                                </Stack>
-                              </TableCell>
-                            );
-														}
+																	<>
+																	{/* <Checkbox
+																		checked={confirm}
+																		onChange={(event) => handleClick(event, id)}
+																	/> */}
+																	<Button
+																		variant="contained"
+																		color="error"
+																		size="small"
+																		onClick={() => approvalStudent(row, false)}
+																	>
+																		Reject	
+																	</Button>
+																	<Button
+																		variant="contained"
+																		color="success"
+																		size="small"
+																		onClick={() => approvalStudent(row, true)}
+																	>
+																		Approve	
+																	</Button>
+																	</>
+																	}
+																</TableCell>
+															)
                             return (
                               <TableCell align="left" key={index}>
                                 <Stack
@@ -436,7 +437,7 @@ export default function (props) {
                                   spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
-                                    {render}
+                                    {tempRow[item]}
                                   </Typography>
                                 </Stack>
                               </TableCell>
@@ -447,7 +448,7 @@ export default function (props) {
                         return (
                           <TableRow
                             hover
-                            key={id}
+                            key={id+indexRow}
                             tabIndex={-1}
                             role="checkbox"
                             selected={isItemSelected}

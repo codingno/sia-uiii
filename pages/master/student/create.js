@@ -244,6 +244,7 @@ export default function () {
 				password,
 				financial_type_id: financeStatus,
 				religion,
+				role_id : 4,
       };
       const { data } = await axios.post("/api/student", sendData);
       alert("Student successfully created.");

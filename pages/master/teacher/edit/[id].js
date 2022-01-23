@@ -3,6 +3,11 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import TextField from "@mui/material/TextField";
 
 import FormContainer from "../../../../components/utils/FormContainer";
 import FormLayout from "../../../../components/utils/FormLayout";
@@ -52,6 +57,7 @@ export default function () {
 	const [departementOptions, setDepartementOptions] = useState([])
 	const [teacherOptions, setTeacherOptions] = useState([])
 	const [statusOptions, setStatusOptions] = useState([])
+  const [religionOptions, setReligionOptions] = useState([]);
 
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
@@ -61,6 +67,7 @@ export default function () {
   const [gender, setGender] = useState(genderOptions[0].id);
   const [identity_id, setIdentityID] = useState("");
   const [identity_type_id, setIdentityType] = useState("");
+  const [religion, setReligion] = useState("");
 
   const [user_id, setUserID] = useState("");
   const [ein, setEIN] = useState("");
@@ -70,6 +77,23 @@ export default function () {
   const [status, setStatus] = useState("");
 
 	const [teacherData, setteacherData] = useState({})
+
+  useEffect(() => {
+    if (religionOptions.length == 0) getReligion();
+  }, [religionOptions]);
+
+  async function getReligion() {
+    try {
+      const { data } = await axios.get("/api/religion");
+      setReligionOptions(data.data);
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status == 404) return;
+        alert(error.response.data);
+      }
+      alert(error);
+    }
+  }
 
   useEffect(() => {
     getTeacherData();
@@ -96,6 +120,7 @@ export default function () {
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
 				setteacherData(data.data)
+  			setReligion(data.data.user_info.religion || 1);
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -164,6 +189,9 @@ export default function () {
 		try {
 			const sendData = {
 				id,
+				first_name,
+				last_name,
+				middle_name,
 				place_of_birth,
 				date_of_birth,
 				gender,
@@ -175,6 +203,7 @@ export default function () {
 				title,
 				departement_id,
 				status,
+				religion,
 			}	
 			let prepareData = {
 				...teacherData,
@@ -207,6 +236,23 @@ export default function () {
 
   return (
     <FormLayout title="Teacher Edit | AIS UIII" titlePage="Teacher Edit">
+			<Grid
+				container
+				spacing={1}
+				direction="row"
+				justifyContent="flex-start"
+				alignItems="flex-start"
+				alignContent="stretch"
+				wrap="wrap"
+				
+			>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
         <FormContainer
           label="Employer Identification Number"
           name="ein"
@@ -251,6 +297,15 @@ export default function () {
 						{statusOptions.length > 0 && statusOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
+				</Stack>
+				</Grid>
+				<Grid	item xs={6}	>
+      <Stack
+        mb={4}
+        sx={{
+          width: "100%",
+        }}
+      >
         <FormContainer
           label="First Name"
           name="first_name"
@@ -275,12 +330,22 @@ export default function () {
           value={place_of_birth}
           setValue={setPlaceOfBirth}
         />
-        <FormContainer
-          label="Date Of Birth"
-          name="date_of_birth"
-          value={date_of_birth}
-          setValue={setDateOfBirth}
-        />
+				<FormParent label="Date Of Birth">
+					<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DesktopDatePicker
+								inputFormat="MM/dd/yyyy"
+								// label="Date Of Birth"
+								name="date_of_birth"
+								value={date_of_birth}
+								onChange={setDateOfBirth}
+								renderInput={(params) => <TextField {...params} 
+								sx={{
+									width : '65%',
+								}}
+								/>}
+							/>
+					</LocalizationProvider>
+				</FormParent>
 				<FormParent label="Gender">
 					<Select
 						displayEmpty
@@ -291,6 +356,22 @@ export default function () {
 						{genderOptions.length > 0 && genderOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
+        <FormParent label="Religion">
+          <Select
+            displayEmpty
+            value={religion}
+            onChange={(e) => setReligion(e.target.value)}
+            inputProps={{ "aria-label": "Without label" }}
+          >
+            <MenuItem value={""}>
+              <em>None</em>
+            </MenuItem>
+            {religionOptions.length > 0 &&
+              religionOptions.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+          </Select>
+        </FormParent>
         <FormContainer
           label="Identity ID"
           name="identity_id"
@@ -329,6 +410,9 @@ export default function () {
             Submit
           </Button>
         </Stack>
+				</Stack>
+				</Grid>
+				</Grid>
     </FormLayout>
   );
 }

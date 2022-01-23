@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       room_id: DataTypes.INTEGER,
       teacher_id: DataTypes.INTEGER,
       semester: DataTypes.INTEGER,
-      start_time: DataTypes.STRING,
-      end_time: DataTypes.STRING
+      start_time: DataTypes.DATE,
+      end_time: DataTypes.DATE,
     },
     {
       sequelize,

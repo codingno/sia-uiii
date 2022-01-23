@@ -35,6 +35,12 @@ Departement.belongsTo(Faculty, {
   foreignKey: "faculty_id",
   as: "faculty",
 });
+AcademicKrs.belongsTo(Student, {
+  foreignKey: "student_number",
+  targetKey: "student_number",
+  as: "student",
+});
+Student.hasMany(AcademicKrs, { foreignKey: "student_number", sourceKey: "student_number" });
 AcademicKrs.belongsTo(AcademicSchedule, {
   foreignKey: "schedule_id",
   as: "schedule",
@@ -61,6 +67,7 @@ AcademicSchedule.belongsTo(Teacher, {
 });
 Teacher.hasMany(AcademicSchedule, { foreignKey: "teacher_id" });
 Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
+Student.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -80,8 +87,9 @@ export default nextConnect()
 				else 
 					await AcademicKrs.create(preparedData);
 			}
-      return res.status(200).json({ data });
+      return res.status(200).json({ message : 'ok' });
     } catch (error) {
+      console.log(`🚀 ~ file: academic-krs.js ~ line 92 ~ .post ~ error`, error)
       return res.status(500).json({ error });
     }
   })
@@ -124,6 +132,10 @@ export default nextConnect()
     } else {
 			if(!req.user.isAdmin && req.user.student_number)
 				condition.student_number = req.user.student_number
+			let teacherCondition = {}
+			if(!req.user.isAdmin && req.user.isTeacher)
+				teacherCondition.id = req.user.teacherData.id
+      console.log(`🚀 ~ file: academic-krs.js ~ line 134 ~ .get ~ teacherCondition`, teacherCondition)
       try {
         console.log(`🚀 ~ file: academic-krs.js ~ line 63 ~ .get ~ condition`, condition)
         let result = await AcademicKrs.findAll({
@@ -135,6 +147,7 @@ export default nextConnect()
 								{ model: Departement, as: "departement" },
 								{ model: Room, as: "room" },
 								{ model: Teacher, as: "teacher",
+									where : teacherCondition,
 									include: [
 										{ model: UserInfo, as: "user_info" },
 									],
@@ -142,11 +155,18 @@ export default nextConnect()
 								{ model: Day, as: "day" },
 							],
 						},
+						{ model: Student, as: "student",
+							include: [
+								{ model: UserInfo, as: "user_info" },
+							],
+						},
           ],
         });
         if (result.length == 0)
           return res.status(404).json({ error: "Data not found", result });
 				let data = JSON.parse(JSON.stringify(result))
+				data = data.filter(item => item.schedule !== null)
+        console.log(`🚀 ~ file: academic-krs.js ~ line 168 ~ .get ~ data`, data.length)
 				data.map(item => {
 					item.name = item.schedule.course.name
 					item.schedule.name = item.schedule.course.name
@@ -154,6 +174,7 @@ export default nextConnect()
 					item.schedule.teacher_name = item.schedule.teacher.user_info.first_name + ' ' + item.schedule.teacher.user_info.middle_name + ' ' + item.schedule.teacher.user_info.last_name
 					item.schedule.day_name = item.schedule.day.name
 					item.schedule.room_name = item.schedule.room.name
+					item.schedule.student_name = item.student.user_info.first_name + ' ' + item.student.user_info.middle_name + ' ' + item.student.user_info.last_name
 				})
         return res.status(200).json({ data });
       } catch (error) {

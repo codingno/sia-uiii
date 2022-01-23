@@ -16,142 +16,181 @@ import UserSide from "./UserSide";
 const topMenuList = [
 	{
     name: "Administrations",
+		role : [4],
     child: [
       {
         name: "Profile",
         link: "administration/profile",
+				role : 4,
       },
       {
         name: "Card",
         link: "administration/card",
+				role : 4,
       },
       {
         name: "Grade",
         link: "administration/grade",
 				disable : true,
+				role : 4,
       },
       {
         name: "Payment",
         link: "administration/payment",
 				disable : true,
+				role : 4,
       },
       {
         name: "Visa/Kitas Report",
         link: "administration/visa",
 				disable : true,
+				role : 4,
       },
 		],
 	},
   {
     name: "Academics",
+		role : [2,3,4],
     child: [
       {
         name: "Curriculums",
         link: "academic/curriculum",
+				role : 2,
       },
       {
         name: "Courses",
         link: "academic/course",
+				role : 2,
       },
       {
         name: "Academic Schedule",
         link: "academic/schedule",
+				role : 3,
+      },
+      {
+        name: "Courses Approval",
+        link: "academic/courses-approval",
+				role : 3,
       },
       {
         name: "Courses Selection",
         link: "academic/courses-selection",
+				role : 4,
       },
       {
         name: "Calendar Academic",
         link: "academic/calendar",
 				disable : true,
+				role : 2,
       },
       {
         name: "Academic Guides",
         link: "academic/guide",
 				disable : true,
+				role : 2,
       },
       {
         name: "Academic News",
         link: "academic/news",
 				disable : true,
+				role : 2,
       },
     ],
   },
   {
     name: "Master",
+		role : [2],
     child: [
       {
         name: "College Identity",
         link: "master/college",
+				role : 1,
       },
       {
         name: "Faculty",
         link: "master/faculty",
+				role : 1,
       },
       {
         name: "Program Study",
         link: "master/departement",
+				role : 1,
       },
       {
         name: "Teacher",
         link: "master/teacher",
+				role : 2,
       },
       {
         name: "Student",
         link: "master/student",
+				role : 2,
       },
     ],
   },
   {
     name: "Portfolio Academics",
 		width: 380,
+		role : [3,4],
     child: [
       {
         name: "Professional Development",
         link: "portfolio/professional",
 				disable : true,
+				role : 4,
       },
       {
         name: "Degree Candidacy",
         link: "portfolio/candidacy",
 				disable : true,
+				role : 4,
       },
       {
         name: "Academic Advising",
         link: "portfolio/advising",
 				disable : true,
+				role : 4,
       },
       {
         name: "Thesis/Disertation",
         link: "portfolio/thesis_dissertation",
 				disable : true,
+				role : 4,
       },
       {
         name: "Application for Student Exchange",
         link: "portfolio/student_exchange",
 				disable : true,
+				role : 4,
       },
       {
         name: "Application for Research Financial Support",
         link: "portfolio/financial_support",
 				disable : true,
+				role : 4,
       },
       {
         name: "Study Leave",
         link: "portfolio/leave",
 				disable : true,
+				role : 4,
       },
       {
         name: "Approval for Study Leave",
         link: "portfolio/leave_approval",
 				disable : true,
+				role : 3,
       },
 		],
 	},
   {
     name: "Admin",
+		role : [1],
     child: [
+      {
+        name: "User Role",
+        link: "master-admin/role",
+      },
       {
         name: "Identity type",
         link: "master-admin/identity-type",
@@ -224,6 +263,8 @@ function ChildMenu({ child }) {
 }
 
 function ItemMenu({ menu }) {
+	const { data: session, status } = useSession()
+	const filterMenu = menu.child ? session.user.isAdmin ? menu.child : menu.child.filter(item => item.role == session.user.role_id) : []
 	const router = useRouter()
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -242,7 +283,7 @@ function ItemMenu({ menu }) {
       >
         {menu.name}
       </Button>
-      {menu.child && (
+      {/* {menu.child && (
         <MenuPopover
           open={open}
           onClose={() => setOpen(false)}
@@ -251,15 +292,26 @@ function ItemMenu({ menu }) {
         >
           <ChildMenu child={menu.child} />
         </MenuPopover>
+      )} */}
+      {menu.child && (
+        <MenuPopover
+          open={open}
+          onClose={() => setOpen(false)}
+          anchorEl={anchorRef.current}
+          sx={{ width: menu.width || 220 }}
+        >
+          <ChildMenu child={filterMenu} />
+        </MenuPopover>
       )}
     </>
   );
 }
 
 function ParentMenu({ menu }) {
-	// const { data: session, status } = useSession()
-	// const filterMenu = menu.filter(item => item.name != 'Administrations' && !session.user.isAdmin)
-  const renderMenu = menu.map((item, index) => (
+	const { data: session, status } = useSession()
+	// const filterMenu = menu.filter(item => item.role >= session.user.role_id)
+	const filterMenu = session.user.isAdmin ? menu : menu.filter(item => item.role.indexOf(session.user.role_id) > -1 ) 
+  const renderMenu = filterMenu.map((item, index) => (
     <ItemMenu key={index} menu={item} />
   ));
   return <>{renderMenu}</>;
@@ -282,9 +334,11 @@ export default function (props) {
       justifyContent="center"
       alignItems="center"
       alignContent="center"
-      wrap="wrap"
+      // wrap="wrap"
     >
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack 
+			direction="row" 
+			alignItems="center" justifyContent="space-between">
         <Image
           src="/static/blue-uiii.png"
           alt="Picture of the author"

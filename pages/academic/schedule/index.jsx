@@ -14,15 +14,15 @@ export default function () {
         getUrl="/api/academic-schedule"
         addLink="/academic/schedule/create"
         tableHead={[
-          { id: "name", label: "Course", center : 'center' },
-          { id: "course_code", label: "Course Code", center : 'center' },
-          { id: "departement_name", label: "Program Study", center : 'center' },
-          { id: "academic_year_id", label: "Year", center : 'center' },
-          { id: "day_name", label: "Day", center : 'center' },
-          { id: "start_time", label: "Start At", center : 'center' },
-          { id: "end_time", label: "End At", center : 'center' },
-          { id: "room_name", label: "Room", center : 'center' },
-          { id: "teacher_name", label: "Teacher", center : 'center' },
+          { id: "name", label: "Course", alignRight: false },
+          { id: "course_code", label: "Course Code", alignRight: false },
+          { id: "departement_name", label: "Program Study",alignRight: false },
+          { id: "academic_year_id", label: "Year",alignRight: false },
+          { id: "day_name", label: "Day",alignRight: false },
+          { id: "start_time", label: "Start At",alignRight: false, type : "Time" },
+          { id: "end_time", label: "End At",alignRight: false, type : "Time" },
+          { id: "room_name", label: "Room",alignRight: false },
+          { id: "teacher_name", label: "Teacher",alignRight: false },
           { id: "" },
         ]}
         moremenu={[

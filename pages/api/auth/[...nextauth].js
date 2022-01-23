@@ -183,6 +183,7 @@ export default async (req, res) => await NextAuth(req, res, {
             if (user_secret.teacher) {
               user.isTeacher = true;
               user.departement_id = user_secret.teacher.departement_id;
+							user.teacherData = user_secret.teacher;
             } else if (user_secret.student) {
               user.isStudent = true;
               user.student_number = user_secret.student.student_number;
@@ -190,7 +191,8 @@ export default async (req, res) => await NextAuth(req, res, {
               user.departementID = user_secret.student.departement_id;
 							user.studentData = user_secret.student;
             } else {
-              user.isAdmin = true;
+							if(user.role_id == 1)
+              	user.isAdmin = true;
             }
 							user.userID = user_secret.user_id
           }
@@ -263,6 +265,7 @@ export default async (req, res) => await NextAuth(req, res, {
     // signIn: '/auth/signin',  // Displays signin buttons
     // signOut: '/auth/signout', // Displays form with sign out button
     // error: '/auth/error', // Error code passed in query string as ?error=
+    error: '/auth/signin', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // Used for check email page
     // newUser: null // If set, new users will be directed here on first sign in
   },

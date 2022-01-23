@@ -29,7 +29,7 @@ export default function () {
             }}
           >
           <Stack
-            direction="column	"
+            direction="column"
             alignItems="center"
             justifyContent="center"
           >

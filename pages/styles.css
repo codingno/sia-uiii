@@ -170,3 +170,13 @@ iframe {
 #renew-create-password {
 	transition: ease 2s;
 }
+
+.bg-notfound {
+	opacity: 0.3;
+	z-index: -1;
+}
+
+.bg-notfound-box span {
+	background-color: #000!important;
+	z-index: -1;
+}

@@ -22,8 +22,7 @@ export default function CategoryListHead({
   headLabel,
   numSelected,
   onRequestSort,
-  onSelectAllClick,
-	mode,
+  onSelectAllClick
 }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -49,10 +48,7 @@ export default function CategoryListHead({
             onChange={onSelectAllClick}
           />
         </TableCell>
-        {headLabel.map((headCell) => {
-					if(headCell.id == 'confirm' && mode)
-						return ""
-					return (
+        {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.center ? headCell.center : headCell.alignRight ? 'right' : 'left'}
@@ -79,7 +75,7 @@ export default function CategoryListHead({
               ) : null}
             </TableSortLabel>
           </TableCell>
-        )})}
+        ))}
       </TableRow>
     </TableHead>
   );
