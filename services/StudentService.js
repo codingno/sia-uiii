@@ -41,12 +41,18 @@ User.hasMany(Student, { foreignKey: "user_id" });
 async function generateStudentNumber (user_id, callback){
     const student = await Student.findOne({
         where:{user_id: user_id},
-        include: [{
-
-        }],
+        include: [
+          {model: Departement, as: "departement",
+            include:[{model: MasterStudyType, as: "study_type"}]  
+          },
+          {model: Faculty, as: "faculty"}
+        ],
     })
     if(student){
-        if(!student.student_number)
-            callback(student.student_number)
+      let student_number = ''
+        if(!student.student_number){
+          student_number = (student.faculty.code || '') + (student.departement && student.departement.study_type ? student.departement.study_type.name.slice(1) : 0 ) + (student.departement.code || '') + (student.entry_year || '' ) 
+        }
+          callback(student.student_number)
     }
 }
