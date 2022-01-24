@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'master_grade',
+		freezeTableName: true,
   });
   return MasterGrade;
 };

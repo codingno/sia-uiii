@@ -29,12 +29,6 @@ const topMenuList = [
 				role : 4,
       },
       {
-        name: "Grade",
-        link: "administration/grade",
-				disable : true,
-				role : 4,
-      },
-      {
         name: "Payment",
         link: "administration/payment",
 				disable : true,
@@ -78,22 +72,9 @@ const topMenuList = [
 				role : 4,
       },
       {
-        name: "Calendar Academic",
-        link: "academic/calendar",
-				disable : true,
-				role : 2,
-      },
-      {
-        name: "Academic Guides",
-        link: "academic/guide",
-				disable : true,
-				role : 2,
-      },
-      {
-        name: "Academic News",
-        link: "academic/news",
-				disable : true,
-				role : 2,
+        name: "Grade",
+        link: "academic/grade",
+				role : 4,
       },
     ],
   },
@@ -129,10 +110,16 @@ const topMenuList = [
     ],
   },
   {
-    name: "Portfolio Academics",
+    name: "Academic Portfolio",
 		width: 380,
 		role : [3,4],
     child: [
+      {
+        name: "Academic Transcript",
+        link: "portfolio/professional",
+				disable : true,
+				role : 4,
+      },
       {
         name: "Professional Development",
         link: "portfolio/professional",
@@ -145,6 +132,13 @@ const topMenuList = [
 				disable : true,
 				role : 4,
       },
+		],
+	},
+  {
+    name: "Advising & Thesis/Disertation",
+		width: 380,
+		role : [3,4],
+    child: [
       {
         name: "Academic Advising",
         link: "portfolio/advising",
@@ -157,6 +151,13 @@ const topMenuList = [
 				disable : true,
 				role : 4,
       },
+		],
+	},
+  {
+    name: "Student Exchange & Research Support",
+		width: 380,
+		role : [3,4],
+    child: [
       {
         name: "Application for Student Exchange",
         link: "portfolio/student_exchange",
@@ -169,6 +170,13 @@ const topMenuList = [
 				disable : true,
 				role : 4,
       },
+		],
+	},
+  {
+    name: "Studey Leave",
+		width: 380,
+		role : [3,4],
+    child: [
       {
         name: "Study Leave",
         link: "portfolio/leave",
@@ -180,6 +188,31 @@ const topMenuList = [
         link: "portfolio/leave_approval",
 				disable : true,
 				role : 3,
+      },
+		],
+	},
+  {
+    name: "Info",
+		width: 380,
+		role : [1,2,3,4],
+    child: [
+      {
+        name: "Calendar Academic",
+        link: "academic/calendar",
+				disable : true,
+				role : 4,
+      },
+      {
+        name: "Academic Guides",
+        link: "academic/guide",
+				disable : true,
+				role : 4,
+      },
+      {
+        name: "Academic News",
+        link: "academic/news",
+				disable : true,
+				role : 4,
       },
 		],
 	},
@@ -230,6 +263,10 @@ const topMenuList = [
       {
         name: "Religion",
         link: "master-admin/religion",
+      },
+      {
+        name: "Grade",
+        link: "master-admin/grade",
       },
     ],
   },

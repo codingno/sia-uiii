@@ -8,38 +8,43 @@ module.exports = {
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isAdmin : (req, res, next) => {
-		if(req.user && req.user.isAdmin)
+	isAdmin : async (req, res, next) => {
+		const session  = await getSession({req});
+		if(session.user && session.user.isAdmin)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isManager : (req, res, next) => {
-		if(req.user && req.user.role_id <= 2)
+	isManager : async (req, res, next) => {
+		const session  = await getSession({req});
+		if(session.user && sesson.user.role_id <= 2)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isCourseCreator : (req, res, next) => {
-		if(req.user && req.user.role_id <= 3)
+	isCourseCreator : async (req, res, next) => {
+		const session  = await getSession({req});
+		if(session.user && sesson.user.role_id <= 3)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isTeacher : (req, res, next) => {
-		if(req.user && req.user.isTeacher)
+	isTeacher : async (req, res, next) => {
+		const session  = await getSession({req});
+		if(session.user && session.user.isTeacher)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isNonEditTeacher : (req, res, next) => {
+	isNonEditTeacher : async (req, res, next) => {
 		if(req.user && req.user.role_id <= 5)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")
 	},
-	isStudent : (req, res, next) => {
-		if(req.user && req.user.isStudent)
+	isStudent : async (req, res, next) => {
+		const session  = await getSession({req});
+		if(session.user && session.user.isStudent)
 			next()
 		else 
 			res.status(403).send("You don't have permission to access this features")

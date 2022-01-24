@@ -11,8 +11,24 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import { useSession } from "next-auth/react"
 
+function parseType(value, type) {
+	let result
+	switch (type) {
+		case 'float':
+			result = parseFloat(value)	
+			break;
+		case 'integer':
+			result = parseInt(value)	
+			break;
+		default:
+			result = value	
+			break;
+	}
+	return result	
+}
+
 export default function (props) {
-	const { title, titlePage, submitUrl, method, additionalForm } = props
+	const { title, titlePage, submitUrl, method, additionalForm, disableMasterForm } = props
 
 	const router = useRouter()
   const { id } = router.query
@@ -59,12 +75,13 @@ export default function (props) {
 				const data = await axios.post(submitUrl, {
 					name, 
 					description,
+					...additional,
 				})	
 			}
+			alert(`Data ${name} already ${method == 'edit' ? 'updated' : 'created'}`)
 		} catch (error) {
 			alert(error)	
 		}	
-		alert(`Data ${name} already ${method == 'edit' ? 'updated' : 'created'}`)
 		router.back()
 	}
 
@@ -83,18 +100,23 @@ export default function (props) {
           width: 640,
         }}
       >
-        <FormContainer
-          label="Name"
-          name="name"
-          value={name}
-          setValue={setName}
-        />
-        <FormContainer
-          label="Description"
-          name="description"
-          value={description}
-          setValue={setDescription}
-        />
+				{
+					!disableMasterForm &&
+					<>
+						<FormContainer
+							label="Name"
+							name="name"
+							value={name}
+							setValue={setName}
+						/>
+						<FormContainer
+							label="Description"
+							name="description"
+							value={description}
+							setValue={setDescription}
+						/>
+					</>
+				}
 				{
 					additionalForm &&
 					additionalForm.map(item => {
@@ -105,7 +127,7 @@ export default function (props) {
 								value={additional[item.value]}
 								setValue={(value) => {
 									let newAdditional = additional
-									newAdditional[item.value] = value
+									newAdditional[item.value] = item.type ? parseType(value, item.type) : value
 									setAdditional(newAdditional)
 								}}
 							/>

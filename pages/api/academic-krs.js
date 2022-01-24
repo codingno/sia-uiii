@@ -10,6 +10,7 @@ const AcademicSchedule = require("../../models/academic_schedule")(db.sequelize,
 const Course = require("../../models/course")(db.sequelize, DataTypes);
 const Departement = require("../../models/departement")(db.sequelize, DataTypes);
 const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
+const Grade = require("../../models/masterGrade")(db.sequelize, DataTypes);
 const Day = require("../../models/day")(
   db.sequelize,
   DataTypes
@@ -41,6 +42,12 @@ AcademicKrs.belongsTo(Student, {
   as: "student",
 });
 Student.hasMany(AcademicKrs, { foreignKey: "student_number", sourceKey: "student_number" });
+AcademicKrs.belongsTo(Grade, {
+  foreignKey: "grade_id",
+  targetKey: "id",
+  as: "grade",
+});
+Grade.hasMany(AcademicKrs, { foreignKey: "grade_id", sourceKey: "id" });
 AcademicKrs.belongsTo(AcademicSchedule, {
   foreignKey: "schedule_id",
   as: "schedule",
@@ -160,6 +167,7 @@ export default nextConnect()
 								{ model: UserInfo, as: "user_info" },
 							],
 						},
+						{ model: Grade, as: "grade"},
           ],
         });
         if (result.length == 0)
@@ -175,6 +183,8 @@ export default nextConnect()
 					item.schedule.day_name = item.schedule.day.name
 					item.schedule.room_name = item.schedule.room.name
 					item.schedule.student_name = item.student.user_info.first_name + ' ' + item.student.user_info.middle_name + ' ' + item.student.user_info.last_name
+					item.grade_value = item.grade ? item.grade.grade : ""
+					item.grade_point = item.grade ? item.grade.point : ""
 				})
         return res.status(200).json({ data });
       } catch (error) {

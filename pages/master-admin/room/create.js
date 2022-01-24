@@ -2,8 +2,8 @@ import FormMaster from "../../../components/utils/FormMaster";
 export default function () {
   return (
     <FormMaster
-      title="Course Type"
-      titlePage="Course Type"
+      title="Rooms"
+      titlePage="Rooms"
       submitUrl="/api/room"
 			additionalForm={[
 				{
