@@ -10,7 +10,7 @@ Portfolio.belongsTo(UserInfo, { foreignKey: "user_id", targetKey: "user_id", as:
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
-  .use(isLogin)
+  // .use(isLogin)
   .post(async (req, res) => {
     let body = req.body;
     if (!body.portfolio_id || !body.url)
