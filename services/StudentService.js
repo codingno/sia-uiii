@@ -4,6 +4,7 @@ import { isLogin, isStudent } from "./config/police";
 const db = require("../../models");
 const Student = require("../../models/student")(db.sequelize, DataTypes);
 const Teacher = require("../../models/teacher")(db.sequelize, DataTypes);
+const UserInfo = require("../../models/userinfo")(db.sequelize, DataTypes);
 const User = require("../../models/user")(db.sequelize, DataTypes);
 const Departement = require("../../models/departement")(
   db.sequelize,
@@ -19,7 +20,7 @@ const MasterStudentStatus = require("../../models/masterStudentStatus")(
 );
 const Faculty = require("../../models/faculty")(db.sequelize, DataTypes);
 Student.belongsTo(Teacher, { foreignKey: "teacher_id", as: "teacher" });
-Student.hasOne(FinancialType, { foreignKey: "financial_type_id", as: "program" });
+// Student.hasOne(FinancialType, { foreignKey: "financial_type_id", as: "program" });
 Teacher.hasMany(Student, { foreignKey: "teacher_id" });
 Student.belongsTo(Departement, {
   foreignKey: "departement_id",
@@ -38,7 +39,7 @@ Student.belongsTo(MasterStudentStatus, {
 Student.belongsTo(User, { foreignKey: "user_id", as: "user" });
 User.hasMany(Student, { foreignKey: "user_id" });
 
-async function generateStudentNumber (user_id, callback){
+export default async function generateStudentNumber (user_id, callback){
     const student = await Student.findOne({
         where:{user_id: user_id},
         include: [
@@ -51,7 +52,7 @@ async function generateStudentNumber (user_id, callback){
     if(student){
       let student_number = ''
         if(!student.student_number){
-          student_number = (student.faculty.code || '') + (student.departement && student.departement.study_type ? student.departement.study_type.name.slice(1) : 0 ) + (student.departement.code || '') + (student.entry_year || '' ) 
+          student_number = (student.faculty.code || '00') + (student.departement && student.departement.study_type ? student.departement.study_type.name.slice(1) : 0 ) + (student.departement.code || '0') + (student.entry_year.slice(-2,) || '00' ) 
         }
           callback(student.student_number)
     }
