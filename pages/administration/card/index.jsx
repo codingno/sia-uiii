@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { useSession } from "next-auth/react"
 
 export default function card() {
-  const ref = useRef(null);
+  let ref = useRef(null);
 	const { data: session, status : statusSession } = useSession()
   const exportPDF = () => {
     // console.log(ref)

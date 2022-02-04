@@ -170,7 +170,6 @@ export default async (req, res) => await NextAuth(req, res, {
             ],
             // raw: true,
           });
-          console.log(`🚀 ~ file: [...nextauth].js ~ line 144 ~ authorize ~ user_secret`, user_secret)
           // return null
           // user = await db.sequelize.models.user.findAll()
           const allowed = await bcrypt.compare(

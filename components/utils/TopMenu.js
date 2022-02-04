@@ -17,6 +17,7 @@ const topMenuList = [
 	{
     name: "Administrations",
 		role : [4],
+		width: 300,
     child: [
       {
         name: "Profile",
@@ -39,6 +40,18 @@ const topMenuList = [
         link: "administration/visa",
 				disable : true,
 				role : 4,
+      },
+      {
+        name: "Study Leave",
+        link: "portfolio/leave",
+				disable : true,
+				role : 4,
+      },
+      {
+        name: "Approval for Study Leave",
+        link: "portfolio/leave_approval",
+				disable : true,
+				role : 3,
       },
 		],
 	},
@@ -74,6 +87,12 @@ const topMenuList = [
       {
         name: "Grade",
         link: "academic/grade",
+				role : 4,
+      },
+      {
+        name: "Academic Transcript",
+        link: "portfolio/transcript",
+				disable : true,
 				role : 4,
       },
     ],
@@ -115,49 +134,29 @@ const topMenuList = [
 		role : [3,4],
     child: [
       {
-        name: "Academic Transcript",
-        link: "portfolio/professional",
-				disable : true,
-				role : 4,
-      },
-      {
         name: "Professional Development",
-        link: "portfolio/professional",
-				disable : true,
+        link: "portfolio/development",
+				// disable : true,
 				role : 4,
       },
       {
         name: "Degree Candidacy",
         link: "portfolio/candidacy",
-				disable : true,
+				// disable : true,
 				role : 4,
       },
-		],
-	},
-  {
-    name: "Advising & Thesis/Disertation",
-		width: 380,
-		role : [3,4],
-    child: [
       {
         name: "Academic Advising",
         link: "portfolio/advising",
-				disable : true,
+				// disable : true,
 				role : 4,
       },
       {
         name: "Thesis/Disertation",
-        link: "portfolio/thesis_dissertation",
-				disable : true,
+        link: "portfolio/thesis_disertation",
+				// disable : true,
 				role : 4,
       },
-		],
-	},
-  {
-    name: "Student Exchange & Research Support",
-		width: 380,
-		role : [3,4],
-    child: [
       {
         name: "Application for Student Exchange",
         link: "portfolio/student_exchange",
@@ -169,25 +168,6 @@ const topMenuList = [
         link: "portfolio/financial_support",
 				disable : true,
 				role : 4,
-      },
-		],
-	},
-  {
-    name: "Studey Leave",
-		width: 380,
-		role : [3,4],
-    child: [
-      {
-        name: "Study Leave",
-        link: "portfolio/leave",
-				disable : true,
-				role : 4,
-      },
-      {
-        name: "Approval for Study Leave",
-        link: "portfolio/leave_approval",
-				disable : true,
-				role : 3,
       },
 		],
 	},
@@ -347,7 +327,10 @@ function ItemMenu({ menu }) {
 function ParentMenu({ menu }) {
 	const { data: session, status } = useSession()
 	// const filterMenu = menu.filter(item => item.role >= session.user.role_id)
-	const filterMenu = session.user.isAdmin ? menu : menu.filter(item => item.role.indexOf(session.user.role_id) > -1 ) 
+	let filterMenu = session.user.isAdmin ? menu : menu.filter(item => item.role.indexOf(session.user.role_id) > -1 ) 
+  console.log(`🚀 ~ file: TopMenu.js ~ line 331 ~ ParentMenu ~ filterMenu`, filterMenu)
+	if(session.user.isAdmin)
+		filterMenu.shift()
   const renderMenu = filterMenu.map((item, index) => (
     <ItemMenu key={index} menu={item} />
   ));

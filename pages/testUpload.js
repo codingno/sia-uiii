@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 
 import FormContainer from "../components/utils/FormContainer";
 import FormLayout from "../components/utils/FormLayout";
+import FormParent from "../components/utils/FormParent"
 import FormControl from "@mui/material/FormControl"
 import Stack from "@mui/material/Stack";
 
@@ -38,18 +39,21 @@ export default function () {
   const uploadFormHandle = e => {
 		if(e.target.files[0]) {
 			const file = e.target.files[0]	
-			setAttachment(file.name)
+			setAttachment(file)
 			// setCourseImage(file)
 		}
 	}
   const uploadImage = async (folderTarget, courseImage) => {
+  console.log(`🚀 ~ file: testUpload.js ~ line 46 ~ uploadImage ~ folderTarget`, folderTarget)
+  console.log(`🚀 ~ file: testUpload.js ~ line 46 ~ uploadImage ~ courseImage`, courseImage)
     if (courseImage === "") return null;
 
     const formData = new FormData();
 
-    formData.append("attachment", courseImage);
+    formData.append("test", courseImage);
     formData.append("folder", folderTarget);
     formData.append("folderTarget", folderTarget);
+    console.log(`🚀 ~ file: testUpload.js ~ line 54 ~ uploadImage ~ formData`, formData)
     try {
       const file = await axios.post("/api/upload", formData);
       return file;
@@ -84,7 +88,7 @@ export default function () {
           value={code}
           setValue={setCode}
         />
-        <FormControl label="Attachment">
+        <FormParent label="Attachment">
           <label htmlFor="contained-button-file">
             <Input
               id="contained-button-file"
@@ -99,11 +103,11 @@ export default function () {
             </Button>
             {attachment && (
               <p style={{ marginTop: "10px" }}>
-                ( {attachment.split("/").pop()} )
+                ( {attachment.name.split("/").pop()} )
               </p>
             )}
           </label>
-        </FormControl>
+        </FormParent>
         <Stack
           direction="row"
           alignItems="center"

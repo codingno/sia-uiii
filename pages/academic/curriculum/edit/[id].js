@@ -66,6 +66,7 @@ export default function () {
 	async function submitCurriculum() {
 		try {
 			const sendData = {
+				id,
 				name,
 				year,
 				departement_id,
