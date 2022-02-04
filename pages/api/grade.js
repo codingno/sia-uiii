@@ -6,7 +6,7 @@ const db = require("../../models");
 const Grade = require("../../models/masterGrade")(db.sequelize, DataTypes);
 
 export default nextConnect()
-//   .use(isLogin)
+  .use(isLogin)
   .post((isAdmin),async (req, res) => {
     let body = req.body;
     if (!body.portfolio_id || !body.url)
