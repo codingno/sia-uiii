@@ -115,12 +115,12 @@ export default nextConnect()
         const student_number = await StudentService.generate(data[i]);
         // console.log({student_number});
         const hashed = student_number
-          ? await bcrypt.hash(student_number, 10)
+          ? await bcrypt.hash(first_name + student_number, 10)
           : await bcrypt.hash("123456", 10);
         data_user_secret = {
           user_id: user.id,
           pass: hashed,
-          username: data[i].username || first_name + middle_name + last_name,
+          username: student_number,
           email: data[i].email,
           email_token: data[i].email_token || "",
           email_token_expired: data[i].email_token_expired || new Date(),
@@ -135,10 +135,10 @@ export default nextConnect()
           user_id: user.id,
           student_number: student_number,
           entry_year: data[i].entry_year,
-          entry_semester: data[i].entry_semester || null,
-          entry_status: data[i].entry_status || null,
+          // entry_semester: data[i].entry_semester || 1,
+          // entry_status: data[i].entry_status || null,
           departement_id: data[i].departement || null,
-          status: data[i].status || null,
+          // status: data[i].status || null,
           mother_name: data[i].mother_name || "",
           father_name: data[i].father_name || "",
           father_income: data[i].father_income || null,
