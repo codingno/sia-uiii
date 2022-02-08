@@ -109,6 +109,8 @@ dist
 .now
 .env.local
 
+.vscode
+
 .DS_Store
 
 database.json

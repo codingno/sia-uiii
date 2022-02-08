@@ -4,6 +4,7 @@ CREATE TABLE `student_temp` (
   `name` VARCHAR(150) NULL,
   `faculty` INT(11) NULL,
   `departement` INT(11) NULL,
+  `financial_type_id` INT(11) NULL,
   `nationality` ENUM('WNI', 'WNA') NOT NULL DEFAULT 'WNI',
   `entry_year` YEAR(4) NULL,
   `email` VARCHAR(150) NULL,

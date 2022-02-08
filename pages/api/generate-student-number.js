@@ -35,19 +35,7 @@ Departement.belongsTo(MasterStudyType, {
 });
 
 export default nextConnect()
-  //   .use(isLogin)
-  .post(isAdmin, async (req, res) => {
-    let body = req.body;
-    if (!body.portfolio_id || !body.url)
-      return res.status(400).json({ message: "Incomplete parameters" });
-    try {
-      body.user_id = req.user.id;
-      const data = await Grade.create(body);
-      return res.status(200).json({ data });
-    } catch (error) {
-      return res.status(500).json({ error });
-    }
-  })
+    .use(isAdmin)
   .get(async (req, res) => {
     try {
       const data = await StudentTemp.findAll({
@@ -172,33 +160,6 @@ export default nextConnect()
       // }
     } catch (error) {
       console.log({ error });
-      return res.status(500).json({ error });
-    }
-  })
-  .patch(isAdmin, async (req, res) => {
-    const body = req.body;
-    const id = body.id;
-    if (!id) return res.status(400).json({ error: "Incomplete parameters" });
-    delete body.id;
-    try {
-      const data = await Grade.update(body, {
-        where: { id: id },
-      });
-      return res.status(200).json({ message: "success update data" });
-    } catch (error) {
-      return res.status(500).json({ error });
-    }
-  })
-  .delete(isAdmin, async (req, res) => {
-    const body = req.body;
-    if (!body.id)
-      return res.status(400).json({ message: "Incomplete parameters" });
-    try {
-      const data = await Grade.destroy({
-        where: { id: body.id },
-      });
-      return res.status(200).json({ message: "success delete data" });
-    } catch (error) {
       return res.status(500).json({ error });
     }
   });
