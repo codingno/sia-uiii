@@ -105,7 +105,9 @@ export default nextConnect()
         const hashed = student_number
           ? await bcrypt.hash(first_name + student_number, 10)
           : await bcrypt.hash("123456", 10);
-        data_user_secret = {
+        const dateNow = new Date()
+        const hour = dateNow.getHours()
+          data_user_secret = {
           user_id: user.id,
           pass: hashed,
           username: student_number,
@@ -115,7 +117,7 @@ export default nextConnect()
           reset_pass_token: data[i].reset_pass_token || "",
           reset_pass_expired: data[i].reset_pass_expire
             ? new Date(data[i].reset_pass_expired)
-            : new Date(),
+            : new Date(dateNow.setHours(hour + 1)),
         };
         const user_secret = await UserSecret.create(data_user_secret);
         // callback(null, user.id);

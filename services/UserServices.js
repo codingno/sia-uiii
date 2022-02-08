@@ -39,6 +39,8 @@ export default {
         };
         const user_info = await UserInfo.create(data_user_info);
         const hashed = data.password ? await bcrypt.hash(data.password, 10) : await bcrypt.hash('123456', 10)
+        const dateNow = new Date()
+        const hour = dateNow.getHours()
         const data_user_secret = {
           user_id: user.id,
           pass: hashed,
@@ -47,7 +49,7 @@ export default {
           email_token: data.email_token || '',
           email_token_expired: data.email_token_expired || new Date(),
           reset_pass_token: data.reset_pass_token || '',
-          reset_pass_expired: new Date(data.reset_pass_expired) || new Date(),
+          reset_pass_expired: data.reset_pass_expire ? new Date(data.reset_pass_expired) : new Date(dateNow.setHours(hour + 1)),
         };
         const user_secret = await UserSecret.create(data_user_secret);
         // callback(null, user.id);
