@@ -145,7 +145,6 @@ export default function List(props) {
   async function getDataList() {
     try {
       const { data, error } = await axios.get(getUrl);
-      console.log(`🚀 ~ file: List.jsx ~ line 146 ~ getDataList ~ data`, typeof(data.data), data.data)
       setDataList(data.data);
     } catch (error) {
       if (error.response) {
@@ -270,7 +269,6 @@ export default function List(props) {
 
                         delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
-                        console.log(`🚀 ~ file: List.jsx ~ line 272 ~ .map ~ tableHeadId`, tableHeadId)
                         Object.keys(row).map((item) => {
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')
@@ -281,14 +279,12 @@ export default function List(props) {
 												// const arrayRow = Object.keys(row)
 												let arrayRow = []
 												Object.keys(row).map(item => arrayRow[tableHeadId.indexOf(item)] = item)
-                        console.log(`🚀 ~ file: List.jsx ~ line 281 ~ .map ~ arrayRow`, arrayRow)
 												// if(isUserList) {
 												// 	arrayRow.unshift(arrayRow[arrayRow.length - 1])
 												// 	arrayRow.pop()
 												// }
                         const columCell = arrayRow.map(
                           (item, index) => {
-														console.log(tableHead[index])
 														let render = row[item]
 														if(tableHead[index].type == 'Date' && render) {
 															const options = { year: 'numeric', month: 'long', day: 'numeric', hour : 'numeric', minute : 'numeric', hour12 : false };
@@ -296,6 +292,9 @@ export default function List(props) {
 														}
 														else if(tableHead[index].type == 'Time' && render) {
 															render = new Date(row[item]).toTimeString().split('GMT')[0]
+														}
+														else if(tableHead[index].type == 'float' && render) {
+															render = row[item].toFixed(2)
 														}
 														else if(tableHead[index].link === true)
 															render = <a href={router.basePath + row[item]} target="_blank">link</a>

@@ -132,6 +132,7 @@ export default nextConnect()
           item.course_code = item.course.code,
           item.departement_name = item.departement.name
 				}) 
+        console.log(`🚀 ~ file: academic-schedule.js ~ line 135 ~ .get ~ data`, data)
         return res.status(200).json({ data });
       } catch (error) {
         return res.status(500).json({ error });

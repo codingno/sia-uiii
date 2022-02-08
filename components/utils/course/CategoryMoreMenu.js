@@ -15,7 +15,7 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 export default function UserMoreMenu(props) {
 	// const dispatch = useDispatch()
 	// const navigate = useNavigate()
-  const ref = useRef(null);
+  let ref = useRef(null);
 	// const { category_code, sub_category } = useParams()
   const [isOpen, setIsOpen] = useState(false);
   // const {user} = useSelector(state => state)

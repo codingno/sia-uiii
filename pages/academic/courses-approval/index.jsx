@@ -207,7 +207,7 @@ export default function (props) {
 			// 	setSelected(selectedSchedule)
 			// }
 			// else {
-				const list = data.data.filter(item => item.schedule.teacher_id == session.user.teacherData.id).map(item => item = { ...item, ...item.schedule })
+				const list = data.data.filter(item => item.schedule.teacher_id == session.user.teacherData.id).map(item => item = { ...item.schedule,...item })
         console.log(`🚀 ~ file: index.jsx ~ line 203 ~ getDataList ~ list`, list)
       	setDataList(list);
 				const ids = list.map(item => item.id)
@@ -223,12 +223,14 @@ export default function (props) {
   }
 
 	async function approvalStudent(row, confirm) {
+    console.log(`🚀 ~ file: index.jsx ~ line 226 ~ approvalStudent ~ row`, row)
 		if(window.confirm(`Are you sure to ${confirm ? 'Approve' : 'Reject'} this item?`))
 		try {
 			await axios.patch('/api/academic-krs', {
-				...row,
+				id : row.id,
 				confirm,
 			})	
+			router.reload()
 		} catch (error) {
 			if(error.response)	
 				alert(error.response)

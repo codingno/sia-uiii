@@ -28,6 +28,7 @@ const Student = require("../../../models/student")(db.sequelize, DataTypes);
 const Teacher = require("../../../models/teacher")(db.sequelize, DataTypes);
 const Departement = require("../../../models/departement")(db.sequelize, DataTypes);
 const Faculty = require("../../../models/faculty")(db.sequelize, DataTypes);
+const MasterStudyType = require("../../../models/masterStudyType")(db.sequelize, DataTypes);
 UserInfo.belongsTo(User, { foreignKey: "user_id" });
 UserSecret.belongsTo(User, { foreignKey: "user_id" });
 Student.belongsTo(UserSecret, { foreignKey: "user_id" });
@@ -35,6 +36,7 @@ Student.belongsTo(Departement, { foreignKey: "departement_id" });
 Teacher.belongsTo(UserSecret, { foreignKey: "user_id" });
 Teacher.belongsTo(Departement, { foreignKey: "departement_id" });
 Departement.belongsTo(Faculty, { foreignKey: "faculty_id" });
+Departement.belongsTo(MasterStudyType, { foreignKey: "study_type_id", as : "study_type" });
 User.hasOne(UserInfo, { as: "user_info", foreignKey: "user_id" });
 User.hasOne(UserSecret, { as: "user_secret", foreignKey: "user_id" });
 UserSecret.hasOne(Student, {
@@ -146,7 +148,11 @@ export default async (req, res) => await NextAuth(req, res, {
 											{
 												model : Faculty,
 												as: "faculty",
-											}
+											},
+											{
+												model : MasterStudyType,
+												as: "study_type",
+											},
 										]
 									}
 								],

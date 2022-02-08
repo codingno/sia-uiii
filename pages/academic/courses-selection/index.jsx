@@ -473,12 +473,15 @@ export default function (props) {
                           <TableCell align="left">{status || "None"}</TableCell> */}
                             {
                               <TableCell align="right">
-                                <MoreMenu
-                                  id={id}
-                                  name={name}
-                                  moremenu={moremenu}
-                                  deleteOptions={deleteOptions}
-                                />
+																{
+																	!session.user.isStudent &&
+																	<MoreMenu
+																		id={id}
+																		name={name}
+																		moremenu={moremenu}
+																		deleteOptions={deleteOptions}
+																	/>
+																}
                               </TableCell>
                             }
                           </TableRow>

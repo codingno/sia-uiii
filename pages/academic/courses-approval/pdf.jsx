@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 
 export default function pdf() {
-  const ref = useRef(null);
+  let ref = useRef(null);
   const exportPDF = () => {
     // console.log(ref)
     ref.save();

@@ -1,18 +1,24 @@
 import React, { useRef } from "react";
+import { useRouter } from "next/router";
 import { PDFExport } from "@progress/kendo-react-pdf";
-import BasicLayout from "../../../components/utils/BasicLayout";
-import CourseRegistrationCard from "../../../components/utils/courses-selection/CourseRegistrationCard";
+import BasicLayout from "../../../../components/utils/BasicLayout";
+import TranscriptCard from './TranscriptCard'
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 
 export default function pdf() {
-  const ref = useRef(null);
+	const router = useRouter()
+	const { id } = router.query
+  let ref = useRef(null);
   const exportPDF = () => {
     // console.log(ref)
     ref.save();
   };
+
+	if(!id)
+		return ""
 
   return (
     <>
@@ -59,7 +65,7 @@ export default function pdf() {
                     overflowY: "hidden",
                   }}
                 >
-                  <CourseRegistrationCard />
+                  <TranscriptCard id={id} />
                 </div>
               </PDFExport>
             </Stack>

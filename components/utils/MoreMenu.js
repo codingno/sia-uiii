@@ -12,7 +12,7 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 export default function MoreMenu(props) {
 	const { moremenu, deleteOptions, id } = props
 	const router = useRouter()
-  const ref = useRef(null);
+  let ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
 	const [disableDeleteButton, setDisableDeleteButton] = useState(false)
@@ -41,7 +41,10 @@ export default function MoreMenu(props) {
 		return (
 			<MenuItem key={index} sx={{ color: 'text.secondary' }} onClick={() => router.push(item.link + id ) }>
 				<ListItemIcon>
-					<Icon icon={editFill} width={24} height={24} />
+					{
+						item.name == 'Edit' &&
+						<Icon icon={editFill} width={24} height={24} />
+					}
 				</ListItemIcon>
 				<ListItemText primary={item.name} primaryTypographyProps={{ variant: 'body2' }} />
 			</MenuItem>

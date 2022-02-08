@@ -18,10 +18,13 @@ import {
   Checkbox,
   Divider,
   Grid,
+	Modal,
+	MenuItem,
   TableRow,
   TableBody,
   TableCell,
   Container,
+	Select,
   Typography,
   TableContainer,
   TablePagination,
@@ -34,6 +37,7 @@ import { CategoryListHead } from "../../../components/utils/grade";
 import TopMenu from "../../../components/utils/TopMenu";
 import MoreMenu from "../../../components/utils/MoreMenu";
 import ListToolbar from "../../../components/utils/ListToolbarGrade";
+import FormParent from "../../../components/utils/FormParent";
 
 import axios from "axios";
 import { useSession } from "next-auth/react"
@@ -80,13 +84,25 @@ const TABLE_HEAD = [
 
 // ----------------------------------------------------------------------
 
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  // border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 export default function (props) {
   // const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
     // props;
 		const { data: session, status : statusSession } = useSession()
 		const { isUserList } = props
 
-		const
+		let
         title="Course Grade",
         name="Course",
         getUrl="/api/academic-krs",
@@ -115,6 +131,10 @@ export default function (props) {
           note: "Are you sure to delete this item?",
         };
 
+	if(statusSession == 'authenticated')
+				if(session.user.role_id <= 4)
+					tableHead.unshift({id: "student_name", label : "Student Name", alignRight : false })
+
   const router = useRouter();
 
   const [page, setPage] = useState(0);
@@ -129,6 +149,24 @@ export default function (props) {
 	const [mode, setMode] = useState(false)
   const [dataList, setDataList] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState([]);
+
+	const [openModal, setOpenModal] = useState(false)
+  const [selectedKRS, setSelectedKRS] = useState({});
+	const [grade, setGrade] = useState("")
+	const [gradeOptions, setGradeOptions] = useState([])
+
+	useEffect(() => {
+		getGradeOptions()
+	},[])
+
+	async function getGradeOptions() {
+		try {
+			const { data } = await axios.get('/api/grade')
+			setGradeOptions(data.data)
+		} catch (error) {
+			alert(error)	
+		}	
+	}
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -212,7 +250,7 @@ export default function (props) {
 				setSelected(selectedSchedule)
 			}
 			else {
-				const list = data.data.map(item => item = { ...item, ...item.schedule}).filter(item => item.confirm == true)
+				const list = data.data.map(item => item = { ...item.schedule, ...item}).filter(item => item.confirm == true)
       	setDataList(list);
 				const ids = list.map(item => item.id)
 				setSelectedSchedule(ids)
@@ -225,6 +263,29 @@ export default function (props) {
       alert(error);
     }
   }
+
+	function editGrade(row) {
+		if(!row.grade_id)
+			setGrade("")
+		else
+			setGrade(row.grade_id)
+		setSelectedKRS(row)
+		setOpenModal(true)
+	}
+
+	async function submitGrade() {
+		if(window.confirm(`Are you sure to submit this grade of ${selectedKRS.course.name} to ${selectedKRS.student_name}?`))
+		try {
+			const prepareData = {
+				id : selectedKRS.id,
+				grade_id : grade == "" ? null : grade,
+			}
+			await axios.patch('/api/academic-krs', prepareData)
+			router.reload()
+		} catch (error) {
+			alert(error)	
+		}	
+	}
 
   const courseList = [
     {
@@ -258,6 +319,72 @@ export default function (props) {
   const isUserNotFound = filteredUsers.length === 0;
   return (
     <BasicLayout title="Course Grade">
+			<Modal
+				open={openModal}
+				onClose={() => setOpenModal(false)}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Card sx={modalStyle}>
+					<Stack
+						direction="column"
+						alignItems="center"
+						mt={3}
+						sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+					>
+						{
+							selectedKRS.student_name &&
+							<>
+							<Typography variant="h6" color="primary">{selectedKRS.course.name}</Typography>
+							<Typography variant="h6" color="primary">{selectedKRS.student_name}</Typography>
+							</>
+						}
+					</Stack>
+					<Stack
+						direction="row"
+						alignItems="center"
+						ml={2}
+						mt={3}
+						sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+					>
+						<FormParent label="Set Grade">
+							<Select
+								displayEmpty
+								value={grade}
+								onChange={(e) => setGrade(e.target.value)}
+								inputProps={{ "aria-label": "Without label" }}
+							>
+								<MenuItem value={""}>
+									<em>None</em>
+								</MenuItem>
+								{gradeOptions.length > 0 &&
+									gradeOptions.map((item) => (
+										<MenuItem value={item.id}>{item.grade} ({item.point})</MenuItem>
+									))}
+							</Select>
+						</FormParent>
+					</Stack>
+					<Stack
+						direction="row"
+						alignItems="center"
+						// ml={5}
+						mt={3}
+						sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+					>
+						<Button
+							variant="contained"
+							color="primary"
+							sx={{
+								width: 150,
+							}}
+							startIcon={() => <></>}
+							onClick={submitGrade}
+						>
+							Submit
+						</Button>
+					</Stack>
+				</Card>
+			</Modal>
       <Grid item xs={10} p={1}>
         <Card
 					sx={{
@@ -473,6 +600,23 @@ export default function (props) {
                           <TableCell align="left">{status || "None"}</TableCell> */}
                             {
                               <TableCell align="right">
+																{
+																	session.user.role_id <= 3 &&
+																	<Button
+																		variant="contained"
+																		color="secondary"
+																		size="small"
+																		onClick={() => editGrade(row)}
+																	>
+																		{row.grade_id ? 'Edit Grade' : 'Add Grade'}
+																	</Button>
+																	// <MoreMenu
+																	// 	id={id}
+																	// 	name={name}
+																	// 	moremenu={moremenu}
+																	// 	deleteOptions={deleteOptions}
+																	// />
+																}
                                 {/* <MoreMenu
                                   id={id}
                                   name={name}

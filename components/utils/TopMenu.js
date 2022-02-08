@@ -91,8 +91,8 @@ const topMenuList = [
       },
       {
         name: "Academic Transcript",
-        link: "portfolio/transcript",
-				disable : true,
+        link: "academic/transcript",
+				// disable : true,
 				role : 4,
       },
     ],
@@ -281,10 +281,10 @@ function ChildMenu({ child }) {
 
 function ItemMenu({ menu }) {
 	const { data: session, status } = useSession()
-	const filterMenu = menu.child ? session.user.isAdmin ? menu.child : menu.child.filter(item => item.role == session.user.role_id) : []
+	const filterMenu = menu.child ? session.user.isAdmin ? menu.child : menu.child.filter(item => item.role >= session.user.role_id) : []
 	const router = useRouter()
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef(null);
+  let anchorRef = useRef(null);
   return (
     <>
       <Button
@@ -328,9 +328,8 @@ function ParentMenu({ menu }) {
 	const { data: session, status } = useSession()
 	// const filterMenu = menu.filter(item => item.role >= session.user.role_id)
 	let filterMenu = session.user.isAdmin ? menu : menu.filter(item => item.role.indexOf(session.user.role_id) > -1 ) 
-  console.log(`🚀 ~ file: TopMenu.js ~ line 331 ~ ParentMenu ~ filterMenu`, filterMenu)
-	if(session.user.isAdmin)
-		filterMenu.shift()
+	// if(session.user.isAdmin)
+	// 	filterMenu.shift()
   const renderMenu = filterMenu.map((item, index) => (
     <ItemMenu key={index} menu={item} />
   ));

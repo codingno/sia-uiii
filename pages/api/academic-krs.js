@@ -27,6 +27,10 @@ const UserInfo = require("../../models/userinfo")(
   db.sequelize,
   DataTypes
 );
+const User= require("../../models/userinfo")(
+  db.sequelize,
+  DataTypes
+);
 AcademicSchedule.belongsTo(Departement, {
   foreignKey: "departement_id",
   as: "departement",
@@ -75,6 +79,7 @@ AcademicSchedule.belongsTo(Teacher, {
 Teacher.hasMany(AcademicSchedule, { foreignKey: "teacher_id" });
 Teacher.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
 Student.hasOne(UserInfo, { foreignKey: "user_id", sourceKey:'user_id' });
+Student.hasOne(User, { foreignKey: "user_id", sourceKey:'user_id' });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -137,8 +142,13 @@ export default nextConnect()
         return res.status(500).json({ error });
       }
     } else {
-			if(!req.user.isAdmin && req.user.student_number)
+			if(!req.user.isAdmin && req.user.student_number) {
 				condition.student_number = req.user.student_number
+				condition.semester = req.user.semester_active
+        console.log(`🚀 ~ file: academic-krs.js ~ line 148 ~ .get ~ condition`, condition)
+			}
+			if(req.query)
+				condition = { ...condition, ...req.query}
 			let teacherCondition = {}
 			if(!req.user.isAdmin && req.user.isTeacher)
 				teacherCondition.id = req.user.teacherData.id
@@ -165,6 +175,7 @@ export default nextConnect()
 						{ model: Student, as: "student",
 							include: [
 								{ model: UserInfo, as: "user_info" },
+								// { model: User, as: "user" },
 							],
 						},
 						{ model: Grade, as: "grade"},
@@ -183,6 +194,7 @@ export default nextConnect()
 					item.schedule.day_name = item.schedule.day.name
 					item.schedule.room_name = item.schedule.room.name
 					item.schedule.student_name = item.student.user_info.first_name + ' ' + item.student.user_info.middle_name + ' ' + item.student.user_info.last_name
+					item.student_name = item.student.user_info.first_name + ' ' + item.student.user_info.middle_name + ' ' + item.student.user_info.last_name
 					item.grade_value = item.grade ? item.grade.grade : ""
 					item.grade_point = item.grade ? item.grade.point : ""
 				})

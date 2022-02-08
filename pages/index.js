@@ -80,7 +80,7 @@ export default function () {
 					// }}
 				>
 					<TopMenu />
-					<Grid xs={10}>
+					<Grid xs={10} item>
 						<Card
 							sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
 							>
@@ -88,20 +88,20 @@ export default function () {
 					</Grid>
 					{
 						!session &&
-					<Grid xs={3}>
+					<Grid xs={3} item>
 						<Card
 							sx={{ bgcolor : '#84754E', height : 400, m : 1}}
 							>
 						</Card>
 					</Grid>
 					}
-					<Grid xs={5}>
+					<Grid xs={5} item>
 						<Card
 							sx={{ bgcolor : '#E3A130', height : 400, m : 1}}
 							>
 						</Card>
 					</Grid>
-					<Grid xs={7}>
+					<Grid xs={7} item>
 						<Card
 							sx={{ bgcolor : '#00778B', height : 400, m : 1}}
 							>
