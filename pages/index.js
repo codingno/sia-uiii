@@ -84,6 +84,26 @@ export default function () {
 						<Card
 							sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
 							>
+								<Stack
+									direction="row"
+									justifyContent="space-around"
+									alignItems="center"
+									alignContent="center"
+									mt={3}
+								>
+									<Card className="reflection-faculty" sx={{ borderRadius : '10px', width : '20%', pb : '13.4%', position : 'relative', backgroundImage : "url('/static/FIS.jpg')", backgroundRepeat : 'no-repeat', backgroundSize : 'contain', overflow : 'visible', backgroundColor : 'transparent' }}>
+										{/* <Image layout="fill" src="/static/FIS.jpg" alt="FIS" /> */}
+									</Card>
+									<Card className="reflection-faculty" sx={{ borderRadius : '10px', width : '20%', pb : '13.4%', position : 'relative', backgroundImage : "url('/static/FSS.jpg')", backgroundRepeat : 'no-repeat', backgroundSize : 'contain', overflow : 'visible', backgroundColor : 'transparent' }}>
+										{/* <Image layout="fill" src="/static/FSS.jpg" alt="FSS" /> */}
+									</Card>
+									<Card className="reflection-faculty" sx={{ borderRadius : '10px', width : '20%', pb : '13.4%', position : 'relative', backgroundImage : "url('/static/FEB.jpg')", backgroundRepeat : 'no-repeat', backgroundSize : 'contain', overflow : 'visible', backgroundColor : 'transparent' }}>
+										{/* <Image layout="fill" src="/static/FEB.jpg" alt="FEB" /> */}
+									</Card>
+									<Card className="reflection-faculty" sx={{ borderRadius : '10px', width : '20%', pb : '13.4%', position : 'relative', backgroundImage : "url('/static/FEDu.jpg')", backgroundRepeat : 'no-repeat', backgroundSize : 'contain', overflow : 'visible', backgroundColor : 'transparent' }}>
+										{/* <Image layout="fill" src="/static/FEDu.jpg" alt="FEDu" /> */}
+									</Card>
+								</Stack>
 						</Card>
 					</Grid>
 					{
