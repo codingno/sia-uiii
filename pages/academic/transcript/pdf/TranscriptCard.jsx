@@ -628,7 +628,7 @@ export default function TranscriptCard(props) {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Typography
+                {/* <Typography
                   variant="string"
                   sx={{
                     fontSize: "10px",
@@ -637,7 +637,7 @@ export default function TranscriptCard(props) {
                   }}
                 >
 									Head of the study program,
-                </Typography>
+                </Typography> */}
               </Stack>
               <Stack
                 direction="row"
@@ -651,7 +651,7 @@ export default function TranscriptCard(props) {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Typography
+                {/* <Typography
                   variant="string"
                   sx={{
                     fontSize: "10px",
@@ -660,7 +660,7 @@ export default function TranscriptCard(props) {
                   }}
                 >
 									(...............................)
-                </Typography>
+                </Typography> */}
               </Stack>
             </Grid>
             <Grid item xs={4.3}>

@@ -1,9 +1,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import Button from "@mui/material/Button";
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 import FormContainer from "./FormContainer";
 import FormLayout from "./FormLayout";
+import FormParent from "./FormParent";
 import Stack from "@mui/material/Stack";
 
 import axios from 'axios';
@@ -27,8 +32,13 @@ function parseType(value, type) {
 	return result	
 }
 
+function useForceUpdate(){
+    const [value, setValue] = useState(false); // integer state
+    return () => setValue(!value); // update the state to force render
+}
+
 export default function (props) {
-	const { title, titlePage, submitUrl, method, additionalForm, disableMasterForm } = props
+	const { title, titlePage, submitUrl, method, additionalForm, disableMasterForm, position } = props
 
 	const router = useRouter()
   const { id } = router.query
@@ -39,6 +49,8 @@ export default function (props) {
   const [description, setDescription] = useState("");
 	const [additional, setAdditional] = useState({});
 
+	const forceUpdate = useForceUpdate();
+
 	useEffect(() => {
 		getData()
 	},[id])
@@ -47,9 +59,9 @@ export default function (props) {
 		if(method == 'edit' && id ) {
 			try {
 				const { data } = await axios.get(submitUrl + `?id=${id}`)
-				setName(data.data.name)
-				setDescription(data.data.description)
-				let { data: result } = data
+				let result = data.data || data[0]
+				setName(result.name)
+				setDescription(result.description)
 				delete result.name
 				delete result.description
 				setAdditional(result)
@@ -69,12 +81,14 @@ export default function (props) {
 					id,
 					name, 
 					description,
+					position,
 					...additional,
 				})	
 			} else {
 				const data = await axios.post(submitUrl, {
 					name, 
 					description,
+					position,
 					...additional,
 				})	
 			}
@@ -93,6 +107,7 @@ export default function (props) {
 		return ""
 
   return (
+		<LocalizationProvider dateAdapter={AdapterDateFns}>
     <FormLayout title={title} titlePage={titlePage}>
       <Stack
         mb={4}
@@ -120,6 +135,25 @@ export default function (props) {
 				{
 					additionalForm &&
 					additionalForm.map(item => {
+						if(item.type == 'date')
+							return (
+								<FormParent 
+								label={item.label}
+								name={item.name}
+								>
+									<DateTimePicker
+										// label="Date&Time picker"
+										value={additional[item.value]}
+										onChange={(value) => {
+											let newAdditional = additional
+											newAdditional[item.value] = value
+											setAdditional(newAdditional)
+											forceUpdate()
+										}}
+										renderInput={(params) => <TextField {...params} />}
+									/>
+								</FormParent>
+							)
 						return (
 							<FormContainer
 								label={item.label}
@@ -155,5 +189,6 @@ export default function (props) {
         </Stack>
       </Stack>
     </FormLayout>
+		</LocalizationProvider>
   );
 }

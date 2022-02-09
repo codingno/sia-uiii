@@ -31,6 +31,7 @@ import MoreMenu from "./MoreMenu";
 import ListToolbar from "./ListToolbar";
 
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,10 +76,11 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export default function List(props) {
-  const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList } =
+  const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList, readOnly, disableAdd } =
     props;
 
   const router = useRouter();
+	const { data : session, status : statusSession } = useSession()
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -140,12 +142,15 @@ export default function List(props) {
 
   useEffect(() => {
     if (dataList.length == 0) getDataList();
-  }, [dataList]);
+  }, []);
 
   async function getDataList() {
     try {
       const { data, error } = await axios.get(getUrl);
-      setDataList(data.data);
+			if(data.data)
+      	setDataList(data.data);
+			else
+      	setDataList(data);
     } catch (error) {
       if (error.response) {
         if ((error.response.status = 404)) return;
@@ -184,6 +189,10 @@ export default function List(props) {
       ? applySortFilter(dataList, getComparator(order, orderBy), filterName)
       : [];
   const isUserNotFound = filteredUsers.length === 0;
+
+	if(statusSession === 'loading')
+		return ""
+
   return (
     <>
       <Grid item xs={10} p={1}>
@@ -202,6 +211,8 @@ export default function List(props) {
             <Typography variant="h5" gutterBottom>
               {title}
             </Typography>
+						{
+							((!readOnly && !disableAdd) || session.user.isAdmin) &&
             <Button
               variant="contained"
               onClick={() => router.push(addLink)}
@@ -209,6 +220,7 @@ export default function List(props) {
             >
               Add {name}
             </Button>
+						}
           </Stack>
           <Divider />
 
@@ -344,12 +356,15 @@ export default function List(props) {
                           <TableCell align="left">{status || "None"}</TableCell> */}
                             {
                               <TableCell align="right">
-                                <MoreMenu
-                                  id={id}
-                                  name={name}
-                                  moremenu={moremenu}
-                                  deleteOptions={deleteOptions}
-                                />
+																{
+																	(!readOnly || session.user.isAdmin) &&
+																	<MoreMenu
+																		id={id}
+																		name={name}
+																		moremenu={moremenu}
+																		deleteOptions={deleteOptions}
+																	/>
+																}
                               </TableCell>
                             }
                           </TableRow>

@@ -33,6 +33,8 @@ export default function () {
         //   link: "/api/grade",
         //   note: "Are you sure to delete this item?",
         // }}
+				// readOnly={true}
+				disableAdd={true}
       />
     </BasicLayout>
   );

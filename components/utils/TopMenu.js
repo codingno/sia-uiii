@@ -178,20 +178,20 @@ const topMenuList = [
     child: [
       {
         name: "Calendar Academic",
-        link: "academic/calendar",
-				disable : true,
+        link: "info/calendar",
+				// disable : true,
 				role : 4,
       },
       {
         name: "Academic Guides",
-        link: "academic/guide",
-				disable : true,
+        link: "info/guides",
+				// disable : true,
 				role : 4,
       },
       {
         name: "Academic News",
-        link: "academic/news",
-				disable : true,
+        link: "info/news",
+				// disable : true,
 				role : 4,
       },
 		],
