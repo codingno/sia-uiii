@@ -12,26 +12,30 @@ module.exports = (sequelize, DataTypes) => {
   //   }
   // };
   // IdentityType.init({
-  const Info = sequelize.define(
-    "info",
+  const StudentExchange = sequelize.define(
+    "student_exchange",
     {
       name: DataTypes.STRING,
-      description: DataTypes.STRING,
-      position: {
-        type: DataTypes.ENUM,
-        values: ["Calendar", "Guides", "News"],
-        defaultValue: "News",
+      student_number: DataTypes.STRING,
+      faculty_id: {
+        type: DataTypes.INTEGER,
+        reference: {
+          modelName: "faculty",
+          key: "id",
+        },
       },
-      source: DataTypes.STRING,
+      exchange_with_university: DataTypes.STRING,
       start_date: DataTypes.DATE,
       end_date: DataTypes.DATE,
-      status: DataTypes.BOOLEAN,
     },
     {
       sequelize,
-      modelName: "info",
+      tableName: "student_exchange",
       freezeTableName: true,
     }
   );
-  return Info;
+  StudentExchange.associate = (model) => {
+    StudentExchange.belongsTo(model.faculty, {foreignKey: 'faculty_id', as: 'faculty'})
+  }
+  return StudentExchange;
 };

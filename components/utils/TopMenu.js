@@ -160,7 +160,7 @@ const topMenuList = [
       {
         name: "Application for Student Exchange",
         link: "portfolio/student_exchange",
-				disable : true,
+				// disable : true,
 				role : 4,
       },
       {

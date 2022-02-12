@@ -22,7 +22,12 @@ module.exports = (sequelize, DataTypes) => {
     accreditation: DataTypes.STRING,
   }, {
     sequelize,
-    modelName: 'faculty',
+    tableName: 'faculties',
   });
+  
+  Faculty.associate = (model) => {
+    Faculty.hasMany(model.student_exchange,{foreignKey: "id", targetKey: 'faculty_id'})
+    Faculty.hasMany(model.student_leave,{foreignKey: "id", targetKey: 'faculty_id'})
+  }
   return Faculty;
 };
