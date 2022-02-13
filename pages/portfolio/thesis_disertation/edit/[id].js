@@ -2,8 +2,8 @@ import FormMaster from "../../../../components/utils/FormMasterWithUpload";
 export default function () {
   return (
     <FormMaster
-      title="Add Thesis/Disertation"
-      titlePage="Add Thesis/Disertation"
+      title="Edit Thesis/Disertation"
+      titlePage="Edit Thesis/Disertation"
       submitUrl="/api/portfolio"
 			portfolio_id={4}
 			listForm={[

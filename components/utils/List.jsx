@@ -282,11 +282,14 @@ export default function List(props) {
                         delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
                         Object.keys(row).map((item) => {
+                            
                           if (tableHeadId.indexOf(item) < 0) {
 														if(isUserList && item == 'user')
 															row.name = row.user.name
 														delete row[item];
 													}
+                          if(row[item] && row[item].name)
+                            row[item] = row[item].name
                         });
 												// const arrayRow = Object.keys(row)
 												let arrayRow = []

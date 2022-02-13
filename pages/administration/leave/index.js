@@ -11,9 +11,8 @@ export default function () {
           { id: "name", label: "Name", alignRight: false },
           { id: "student_number", label: "Student Number", alignRight: false },
           { id: `faculty`, label: "Faculty", alignRight: false },
-          { id: "exchange_with_university", label: "Exchange With University", alignRight: false },
-          { id: "start_date", label: "Start Date", type: 'Date', alignRight: false },
-          { id: "end_date", label: "End Date", type: 'Date', alignRight: false },
+          { id: "reason", label: "reason", alignRight: false },
+          { id: "date", label: "Date", type: 'Date', alignRight: false },
           // { id: "url", label: "File", alignRight: false, link : true },
           { id: "" },
         ]
@@ -29,17 +28,17 @@ export default function () {
       <List
         title="Student Exchange"
         name="Student Exchange"
-        getUrl="/api/student-exchange"
-        addLink="/portfolio/student_exchange/create"
+        getUrl="/api/student-leave"
+        addLink="/admisnistration/leave/create"
         tableHead={tableHead}
         moremenu={[
           {
             name: "Edit",
-            link: "/portfolio/student_exchange/edit/",
+            link: "/admisnistration/leave/edit/",
           },
         ]}
         deleteOptions={{
-          link: "/api/student-exchange",
+          link: "/api/student-leave",
           note: "Are you sure to delete this item?",
         }}
       />

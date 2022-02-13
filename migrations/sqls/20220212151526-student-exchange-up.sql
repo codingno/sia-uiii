@@ -4,7 +4,7 @@ CREATE TABLE `student_exchange` (
   `name` VARCHAR(150) NULL,
   `student_number` VARCHAR(45) NULL,
   `faculty_id` INT(11) NULL,
-  `exchange_with_univversity` VARCHAR(150) NULL,
+  `exchange_with_university` VARCHAR(150) NULL,
   `start_date` DATETIME NULL,
   `end_date` DATETIME NULL,
   `createdAt` DATETIME NOT NULL DEFAULT NOW(),

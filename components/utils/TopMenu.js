@@ -43,13 +43,13 @@ const topMenuList = [
       },
       {
         name: "Study Leave",
-        link: "portfolio/leave",
-				disable : true,
+        link: "administration/leave",
+				// disable : true,
 				role : 4,
       },
       {
         name: "Approval for Study Leave",
-        link: "portfolio/leave_approval",
+        link: "addministration/leave_approval",
 				disable : true,
 				role : 3,
       },

@@ -3,6 +3,7 @@ import nextConnect from "next-connect";
 import { isLogin, isStudent, isAdmin } from "./config/police";
 import StudentService from "../../services/StudentService";
 import bcrypt from "bcrypt";
+import { sendEmailStudentAdmission } from "../../services/emailService";
 const uuidv4 = require("uuid").v4;
 const db = require("../../models");
 // const StudentService = require("../../services/StudentService");
@@ -79,15 +80,14 @@ export default nextConnect()
         const middle_name = name.length > 2 ? name[1] : "";
         const last_name =
           name.length > 1
-            ? name
-                .filter((word) => word != first_name && word != middle_name)
-                .join(" ")
+            ? name.filter((word) => word != first_name && word != middle_name).join(" ")
             : "";
+        console.log({last_name},name.filter((word) => word != first_name && word != middle_name));
         data_user_info = {
           user_id: user.id,
           first_name: first_name || "",
           middle_name: middle_name || "",
-          last_name: last_name | "",
+          last_name: last_name || "",
           place_of_birth: data.place_of_birth || "",
           date_of_birth: data.date_of_birth
             ? new Date(data.date_of_birth)
@@ -103,7 +103,7 @@ export default nextConnect()
         const student_number = await StudentService.generate(data[i]);
         // console.log({student_number});
         const hashed = student_number
-          ? await bcrypt.hash(first_name + student_number, 10)
+          ? await bcrypt.hash(student_number, 10)
           : await bcrypt.hash("123456", 10);
         const dateNow = new Date()
         const hour = dateNow.getHours()
@@ -128,6 +128,7 @@ export default nextConnect()
           // entry_semester: data[i].entry_semester || 1,
           // entry_status: data[i].entry_status || null,
           departement_id: data[i].departement || null,
+          financial_type_id: data[i].financial_type_id,
           // status: data[i].status || null,
           mother_name: data[i].mother_name || "",
           father_name: data[i].father_name || "",
@@ -155,6 +156,7 @@ export default nextConnect()
           { generate: true },
           { where: { id: data[i].id } }
         );
+        const sendEmail = await sendEmailStudentAdmission(data[i], student_number)
         if (i == data.length - 1)
           return res.status(400).json({ message: "success to generate" });
         i += 1;

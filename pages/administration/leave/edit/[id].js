@@ -1,9 +1,9 @@
-import FormMaster from "../../../components/utitudels/FormMasterWithUpload";
+import FormMaster from "../../../../components/utils/FormMasterWithUpload";
 export default function () {
   return (
     <FormMaster
-      title="Add Student Exchange"
-      titlePage="Add Student Exchange"
+      title="Edit Student Exchange"
+      titlePage="Edit Student Exchange"
       submitUrl="/api/student-exchange"
 			listForm={[
 				{
@@ -22,13 +22,13 @@ export default function () {
 					value : 'faculty_id',
 				},
 				{
-					label : 'Exchange With University',
-					name : 'exchange_with_university',
-					value : 'exchange_with_university',
+					label : 'Reason',
+					name : 'reason',
+					value : 'reason',
 				},
 			]}
 			disableMasterForm={true}
-      method="create"
+      method="edit"
     />
   );
 }

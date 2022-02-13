@@ -22,9 +22,9 @@ export default function () {
 					value : 'faculty_id',
 				},
 				{
-					label : 'Exchange With University',
-					name : 'exchange_with_university',
-					value : 'exchange_with_university',
+					label : 'Reason',
+					name : 'reason',
+					value : 'reason',
 				},
 			]}
 			disableMasterForm={true}
