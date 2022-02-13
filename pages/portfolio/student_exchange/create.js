@@ -1,4 +1,4 @@
-import FormMaster from "../../../components/utitudels/FormMasterWithUpload";
+import FormMaster from "../../../components/utils/FormMaster";
 export default function () {
   return (
     <FormMaster
