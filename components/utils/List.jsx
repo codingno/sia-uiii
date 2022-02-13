@@ -314,7 +314,7 @@ export default function List(props) {
 														else if(tableHead[index].link === true)
 															render = <a href={router.basePath + row[item]} target="_blank">link</a>
                             return (
-                              <TableCell align="left" key={index}>
+                              <TableCell align="left" key={index} sx={{ maxWidth : 100}}>
                                 <Stack
                                   direction="row"
                                   alignItems="left"

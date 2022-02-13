@@ -35,13 +35,41 @@ import CardMedia from '@mui/material/CardMedia'
 import { useRouter } from 'next/router'
 import { useSession, signOut } from "next-auth/react"
 import Image from 'next/image'
+import axios from 'axios';
+import Carousel from 'react-material-ui-carousel'
+import Scrollbar from '../components/Scrollbar';
 
 import List from '../components/utils/List'
 
+function groupByKey(array, key) {
+   return array
+     .reduce((hash, obj) => {
+       if(obj[key] === undefined) return hash; 
+       return Object.assign(hash, { [obj[key]]:( hash[obj[key]] || [] ).concat(obj)})
+     }, {})
+}
 
 export default function () {
 	const router = useRouter()
 	const { data: session, status } = useSession()
+
+	const [info, setInfo] = useState({})
+
+	useEffect(() => {
+		getInfo()
+	},[])
+
+	async function getInfo() {
+		try {
+			const { data }	 = await axios.get(`/api/info?start_date=lte${new Date()}&end_date=gte${new Date()}`)
+			// const filtered = data.filter(item => new Date(item.start_date) <= new Date() && new Date(item.end_date) >= new Date())
+			const result = groupByKey(data, "position")
+      console.log(`🚀 ~ file: index.js ~ line 65 ~ getInfo ~ result`, result)
+			setInfo(result)
+		} catch (error) {
+			alert(error)	
+		}	
+	}
 
 	useEffect(() => {
 		if(!session && status == `unauthenticated`)
@@ -82,7 +110,8 @@ export default function () {
 					<TopMenu />
 					<Grid xs={10} item>
 						<Card
-							sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
+							// sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
+							sx={{ bgcolor : '#003B5C', height : '50%', m : 1}}
 							>
 								<Stack
 									direction="row"
@@ -104,6 +133,36 @@ export default function () {
 										{/* <Image layout="fill" src="/static/FEDu.jpg" alt="FEDu" /> */}
 									</Card>
 								</Stack>
+								{
+									info.Calendar &&
+								<Stack
+									direction="column"
+									justifyContent="flex-start"
+									alignItems="start"
+									alignContent="center"
+									mt={3}
+								>
+									<Typography variant="h3" color="#6098B7" sx={{ zIndex : 2, pl : 3 }}>Calendar Academics</Typography>
+									<Carousel
+									duration={10}
+													sx={{
+														width : '90%',
+														pt : 1,
+														pl : 3,
+													}}
+									>
+										{
+											info.Calendar.map(item => (
+												<Stack
+												>
+													<Typography variant="h6" color="white" >{item.name}</Typography>
+													<Typography variant="body1" color="white" >{item.description}</Typography>
+												</Stack>
+											))
+										}
+									</Carousel>
+								</Stack>
+								}
 						</Card>
 					</Grid>
 					{
@@ -119,12 +178,87 @@ export default function () {
 						<Card
 							sx={{ bgcolor : '#E3A130', height : 400, m : 1}}
 							>
+								{
+									info.Guides &&
+									<>
+								<Typography variant="h4" color="primary" sx={{ pt : 4, pl : 3 }}>Academic Guides</Typography>
+								<Scrollbar>
+									<Stack spacing={2} sx={{ p: 3, pr: 0 }}>
+										{info.Guides.map((news) => (
+											<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}
+											sx={{ width : '100%'}}
+											>
+												{/* <Box
+													component="img"
+													alt={news.name}
+													src={image}
+													sx={{ width: 48, height: 48, borderRadius: 1.5 }}
+												/> */}
+												<Box sx={{ minWidth: 240 }}>
+													{/* <Link to="#" color="inherit" underline="hover" component={RouterLink}> */}
+														<Typography variant="h6" noWrap 
+														// color="primary" 
+														sx={{ color : "#31261D"}}
+														>
+															{news.name}
+														</Typography>
+													{/* </Link> */}
+													<Typography variant="body2" color="primary" >
+														{news.description}
+													</Typography>
+												</Box>
+												<Typography variant="caption" sx={{ pr: 3, flexShrink: 0, }} color="primary">
+													{/* {formatDistance(postedAt, new Date())} */}
+													{new Date(news.createdAt).toLocaleString()}
+												</Typography>
+											</Stack>
+										))}
+									</Stack>
+								</Scrollbar>
+									</>
+								}
 						</Card>
 					</Grid>
 					<Grid xs={7} item>
 						<Card
 							sx={{ bgcolor : '#00778B', height : 400, m : 1}}
 							>
+								{
+									info.News &&
+									<>
+								<Typography variant="h4" color="white" sx={{ pt : 4, pl : 3 }}>News Update</Typography>
+								<Scrollbar>
+									<Stack spacing={2} sx={{ p: 3, pr: 0 }}>
+										{info.News.map((news) => (
+											<Stack direction="row" alignItems="center" spacing={2} 
+											sx={{ width : '100%'}}
+											>
+												{/* <Box
+													component="img"
+													alt={news.name}
+													src={image}
+													sx={{ width: 48, height: 48, borderRadius: 1.5 }}
+												/> */}
+												<Box sx={{ minWidth: 240 }}>
+													{/* <Link to="#" color="inherit" underline="hover" component={RouterLink}> */}
+														<Typography variant="h6" noWrap color="primary.dark">
+															{news.name}
+														</Typography>
+													{/* </Link> */}
+													<Typography variant="body2" sx={{ color: 'white' }} noWrap>
+														{news.description}
+													</Typography>
+												</Box>
+												<Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'white' }}>
+													{/* {formatDistance(postedAt, new Date())} */}
+													{new Date(news.createdAt).toLocaleString()}
+												</Typography>
+											</Stack>
+										))}
+									</Stack>
+								</Scrollbar>
+									</>
+								}
 						</Card>
 					</Grid>
 				</Grid>

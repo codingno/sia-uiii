@@ -7,6 +7,11 @@ export default function () {
       submitUrl="/api/info"
 			additionalForm={[
 				{
+					label : 'Source',
+					name : 'source',
+					value : 'source',
+				},
+				{
 					label : 'Start Date',
 					name : 'start_date',
 					value : 'start_date',
