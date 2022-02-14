@@ -1,10 +1,18 @@
 var nodemailer = require("nodemailer");
 var transporter = nodemailer.createTransport({
-  service: "Gmail",
+  service: "gmail",
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASSEMAIL,
   },
+});
+transporter.set("oauth2_provision_cb", (user, renew, callback) => {
+  let accessToken = userTokens[user];
+  if (!accessToken) {
+    return callback(new Error("Unknown user"));
+  } else {
+    return callback(null, accessToken);
+  }
 });
 var BaseUrlClient = process.env.BASE_URL_CLIENT || "localhost:3000";
 
@@ -104,12 +112,6 @@ module.exports = {
   },
   sendEmailStudentAdmission: async function (data, student_number) {
     return new Promise(async (resolve, reject) => {
-      console.log({data});
-      var mailOptions = {
-        from: "LMS-UIII <no-reply>",
-        to: data.email,
-        subject: "Student Admission Announcement",
-      };
       const html = `
 				<!doctype html>
 				<html lang="en-US">
@@ -166,8 +168,7 @@ module.exports = {
                               } UIII. Your student number is ${student_number}. Use your student number as your username and password to complete the data on the page
 														</p>
 														<a href="${BaseUrlClient}"
-															style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
-															Password</a>
+															style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Login</a>
 													</td>
 												</tr>
 												<tr>
@@ -195,11 +196,15 @@ module.exports = {
 
 				</html>
 				`;
+      var mailOptions = {
+        from: "LMS-UIII <no-reply>",
+        to: data.email,
+        subject: "Student Admission Announcement",
+        html
+      };
       transporter.sendMail(mailOptions, function (error, info) {
-        if(error)
-          reject(error)
-        else
-          resolve(info);
+        if (error) reject(error);
+        else resolve(info);
       });
     });
   },
