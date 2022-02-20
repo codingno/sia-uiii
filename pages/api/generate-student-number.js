@@ -158,7 +158,7 @@ export default nextConnect()
         );
         const sendEmail = await sendEmailStudentAdmission(data[i], student_number)
         if (i == data.length - 1)
-          return res.status(400).json({ message: "success to generate" });
+          return res.status(200).json({ message: "success to generate" });
         i += 1;
       }
       // }

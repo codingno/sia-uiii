@@ -76,7 +76,7 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export default function List(props) {
-  const { title, name, tableHead, getUrl, addLink, moremenu, deleteOptions, isUserList, readOnly, disableAdd } =
+  const { title, name, tableHead, getUrl, addLink, generateLink, moremenu, deleteOptions, isUserList, readOnly, disableAdd } =
     props;
 
   const router = useRouter();
@@ -91,7 +91,7 @@ export default function List(props) {
 
   const [isLoading, setLoading] = useState(false);
 
-  const [dataList, setDataList] = useState([]);
+  const [dataList, setDataList] = useState({data:[], isLoad: false});
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -101,13 +101,24 @@ export default function List(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = dataList.map((n) => n.id);
+      const newSelecteds = dataList.data.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
-
+  const handleGenerate = async () => {
+    try {
+      const { data, error } = await axios.get(generateLink);
+        setDataList({...dataList, isLoad: false})
+        alert(data.message)
+    } catch (error) {
+      if (error.response) {
+        if ((error.response.status = 404)) return alert(error.response.data.error);
+      }
+      alert(error);
+    }
+  }
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -141,18 +152,19 @@ export default function List(props) {
 
 
   useEffect(() => {
-    if (dataList.length == 0) getDataList();
-  }, []);
+    if (!dataList.isLoad) getDataList();
+  }, [dataList]);
 
   async function getDataList() {
     try {
       const { data, error } = await axios.get(getUrl);
 			if(data.data)
-      	setDataList(data.data);
+      	setDataList({data:data.data, isLoad: true});
 			else
-      	setDataList(data);
+      	setDataList({data: data, isLoad: true});
     } catch (error) {
       if (error.response) {
+        setDataList({...dataList, isLoad: true})
         if ((error.response.status = 404)) return;
       }
       alert(error);
@@ -181,12 +193,12 @@ export default function List(props) {
   ];
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - dataList.data.length) : 0;
 
   // const filteredUsers = courseList ? applySortFilter(courseList, getComparator(order, orderBy), filterName) : [];
   const filteredUsers =
-    dataList.length > 0
-      ? applySortFilter(dataList, getComparator(order, orderBy), filterName)
+    dataList.data.length > 0
+      ? applySortFilter(dataList.data, getComparator(order, orderBy), filterName)
       : [];
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -211,6 +223,15 @@ export default function List(props) {
             <Typography variant="h5" gutterBottom>
               {title}
             </Typography>
+            {
+							(((!readOnly && !disableAdd) || session.user.isAdmin) && generateLink ) &&
+            <Button
+              variant="contained"
+              onClick={handleGenerate}
+            >
+              Generate Student Number
+            </Button>
+            }
 						{
 							(((!readOnly && !disableAdd) || session.user.isAdmin) && addLink ) &&
             <Button
@@ -252,7 +273,7 @@ export default function List(props) {
                     order={order}
                     orderBy={orderBy}
                     headLabel={tableHead}
-                    rowCount={dataList.length}
+                    rowCount={dataList.data.length}
                     numSelected={selected.length}
                     onRequestSort={handleRequestSort}
                     onSelectAllClick={handleSelectAllClick}
@@ -421,7 +442,7 @@ export default function List(props) {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={dataList.length}
+            count={dataList.data.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

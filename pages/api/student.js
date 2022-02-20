@@ -2,6 +2,7 @@
 import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
 import UserServices from "../../services/UserServices";
+import StudentService from "../../services/StudentService";
 import { isLogin, isStudent } from "./config/police";
 
 const db = require("../../models");
@@ -69,9 +70,10 @@ export default nextConnect()
     const body = req.body;
     try {
       const user_id = await UserServices.create(body);
+      const student_number = await StudentService.generate(body)
       const data_student = {
         user_id: user_id,
-        student_number: body.student_number,
+        student_number: student_number,
         teacher_id: body.teacher_id,
         entry_year: body.entry_year,
         entry_semester: body.entry_semester,
@@ -107,8 +109,6 @@ export default nextConnect()
   })
   .get(async (req, res) => {
     const options = req.query;
-    console.log(`🚀 ~ file: student.js ~ line 109 ~ .get ~ options`, options)
-		console.log()
     if (options.id || options.user_id) {
       try {
         const data = await Student.findOne({

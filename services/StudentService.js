@@ -49,17 +49,36 @@ export default {
     // })
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(student.departement_data.study_type.description);
         let student_number = "";
-        if (!student.student_number) {
-          student_number +=
-            (student.departement_data.faculty.code || "00") +
-            (student.departement_data && student.departement_data.study_type
-              ? student.departement_data.study_type.description.slice(1)
-              : "0") +
-            (student.departement_data.code || "0") +
-            (student.entry_year.toString().slice(-2) || "00") + (student.nationality == 'WNI' ? '1' : '2');
+        const departement_data = await Departement.findOne({
+          where: { id: student.departement_id || student.departement },
+          include: [
+            { model: Faculty, as: "faculty" },
+            { model: MasterStudyType, as: "study_type" },
+          ],
+        });
+        if (!student.student_number || student.student_number == "") {
+          if (student.departement_data) {
+            student_number +=
+              (student.departement_data.faculty.code || "00") +
+              (student.departement_data && student.departement_data.study_type
+                ? student.departement_data.study_type.description.slice(1)
+                : "0") +
+              (student.departement_data.code || "0") +
+              (student.entry_year.toString().slice(-2) || "00") +
+              (student.nationality == "WNI" ? "1" : "2");
+          } else {
+            student_number +=
+              (departement_data.faculty.code || "00") +
+              (departement_data && departement_data.study_type
+                ? departement_data.study_type.description.slice(1)
+                : "0") +
+              (departement_data.code || "0") +
+              (student.entry_year.toString().slice(-2) || "00") +
+              (student.nationality == "WNI" ? "1" : "2");
+          }
         }
+        console.log({ student_number });
         const student_in_departement = await Student.findAll({
           where: {
             student_number: {
@@ -74,7 +93,7 @@ export default {
             student_number += "00" + (student_in_departement.length + 1);
           else if (student_in_departement.length + 1 < 1000)
             student_number += "0" + (student_in_departement.length + 1);
-          else student_number += (student_in_departement.length + 1);
+          else student_number += student_in_departement.length + 1;
         }
         resolve(student_number);
       } catch (error) {
