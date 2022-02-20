@@ -67,6 +67,7 @@ export default function () {
   const [gender, setGender] = useState(genderOptions[0].id);
   const [identity_id, setIdentityID] = useState("");
   const [identity_type_id, setIdentityType] = useState("");
+  const [expiredVisa, setExpiredVisa] = useState("");
 
   const [father_name, setFatherName] = useState("");
   const [mother_name, setMotherName] = useState("");
@@ -102,6 +103,7 @@ export default function () {
   			setGender(genderGet);
   			setIdentityID(data.data.user_info.identity_id);
   			setIdentityType(data.data.user_info.identity_type_id);
+  			setExpiredVisa(data.data.user_info.expiredVisa);
 
   			setUserID(data.data.user_id);
   			setStudentNumber(data.data.student_number);
@@ -213,6 +215,7 @@ export default function () {
 				gender,
 				identity_id,
 				identity_type_id,
+				expiredVisa,
 				user_id,
 				student_number,
 				teacher_id,
@@ -256,6 +259,7 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
+		<LocalizationProvider dateAdapter={AdapterDateFns}>
     <FormLayout title="Student Edit | AIS UIII" titlePage="Student Personal Edit">
 			<Grid
 				container
@@ -420,6 +424,20 @@ export default function () {
 						{identityTypeOptions.length > 0 && identityTypeOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
 				</FormParent>
+				{
+					identity_type_id == 2 &&
+				<FormParent 
+				label="Expired Visa"
+				name="expiredVisa"
+				>
+					<DesktopDatePicker 
+						// label="Date&Time picker"
+						value={expiredVisa}
+						onChange={setExpiredVisa}
+						renderInput={(params) => <TextField {...params} />}
+					/>
+				</FormParent>
+				}
         <Stack
           direction="row"
           alignItems="center"
@@ -475,5 +493,6 @@ export default function () {
 			</Grid>
 			</Grid>
     </FormLayout>
+		</LocalizationProvider>
   );
 }

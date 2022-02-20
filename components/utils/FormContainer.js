@@ -29,6 +29,7 @@ export default function FormContainer(props) {
 					name={props.name}
 					type={props.type}
           value={props.value}
+					defaultValue={props.defaultValue}
           onChange={(e) => props.setValue(e.target.value)}
 					sx={{
 						background: "#E0E0E0"

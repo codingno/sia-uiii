@@ -38,8 +38,8 @@ const topMenuList = [
       {
         name: "Visa/Kitas Report",
         link: "administration/visa",
-				disable : true,
-				role : 4,
+				// disable : true,
+				role : 3,
       },
       {
         name: "Study Leave",
@@ -49,8 +49,8 @@ const topMenuList = [
       },
       {
         name: "Approval for Study Leave",
-        link: "addministration/leave_approval",
-				disable : true,
+        link: "administration/leave-approval",
+				// disable : true,
 				role : 3,
       },
 		],

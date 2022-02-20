@@ -5,6 +5,7 @@ import UserServices from "../../services/UserServices";
 import { isLogin, isStudent } from "./config/police";
 
 const db = require("../../models");
+const { Op } = require("sequelize");
 const Student = require("../../models/student")(db.sequelize, DataTypes);
 const Teacher = require("../../models/teacher")(db.sequelize, DataTypes);
 const User = require("../../models/user")(db.sequelize, DataTypes);
@@ -106,6 +107,8 @@ export default nextConnect()
   })
   .get(async (req, res) => {
     const options = req.query;
+    console.log(`🚀 ~ file: student.js ~ line 109 ~ .get ~ options`, options)
+		console.log()
     if (options.id || options.user_id) {
       try {
         const data = await Student.findOne({
@@ -202,6 +205,7 @@ export default nextConnect()
               model: UserInfo,
               as: "user_info",
               include: [{ model: MasterIdentityType, as: "identity_type" }],
+							where : options.expiredVisa ? { identity_type_id : 2 , expiredVisa : { [Op.lt] : new Date(new Date().setDate(new Date(options.expiredVisa).getDate() + 30)) } } : {}
             },
             { model: MasterStudentStatus, as: "student_status" },
             { model: FinancialType, as: "financial_type" },
@@ -244,6 +248,7 @@ export default nextConnect()
 						student.status = student.student_status.name
 						student.citizen = student.user_info ? student.user_info.nationality : ""
 						student.student_program = student.financial_type ? student.financial_type.name : ""
+						student.expiredVisa = student.user_info ? student.user_info.expiredVisa : ""
             return student;
           });
           return res.status(200).json({ data: result });

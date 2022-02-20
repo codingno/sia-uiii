@@ -159,6 +159,23 @@ export default function List(props) {
     }
   }
 
+	async function approvalStudent(row, approved) {
+    console.log(`🚀 ~ file: index.jsx ~ line 226 ~ approvalStudent ~ row`, row)
+		if(window.confirm(`Are you sure to ${confirm ? 'Approve' : 'Reject'} this item?`))
+		try {
+			await axios.patch('/api/student-leave', {
+				id : row.id,
+				approved,
+			})	
+			router.reload()
+		} catch (error) {
+			if(error.response)	
+				alert(error.response)
+			else
+				alert(error)
+		}	
+	}
+
   const courseList = [
     {
       id: 1,
@@ -212,7 +229,7 @@ export default function List(props) {
               {title}
             </Typography>
 						{
-							(((!readOnly && !disableAdd) || session.user.isAdmin) && addLink ) &&
+							((!readOnly && !disableAdd) || session.user.isAdmin) &&
             <Button
               variant="contained"
               onClick={() => router.push(addLink)}
@@ -302,26 +319,42 @@ export default function List(props) {
                           (item, index) => {
 														let render = row[item]
 														if(tableHead[index].type == 'boolean') {
-															render = <Button
+															row.id = id
+															render = render != null ? <Button
 																variant="contained"
 																color={ render ? 'success' : 'error'}
 																size="small"
 																disabled={render == null}	
 															>
 															{(!render ? render == null ? 'Pending' : 'Not ' : '') + (render == null ? '' : tableHead[index].label)}	
-															</Button>
+															</Button> : 
+															<>
+																	<Button
+																		variant="contained"
+																		color="error"
+																		size="small"
+																		onClick={() => approvalStudent(row, false)}
+																	>
+																		Reject	
+																	</Button>
+																	<Button
+																		variant="contained"
+																		color="success"
+																		size="small"
+																		onClick={() => approvalStudent(row, true)}
+																	>
+																		Approve	
+																	</Button>
+																	</>
 															return (
 																<TableCell align="center" key={index} sx={{ maxWidth : 100}}>
 																	<Stack
 																		direction="row"
 																		alignItems="center"
-																		justifyContent="center"
+																		justifyContent={row[item] != null ? 'center' : 'space-around'}
 																		spacing={1}
 																	>
-																		<Typography variant="subtitle2" noWrap>
-																			{/* {row[item]} */}
 																			{render}
-																		</Typography>
 																	</Stack>
 																</TableCell>
 															)

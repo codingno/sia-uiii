@@ -13,28 +13,29 @@ export default function () {
           { id: `faculty`, label: "Faculty", alignRight: false },
           { id: "reason", label: "reason", alignRight: false },
           { id: "date", label: "Date", type: 'Date', alignRight: false },
+          { id: "approved", label: "Approved", type: 'boolean', center : 'center', alignRight: false },
           // { id: "url", label: "File", alignRight: false, link : true },
           { id: "" },
         ]
-	if(session)
-		if(session.user.role_id !== 1)
-				tableHead.unshift(
-          { id: "user_name", label: "User", alignRight: false }
-				)
+	// if(session)
+	// 	if(session.user.role_id !== 1)
+	// 			tableHead.unshift(
+  //         { id: "user_name", label: "User", alignRight: false }
+	// 			)
 	if(statusSession !== 'authenticated')
 					return ""
   return (
-    <BasicLayout title="Student Exchange">
+    <BasicLayout title="Student Leave">
       <List
-        title="Student Exchange"
-        name="Student Exchange"
+        title="Student Leave"
+        name="Student Leave"
         getUrl="/api/student-leave"
-        addLink="/admisnistration/leave/create"
+        addLink="/administration/leave/create"
         tableHead={tableHead}
         moremenu={[
           {
             name: "Edit",
-            link: "/admisnistration/leave/edit/",
+            link: "/administration/leave/edit/",
           },
         ]}
         deleteOptions={{

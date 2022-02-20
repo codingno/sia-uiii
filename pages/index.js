@@ -64,7 +64,6 @@ export default function () {
 			const { data }	 = await axios.get(`/api/info?start_date=lte${new Date()}&end_date=gte${new Date()}`)
 			// const filtered = data.filter(item => new Date(item.start_date) <= new Date() && new Date(item.end_date) >= new Date())
 			const result = groupByKey(data, "position")
-      console.log(`🚀 ~ file: index.js ~ line 65 ~ getInfo ~ result`, result)
 			setInfo(result)
 		} catch (error) {
 			alert(error)	
@@ -152,8 +151,9 @@ export default function () {
 													}}
 									>
 										{
-											info.Calendar.map(item => (
+											info.Calendar.map((item, key) => (
 												<Stack
+													key={key}
 												>
 													<Typography variant="h6" color="white" >{item.name}</Typography>
 													<Typography variant="body1" color="white" >{item.description}</Typography>
@@ -184,8 +184,8 @@ export default function () {
 								<Typography variant="h4" color="primary" sx={{ pt : 4, pl : 3 }}>Academic Guides</Typography>
 								<Scrollbar>
 									<Stack spacing={2} sx={{ p: 3, pr: 0 }}>
-										{info.Guides.map((news) => (
-											<Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}
+										{info.Guides.map((news, key) => (
+											<Stack key={key} direction="row" justifyContent="space-between" alignItems="center" spacing={2}
 											sx={{ width : '100%'}}
 											>
 												{/* <Box
@@ -229,8 +229,8 @@ export default function () {
 								<Typography variant="h4" color="white" sx={{ pt : 4, pl : 3 }}>News Update</Typography>
 								<Scrollbar>
 									<Stack spacing={2} sx={{ p: 3, pr: 0 }}>
-										{info.News.map((news) => (
-											<Stack direction="row" alignItems="center" spacing={2} 
+										{info.News.map((news, key) => (
+											<Stack key={key} direction="row" alignItems="center" spacing={2} 
 											sx={{ width : '100%'}}
 											>
 												{/* <Box

@@ -180,7 +180,7 @@ export default function profile() {
 									{
 										userData.user_info &&
 										<>
-											<StackContainer label="Identity ID" width="100%" leftWidth="50%" value={`${userData.user_info.identity_id} (${userData.user_info.identity_type.name})`} />
+											<StackContainer label="Identity ID" width="100%" leftWidth="50%" value={`${userData.user_info.identity_id} (${userData.user_info.identity_type.name}) ${ userData.user_info.identity_type_id == 2 ? '| expired at ' + new Date(userData.user_info.expiredVisa).toDateString() : ''}`} />
 											<StackContainer label="Place Of Birth" width="100%" leftWidth="50%" value={`${userData.user_info.place_of_birth}`} />
 											<StackContainer label="Date Of Birth" width="100%" leftWidth="50%" value={`${userData.user_info.date_of_birth}`} />
 											<StackContainer label="Gender" width="100%" leftWidth="50%" value={`${userData.user_info.gender}`} />

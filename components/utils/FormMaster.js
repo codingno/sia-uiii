@@ -134,12 +134,13 @@ export default function (props) {
 				}
 				{
 					additionalForm &&
-					additionalForm.map(item => {
+					additionalForm.map((item, index) => {
 						if(item.type == 'date')
 							return (
 								<FormParent 
 								label={item.label}
 								name={item.name}
+								key={index}
 								>
 									<DateTimePicker
 										// label="Date&Time picker"
@@ -158,6 +159,7 @@ export default function (props) {
 							<FormContainer
 								label={item.label}
 								name={item.name}
+								key={index}
 								value={additional[item.value]}
 								setValue={(value) => {
 									let newAdditional = additional
@@ -181,7 +183,7 @@ export default function (props) {
             sx={{
               width: 150,
             }}
-            startIcon={() => <></>}
+            // startIcon={() => <></>}
 						onClick={submitForm}
           >
             Submit

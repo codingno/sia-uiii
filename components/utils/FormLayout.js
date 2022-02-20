@@ -65,6 +65,7 @@ export default function (props) {
 					
 				<TopMenu />
         <Grid 
+				item
 				xs={10}
 				p={1}
 				>
