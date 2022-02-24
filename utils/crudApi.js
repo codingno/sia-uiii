@@ -15,23 +15,22 @@ const handler = (tableName, getOptions, role, readOnly ) => nc({
 })
   .use(police[role])
   .get(async (req, res) => {
+	  delete getOptions.where
 		let options = getOptions
 		if(req.query) {
 			Object.keys(req.query).map(item => {
 				if(req.query[item].startsWith('lte'))
-					options.where = { ...options.where, [item] : { [Op.lte] : req.query[item].split('lte')[1]} }
+					options.where = { ...options.where, [item] : { [Op.lte] : new Date(req.query[item].split('lte')[1])} }
 				else if(req.query[item].startsWith('gte'))
-					options.where = { ...options.where, [item] : { [Op.gte] : req.query[item].split('gte')[1]} }
+					options.where = { ...options.where, [item] : { [Op.gte] : new Date(req.query[item].split('gte')[1])} }
 				else options.where = { ...options.where, [item] : req.query[item]}
 				return
 			})
 		}
 		try {
-      console.log(`🚀 ~ file: crudApi.js ~ line 34 ~ .get ~ options`, options)
-			const data = await db[tableName].findAll(options)	
+			const data = await db[tableName].findAll(options)
     	res.send(data);
 		} catch (error) {
-      console.log(`🚀 ~ file: specification.js ~ line 22 ~ .get ~ error`, error)
 			res.status(500).send(error)	
 		}
   })

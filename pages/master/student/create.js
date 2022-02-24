@@ -117,8 +117,6 @@ export default function () {
     if (departement_id != "") {
       try {
         const { data } = await axios.get("/api/teacher");
-        console.log(`🚀 ~ file: create.js ~ line 80 ~ getTeacher ~ data`, data)
-          console.log(`🚀 ~ file: create.js ~ line 83 ~ getTeacher ~ departement_id`, departement_id)
         const teachers = data.data.map(item => {
 					item.name = item.user.name
 					return item
@@ -455,10 +453,8 @@ export default function () {
                   onClick={e => {
 										setPassword(generatePassword())
 										document.getElementById('renew-create-password').classList.add('spin-animation')	
-										console.log("jalan sini");
 										setTimeout(() => {
 											document.getElementById('renew-create-password').classList.remove('spin-animation')	
-											console.log("jalan sana");
 										}, 1000)
 									}}
                   // onMouseDown={handleMouseDownPassword}

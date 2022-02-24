@@ -82,7 +82,6 @@ export default nextConnect()
           name.length > 1
             ? name.filter((word) => word != first_name && word != middle_name).join(" ")
             : "";
-        console.log({last_name},name.filter((word) => word != first_name && word != middle_name));
         data_user_info = {
           user_id: user.id,
           first_name: first_name || "",

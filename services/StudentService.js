@@ -78,7 +78,6 @@ export default {
               (student.nationality == "WNI" ? "1" : "2");
           }
         }
-        console.log({ student_number });
         const student_in_departement = await Student.findAll({
           where: {
             student_number: {

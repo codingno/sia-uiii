@@ -319,10 +319,8 @@ export default function () {
                   onClick={e => {
 										setPassword(generatePassword())
 										document.getElementById('renew-create-password').classList.add('spin-animation')	
-										console.log("jalan sini");
 										setTimeout(() => {
 											document.getElementById('renew-create-password').classList.remove('spin-animation')	
-											console.log("jalan sana");
 										}, 1000)
 									}}
                   // onMouseDown={handleMouseDownPassword}

@@ -63,7 +63,6 @@ const items = [
 
 export const DashboardSidebar = (props) => {
 	const { data: session, status } = useSession()
-  console.log(`🚀 ~ file: dashboard-sidebar.js ~ line 66 ~ DashboardSidebar ~ session`, session)
   const { open, onClose } = props;
   const router = useRouter();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'), {

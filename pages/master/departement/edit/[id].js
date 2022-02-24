@@ -119,7 +119,6 @@ export default function () {
 			router.back()
 		} catch (error) {
 			if(error.response) {
-        console.log(`🚀 ~ file: create.js ~ line 67 ~ submitDepartement ~ error.response`, error.response)
 				alert(error.response.data)
 			}	
 			alert(error)

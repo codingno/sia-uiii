@@ -143,7 +143,6 @@ export default nextConnect()
           ],
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
-          console.log(`🚀 ~ file: student.js ~ line 137 ~ .get ~ data`, data)
           let new_data = JSON.parse(JSON.stringify(data));
           new_data.name = data.user
             ? data.user.name

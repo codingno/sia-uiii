@@ -23,7 +23,6 @@ export default async (req, res) => {
       // });
     },
 		GET: (response) => {
-      console.log({db});
 			response.json({message : "ok"})
 		},
 		PATCH: (response) => {
@@ -36,7 +35,6 @@ export default async (req, res) => {
 }
 
 export async function getStaticProps() {
-	console.log(db);
   // const message = await redis.get('message')
   return {
     message : "ok",
