@@ -63,6 +63,22 @@ const handler = (tableName, getOptions, role, readOnly ) => nc({
       console.log(`🚀 ~ file: component.js ~ line 40 ~ .patch ~ error`, error)
 			res.status(500).send(error)	
 		}
+  })
+  .delete(async (req,res) => {
+    const body = req.body;
+	if(readOnly)
+		return res.status(403).send("You don't have permission to access this features")
+	if (!body.id)
+	return res.status(400).json({ message: "Incomplete parameters" });
+	try {
+	const data = await db[tableName].destroy({
+		where: { id: body.id },
+	});
+	return res.status(200).json({ message: "success delete data" });
+	} catch (error) {
+	return res.status(500).json({ error });
+	}
+	
   });
 
 export default handler;
