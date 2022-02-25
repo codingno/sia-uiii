@@ -150,7 +150,8 @@ export default function () {
 				setFatherIncome(data.data.father_income)
 				setMotherIncome(data.data.mother_income)
 				setCurrentAttachment(data.data.user.image)
-				setAttachment({ name : data.data.user.image})
+				if(data.data.user.image)
+					setAttachment({ name : data.data.user.image})
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -554,10 +555,12 @@ export default function () {
 							Upload File
 						</Button>
 						{
-							attachment && 
+							attachment ?
+							attachment.name && 
 							<p style={{ marginTop: "10px" }}>
 								( {attachment.name.split("/").pop().split("-").pop()} )
 							</p> 
+							: ""
 						}
 					</label>
 				</FormParent>
