@@ -5,6 +5,10 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
+import QRCode from "react-qr-code";
+
+
+import ImageWithLoader from "../../utils/ImageWithLoader";
 
 export default function StudentCard() {
   const { data: session, status: statusSession } = useSession();
@@ -88,7 +92,16 @@ export default function StudentCard() {
                 alignItems="center"
                 justifyContent="flex-start"
               >
-                <Box width={150} height={150} sx={{ bgcolor: "white" }}></Box>
+                <Box width={150} height={150} sx={{ bgcolor: "white", display : 'flex', justifyContent: 'center', alignItems : 'center', }}>
+									<QRCode value={JSON.stringify({
+										name : session.user.name,
+										student_number : session.student_number,
+										faculty : session.user.studentData.departement.faculty.name,
+										entry_year : session.user.studentData.entry_year,
+									})} 
+										size={140}
+									/>
+								</Box>
               </Stack>
             </Grid>
             <Grid item xs={3}>
@@ -106,7 +119,18 @@ export default function StudentCard() {
               height={300}
               onClick={() => router.push("/")}
             /> */}
-             <Box width={200} height={250} sx={{ bgcolor: "white" }}></Box>
+             <Box width={200} height={250} sx={{ bgcolor: "white", position: "relative", }}>
+							{
+								session.user.image &&
+            <ImageWithLoader
+              src={session.user.image}
+              alt={session.user.name}
+              // width={200} height={250}
+							layout="fill"
+							objectFit="cover"
+            />
+							}
+						 </Box>
           </Stack>
             </Grid>
           </Grid>
@@ -123,7 +147,7 @@ export default function StudentCard() {
               alt="Picture of the author"
               width={300}
               height={77.25}
-              onClick={() => router.push("/")}
+              // onClick={() => router.push("/")}
             />
           </Stack>
         </Grid>

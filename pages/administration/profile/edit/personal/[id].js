@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -82,8 +83,36 @@ export default function () {
   const [entry_status, setEntryStatus] = useState(entryStatusOptions[0].id);
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
+  const [attachment, setAttachment] = useState("");
+  const [currentAttachment, setCurrentAttachment] = useState("");
 
 	const [studentData, setstudentData] = useState({})
+
+	const uploadImage = async (folderTarget, courseImage) => new Promise(async (resolve, reject) => {
+    if (courseImage === "") return null;
+
+    const formData = new FormData();
+
+    formData.append('folderTarget', folderTarget);
+    formData.append('uploads', courseImage);
+    console.log(`🚀 ~ file: [id].js ~ line 98 ~ uploadImage ~ courseImage`, courseImage)
+    try {
+      const file = await axios.post("/api/upload", formData);
+			return resolve(file)
+    } catch (error) {
+      console.log(`🚀 ~ file: [id].js ~ line 102 ~ uploadImage ~ error`, error)
+      alert(error);
+			return reject(error)
+    }
+  });
+
+	const uploadFormHandle = e => {
+		if(e.target.files[0]) {
+			const file = e.target.files[0]	
+			setAttachment(file)
+			// setCourseImage(file)
+		}
+	}
 
   useEffect(() => {
     getStudentData();
@@ -120,6 +149,8 @@ export default function () {
 				setMotherName(data.data.mother_name)
 				setFatherIncome(data.data.father_income)
 				setMotherIncome(data.data.mother_income)
+				setCurrentAttachment(data.data.user.image)
+				setAttachment({ name : data.data.user.image})
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -208,6 +239,24 @@ export default function () {
 
 	async function submitStudent() {
 		try {
+			let attachmentData = attachment
+			let imageName = ""
+			// const fileForm = listForm.filter(item => item.type === 'file')[0]
+			const fileForm = {
+					label : 'File',
+					name : 'file',
+					value : 'url',
+					type : 'file',
+					path: "profile",
+				}
+				if(attachment.name !== currentAttachment) {
+					const uploadedFile = await uploadImage(fileForm.path, attachment)
+					attachmentData = uploadedFile.data
+					imageName = attachmentData.replace('files','')
+				}
+      console.log(`🚀 ~ file: [id].js ~ line 243 ~ submitStudent ~ imageName`, imageName)
+			alert("uploaded")
+
 			const sendData = {
 				id,
 				place_of_birth,
@@ -237,11 +286,14 @@ export default function () {
 				user : {
 					...studentData.user,
 					name : first_name + ' ' + middle_name + ' ' + last_name,
+					image : imageName,
 				},
 				...sendData,
 			}
-			const { data } = await axios.patch('/api/student', prepareData)
+			await axios.patch('/api/student', prepareData)
 			alert("Student successfully updated.")
+			const { data } = await axios.get("/api/auth/session?update")
+      console.log(`🚀 ~ file: [id].js ~ line 296 ~ submitStudent ~ data`, data)
 			router.back()
 		} catch (error) {
 			if(error.response) {
@@ -489,6 +541,26 @@ export default function () {
           value={mother_income}
           setValue={setMotherIncome}
         />
+				<FormParent label="Upload Profile Image">
+					<label htmlFor="contained-button-file">
+						<Input
+							id="contained-button-file"
+							// multiple
+							type="file"
+							sx={{ display: "none" }}
+							onChange={uploadFormHandle}
+						/>
+						<Button variant="contained" component="span">
+							Upload File
+						</Button>
+						{
+							attachment && 
+							<p style={{ marginTop: "10px" }}>
+								( {attachment.name.split("/").pop().split("-").pop()} )
+							</p> 
+						}
+					</label>
+				</FormParent>
 				</Stack>
 			</Grid>
 			</Grid>

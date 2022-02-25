@@ -38,6 +38,7 @@ bower_components
 build/Release
 uploads/
 public/uploads/
+files/
 
 # Dependency directories
 node_modules/

@@ -60,6 +60,7 @@ export default {
     });
   },
   update: async function (data) {
+    console.log(`🚀 ~ file: UserServices.js ~ line 12 ~ data`, data.image)
     return new Promise(async (resolve, reject) => {
     const user_id = data.user.id;
     const data_user = data.user;

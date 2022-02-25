@@ -11,6 +11,8 @@ import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
 import Typography from '@mui/material/Typography'
 
+import ImageWithLoader from "../../utils/ImageWithLoader";
+
 export default function () {
 	const router = useRouter()
   const { data: session, status } = useSession();
@@ -41,11 +43,12 @@ export default function () {
 							}}
 						>
 							{session.user.image && (
-								<Image
+								<ImageWithLoader
 									src={session.user.image}
 									alt={session.user.name}
 									width={150}
-									height={75}
+									// height={75}
+									height={150}
 								/>
 							)}
 						</Avatar>

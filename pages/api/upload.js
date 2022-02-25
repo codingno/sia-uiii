@@ -13,13 +13,13 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
 		const folderTarget = req.body.folderTarget || 'files'
 		// const pathTarget = 'uploads/'	+ folderTarget + '/' + file.fieldname	
-		const pathTarget = `public/${file.fieldname}/${folderTarget}`
+		const pathTarget = `files/${file.fieldname}/${folderTarget}`
     cb(null, pathTarget)
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     // cb(null, file.fieldname + '-' + uniqueSuffix + "." +file.originalname.split('.').pop())
-    cb(null, file.fieldname + '-' + uniqueSuffix + "-" +file.originalname)
+    cb(null, file.fieldname + '-' + uniqueSuffix + "-" +file.originalname.replace(' ', ''))
   }
 })
 

@@ -40,7 +40,6 @@ export default function (props) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 	const [additional, setAdditional] = useState({});
-  console.log(`🚀 ~ file: FormMasterWithUpload.js ~ line 43 ~ additional`, additional)
   const [attachment, setAttachment] = useState("");
   const [currentAttachment, setCurrentAttachment] = useState("");
 
@@ -75,11 +74,6 @@ export default function (props) {
 		try {
 			let attachmentData = attachment
 			let newAdditional = additional
-			// const fileForms = listForm.filter(item => item.type === 'file')
-			// if(fileForms.length > 0)
-			// 	for(let i = 0; i < fileForms.length; i++) {
-			// 		await new Promise(resolve => setTimeout(() => { console.log(i, fileForms[i]); resolve()}, i * 1000))
-			// 	}
 			const fileForm = listForm.filter(item => item.type === 'file')[0]
 				if(fileForm && attachment.name !== currentAttachment) {
 					const uploadedFile = await uploadImage(fileForm.path, attachment)

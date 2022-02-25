@@ -110,7 +110,7 @@ export default function () {
 					<Grid xs={10} item>
 						<Card
 							// sx={{ bgcolor : '#003B5C', height : 400, m : 1}}
-							sx={{ bgcolor : '#003B5C', height : '50%', m : 1}}
+							sx={{ bgcolor : '#003B5C', height : '50%', m : 1, minHeight : '450px'}}
 							>
 								<Stack
 									direction="row"

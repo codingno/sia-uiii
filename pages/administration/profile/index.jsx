@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 
 import BasicLayout from '../../../components/utils/BasicLayout'
 import StackContainer from '../../../components/utils/StackContainer'
+import ImageWithLoader from '../../../utils/ImageWithLoader';
 
 // mui
 import Avatar from '@mui/material/Avatar'
@@ -52,8 +53,8 @@ export default function profile() {
 	async function getStudentData() {
 		try {
       const { data } = await axios.get(`/api/student?user_id=${session.user.userID}`);
-      setuserData(data.data)
       console.log(`🚀 ~ file: index.jsx ~ line 48 ~ getStudentData ~ data.data`, data.data)
+      setuserData(data.data)
 
 		} catch (error) {
 			
@@ -98,7 +99,7 @@ export default function profile() {
 									}}
 								>
                   {userData.user.image && (
-                    <Image
+                    <ImageWithLoader
                       src={userData.user.image}
                       alt={userData.user.name}
                       width={80}
