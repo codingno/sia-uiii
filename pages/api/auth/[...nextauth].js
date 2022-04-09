@@ -53,7 +53,9 @@ UserSecret.hasOne(Teacher, {
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-export default async (req, res) => await NextAuth(req, res, {
+export default async (req, res) =>  {
+	process.env.NEXTAUTH_URL = 'http://' + req.headers.host;
+	return await NextAuth(req, res, {
   // https://next-auth.js.org/configuration/providers
   providers: [
     /* EmailProvider({
@@ -349,4 +351,4 @@ export default async (req, res) => await NextAuth(req, res, {
 
   // Enable debug messages in the console if you are having problems
   debug: false,
-});
+})};
