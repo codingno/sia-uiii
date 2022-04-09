@@ -50,7 +50,7 @@ export default function () {
 
 	async function submitChangePassword() {
 		try {
-			const url = '/api/password/change/' + session.user.userID
+			const url = '/api/change-password/' + session.user.userID
 			const { data }	= await axios.post(url, { password, newPassword, confirmNewPassword })
 			alert('Password successfully changed')
 		} catch (error) {
