@@ -14,7 +14,7 @@ transporter.set("oauth2_provision_cb", (user, renew, callback) => {
     return callback(null, accessToken);
   }
 });
-var BaseUrlClient = process.env.BASE_URL_CLIENT || "localhost:3000";
+var BaseUrlClient = process.env.BASE_URL_CLIENT || "http://localhost:3000";
 
 module.exports = {
   sendEmailForgotPass: function (email, resetPasswordToken, callback) {
@@ -70,7 +70,7 @@ module.exports = {
 															password has been generated for you. To reset your password, click the
 															following link and follow the instructions.
 														</p>
-														<a href="${BaseUrlClient}/resetPassword/${resetPasswordToken}"
+														<a href="${BaseUrlClient}/reset-password/${resetPasswordToken}"
 															style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
 															Password</a>
 													</td>
@@ -101,9 +101,9 @@ module.exports = {
 				</html>
 				`;
     var mailOptions = {
-      from: "LMS-UIII <no-reply>",
+      from: "SIA-UIII <no-reply>",
       to: email,
-      subject: "reset password lms-uiii",
+      subject: "reset password sia-uiii",
       html,
     };
     transporter.sendMail(mailOptions, function (error, info) {
@@ -197,7 +197,7 @@ module.exports = {
 				</html>
 				`;
       var mailOptions = {
-        from: "LMS-UIII <no-reply>",
+        from: "SIA-UIII <no-reply>",
         to: data.email,
         subject: "Student Admission Announcement",
         html

@@ -116,7 +116,7 @@ export default function SignIn({ csrfToken }) {
 			const getUserInfo = await axios.post('/api/auth/callback/credentials', {name : email, password})
 			localStorage.setItem('getUserInfo', JSON.stringify(getUserInfo.data));
 			dispatch({ type : 'getUserInfo', data : getUserInfo.data })
-			navigate('/')
+			// navigate('/')
 		} catch(err) {
 			if(err.response) {
 				dispatch({ type : 'err_getUserInfo', error : err.response.data.message })
@@ -128,10 +128,10 @@ export default function SignIn({ csrfToken }) {
 		e.preventDefault()
 		setDisableReset(true)
 		try {
-		const resetPass = await axios.post('/api/resetPasswordToken', {email})
+		const resetPass = await axios.post('/api/reset-password-token', {email})
 			// e.preventDefault()
 			alert("send forgot password")
-			navigate('/')
+			// navigate('/')
 			setDisableReset(false)
 		} catch (error) {
 			setErrorReset(error.response.data.err)
