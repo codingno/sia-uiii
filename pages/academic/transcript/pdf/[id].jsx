@@ -12,9 +12,18 @@ export default function pdf() {
 	const router = useRouter()
 	const { id } = router.query
   let ref = useRef(null);
-  const exportPDF = () => {
+	let divRef = useRef(null)
+  const exportPDF = async () => {
     // console.log(ref)
-    ref.save();
+		// divRef.current.style.height = 792
+		// divRef.current.style.width= 612
+		// console.log(divRef)
+		// divRef.style.visibility= 'show'
+		// setTimeout(() => {
+		// 	divRef.style.visibility= 'show'
+		// }, 3000)
+		// divRef.style.transform= 'scale(1.5)'
+    await ref.save();
   };
 
 	if(!id)
@@ -39,30 +48,70 @@ export default function pdf() {
 								Download PDF
 							</Button>
 						</Stack>
-            <Stack
+            {/* <Stack
               direction="row"
               alignItems="center"
               justifyContent="center"
-              p={5}
+              p={20}
+							// sx={{
+							// 	visibility : 'hidden'
+							// }}
             >
-              <PDFExport
-                paperSize={"Letter"}
-                fileName="_____.pdf"
-                title=""
-                subject=""
-                keywords=""
-                ref={(r) => (ref = r)}
-              >
                 <div
+                	// ref={(r) => (divRef = r)}
                   style={{
                     height: 792,
                     width: 612,
+                    // height: '100%',
+                    // width: '100%',
                     padding: "none",
                     backgroundColor: "white",
                     boxShadow: "5px 5px 5px black",
                     margin: "30px auto",
                     overflowX: "hidden",
                     overflowY: "hidden",
+										transform : 'scale(1.5)'
+                  }}
+                >
+                  <TranscriptCard id={id} />
+                </div>
+						</Stack> */}
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              p={20}
+							// sx={{
+							// 	visibility : 'hidden'
+							// }}
+              ref={(r) => (divRef = r)}
+            >
+              <PDFExport
+                // paperSize={"Letter"}
+                fileName="_____.pdf"
+                title=""
+                subject=""
+                keywords=""
+                ref={(r) => (ref = r)}
+								style={{
+									transform : 'scale(1.5)',
+									width : 'calc(792*1.5)',
+									height : 'calc(612*1.5',
+								}}
+              >
+                <div
+                  style={{
+                    height: 792,
+                    width: 612,
+                    // height: '100%',
+                    // width: '100%',
+                    padding: "none",
+                    backgroundColor: "white",
+                    boxShadow: "5px 5px 5px black",
+                    margin: "30px auto",
+                    overflowX: "hidden",
+                    overflowY: "hidden",
+										transform : 'scale(1.5)'
                   }}
                 >
                   <TranscriptCard id={id} />

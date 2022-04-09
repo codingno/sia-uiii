@@ -270,16 +270,6 @@ export default function () {
           setValue={setUsername}
         />
         <FormParent label="Password">
-				 {/* <TextField
-					 id="password"
-					 type={ showPassword ? "password" : "text" }
-					 value={password}
-					 onChange={e => setPassword(e.target.value)}
-					 
-				 />
-					<IconButton className="show-password" onClick={() => setShowPassword(!showPassword)} edge="end" sx={{position:'absolute', padding:'0.35rem'}}>
-						<Icon icon={showPassword ? eyeFill : eyeOffFill} />
-					</IconButton> */}
       <FormControl sx={{ width: "65%" }} variant="outlined">
 					<OutlinedInput
             id="outlined-adornment-password"

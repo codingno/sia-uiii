@@ -3,19 +3,64 @@ import Card from "@mui/material/Card";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
+import Tooltip from "@mui/material/Tooltip";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
+import { useState } from 'react'
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from 'next/router'
 import Image from "next/image";
 import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
 import Typography from '@mui/material/Typography'
+import FormParent from "./FormParent";
+import generator from 'generate-password';
 
 import ImageWithLoader from "../../utils/ImageWithLoader";
+import axios from 'axios'
 
 export default function () {
 	const router = useRouter()
   const { data: session, status } = useSession();
+
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [copiedNew, setCopiedNew] = useState(false);
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+  const [copiedConfirmNew, setCopiedConfirmNew] = useState(false);
+  const [modalNewPassword, setModalNewPassword] = useState(false);
+	
+	const generatePassword = () => generator.generate({
+		length: 10,
+		numbers: true
+	});
+
+	async function submitChangePassword() {
+		try {
+			const url = '/api/password/change/' + session.user.userID
+			const { data }	= await axios.post(url, { password, newPassword, confirmNewPassword })
+			alert('Password successfully changed')
+		} catch (error) {
+			if(error.response) {
+				alert(error.response.data)
+			}	
+			alert(error)
+		}
+	}
+
 
   return (
     <>
@@ -72,10 +117,181 @@ export default function () {
 							</Typography>
 							</>
 						}
+						{
+							router.pathname === '/' &&
+						<Stack
+							mt={3}
+						>
+							<Button variant="contained" color="secondary" component="span" onClick={() => setModalNewPassword(true)}>
+								Change Password
+							</Button>
+						</Stack>
+						}
 					</Stack>
           </Card>
         </Grid>
       )}
+			<Modal
+				aria-labelledby="simple-modal-title"
+				aria-describedby="simple-modal-description"
+				open={modalNewPassword}
+				onClose={() => setModalNewPassword(false)}
+			>
+				<Card
+					sx={{
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						width: 600,
+						// bgcolor: 'background.paper',
+						// border: '2px solid #000',
+						// boxShadow: 24,
+						p: 4,
+					}}
+				>
+        <FormParent label="New Password">
+					<FormControl sx={{ width: "65%" }} variant="outlined">
+							<OutlinedInput
+								id="outlined-adornment-password"
+								type={showNewPassword ? 'text' : 'password'}
+								value={newPassword}
+								onChange={e => setPassword(e.target.value)}
+								endAdornment={
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={e => setShowNewPassword(!showNewPassword)}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											{showNewPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+											<CopyToClipboard 
+												text={newPassword} >
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={e => setCopiedNew(!copiedNew)}
+													// onMouseDown={handleMouseDownPassword}
+													edge="end"
+												>
+													<Tooltip
+														open={copiedNew}
+														title={"Copied to clipboard!"}
+														leaveDelay={1500}
+														onClose={() => setCopiedNew(false)}
+													>
+													<ContentCopyIcon />
+										</Tooltip>
+												</IconButton>
+											</CopyToClipboard>
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={e => {
+												setNewPassword(generatePassword())
+												document.getElementById('renew-create-password').classList.add('spin-animation')	
+												setTimeout(() => {
+													document.getElementById('renew-create-password').classList.remove('spin-animation')	
+												}, 1000)
+											}}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											<AutorenewIcon id="renew-create-password" />
+										</IconButton>
+									</InputAdornment>
+								}
+								inputProps={{
+										autoComplete: 'new-password'
+								}}
+								autocomplete="new-password"
+								sx={{
+									background: "#E0E0E0"
+								}}
+							/>
+					</FormControl>
+        </FormParent>
+        <FormParent label="Confirm New Password">
+					<FormControl sx={{ width: "65%" }} variant="outlined">
+							<OutlinedInput
+								id="outlined-adornment-password"
+								type={showConfirmNewPassword ? 'text' : 'password'}
+								value={confirmNewPassword}
+								onChange={e => setConfirmNewPassword(e.target.value)}
+								endAdornment={
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={e => setShowConfirmNewPassword(!showConfirmNewPassword)}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											{showConfirmNewPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+									</InputAdornment>
+								}
+								inputProps={{
+										autoComplete: 'new-password'
+								}}
+								autocomplete="new-password"
+								sx={{
+									background: "#E0E0E0"
+								}}
+							/>
+					</FormControl>
+        </FormParent>
+        <FormParent label="Current Password">
+					<FormControl sx={{ width: "65%" }} variant="outlined">
+							<OutlinedInput
+								id="outlined-adornment-password"
+								type={showPassword ? 'text' : 'password'}
+								value={password}
+								onChange={e => setPassword(e.target.value)}
+								endAdornment={
+									<InputAdornment position="end">
+										<IconButton
+											aria-label="toggle password visibility"
+											onClick={e => setShowPassword(!showPassword)}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											{showPassword ? <VisibilityOff /> : <Visibility />}
+										</IconButton>
+									</InputAdornment>
+								}
+								inputProps={{
+										autoComplete: 'new-password'
+								}}
+								autocomplete="new-password"
+								sx={{
+									background: "#E0E0E0"
+								}}
+							/>
+					</FormControl>
+        </FormParent>
+				<FormParent>
+        <Stack
+          direction="row"
+          alignItems="center"
+          ml={5}
+          mt={3}
+          sx={{ width: "60%", display: "flex", justifyContent: "flex-start" }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              width: 150,
+            }}
+            startIcon={() => <></>}
+						onClick={submitChangePassword}
+          >
+            Submit
+          </Button>
+        </Stack>
+				</FormParent>
+				</Card>
+			</Modal>
     </>
   );
 }

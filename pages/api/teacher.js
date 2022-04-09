@@ -9,6 +9,7 @@ const db = require("../../models");
 const Teacher = require("../../models/teacher")(db.sequelize, DataTypes);
 const User = require("../../models/user")(db.sequelize, DataTypes);
 const UserInfo = require("../../models/userinfo")(db.sequelize, DataTypes);
+const MasterIdentityType = require("../../models/masterIdentityType")(db.sequelize, DataTypes)
 const Departement = require("../../models/departement")(
   db.sequelize,
   DataTypes
@@ -36,6 +37,8 @@ Teacher.belongsTo(MasterTeacherStatus, {
   foreignKey: "status",
   as: "teacher_status",
 });
+UserInfo.belongsTo(MasterIdentityType, { foreignKey : "identity_type_id", as : "identity_type"})
+MasterIdentityType.hasMany(UserInfo, { foreignKey: "identity_type_id", sourceKey: "id",  });
 // console.log(`🚀 ~ file: user.js ~ line 8 ~ db`, db.sequelize)
 
 export default nextConnect()
@@ -71,7 +74,11 @@ export default nextConnect()
               include: [{ model: Faculty, as: "faculty" }],
             },
             { model: User, as: "user" },
-            { model: UserInfo, as: "user_info" },
+            {
+              model: UserInfo,
+              as: "user_info",
+              include: [{ model: MasterIdentityType, as: "identity_type" }],
+            },
             { model: MasterTeacherStatus, as: "teacher_status" },
           ],
         });

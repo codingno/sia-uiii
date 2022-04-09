@@ -65,6 +65,7 @@ export default {
     const user_id = data.user.id;
     const data_user = data.user;
     delete data_user.id;
+    delete data_user.email_verified;
     try {
       const user = await User.update(data_user, { where: { id: user_id } });
       const data_user_info = data.user_info;

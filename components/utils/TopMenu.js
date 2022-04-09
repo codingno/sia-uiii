@@ -15,6 +15,12 @@ import UserSide from "./UserSide";
 
 const topMenuList = [
 	{
+    name: "Profile",
+		role : [3],
+    link: "teacher/profile",
+		width: 300,
+	},
+	{
     name: "Administrations",
 		role : [4],
 		width: 300,
@@ -174,7 +180,7 @@ const topMenuList = [
   {
     name: "Info",
 		width: 380,
-		role : [1,2,3,4],
+		role : [1,2],
     child: [
       {
         name: "Calendar Academic",
@@ -430,7 +436,8 @@ export default function (props) {
     </Grid>
 		{/* <Grid item xs={2.5}></Grid> */}
 		{
-			router.pathname !== '/administration/profile' &&
+			( router.pathname !== '/administration/profile' &&
+			router.pathname !== '/teacher/profile') &&
 			session && (( session.user.isStudent && session.user.studentData.status ) || !session.user.isStudent) ?
 			<UserSide /> : ""
 		}

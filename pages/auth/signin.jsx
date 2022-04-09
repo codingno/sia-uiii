@@ -301,7 +301,7 @@ export default function SignIn({ csrfToken }) {
 						</IconButton>
 						</label>
 						<label htmlFor="forgotPassword" className="login-options">
-							<span onClick={() => forgotPassword(true)}>Forgot your Password?</span>
+							<span style={{ cursor : 'pointer' }} onClick={() => forgotPassword(true)}>Forgot your Password?</span>
 							<button type="submit" className="login-submit" onClick={e => onSignIn(e)}
 							>Sign In</button>
 						</label>
@@ -311,7 +311,7 @@ export default function SignIn({ csrfToken }) {
 				</Grid>
 			</Grid>
 			</div>
-			{/* { popUpForgotPassword && <div className="login-form forgot-password">
+			{ popUpForgotPassword && <div className="login-form forgot-password">
 				<form>
 					<CancelIcon disabled={disableReset} className="cancel" onClick={() => forgotPassword(false)} />
 					<h2>Forgot Password</h2>
@@ -329,7 +329,7 @@ export default function SignIn({ csrfToken }) {
 					</label>
 				</form>
 			</div>
-			} */}
+			}
 			<div className="login-copyright">
 				<span>&copy;{ new Date().getFullYear()} Universitas Islam International Indonesia</span>
 			</div>

@@ -56,8 +56,9 @@ export default function () {
 	const [info, setInfo] = useState({})
 
 	useEffect(() => {
-		getInfo()
-	},[])
+		if(status === 'authenticated')
+			getInfo()
+	},[status])
 
 	async function getInfo() {
 		try {

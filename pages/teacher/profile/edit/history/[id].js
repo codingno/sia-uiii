@@ -1,23 +1,10 @@
 import { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Modal from "@mui/material/Modal";
-import Card from "@mui/material/Card";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import Tooltip from "@mui/material/Tooltip";
-import AutorenewIcon from '@mui/icons-material/Autorenew';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Input from '@mui/material/Input';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -30,7 +17,6 @@ import FormParent from "../../../../../components/utils/FormParent";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react"
-import generator from 'generate-password';
 
 export default function () {
 	const router = useRouter()
@@ -81,7 +67,6 @@ export default function () {
   const [gender, setGender] = useState(genderOptions[0].id);
   const [identity_id, setIdentityID] = useState("");
   const [identity_type_id, setIdentityType] = useState("");
-  const [expiredVisa, setExpiredVisa] = useState("");
 
   const [father_name, setFatherName] = useState("");
   const [mother_name, setMotherName] = useState("");
@@ -96,52 +81,20 @@ export default function () {
   const [entry_status, setEntryStatus] = useState(entryStatusOptions[0].id);
   const [departement_id, setDepartement] = useState("");
   const [status, setStatus] = useState("");
-  const [attachment, setAttachment] = useState("");
-  const [currentAttachment, setCurrentAttachment] = useState("");
 
 	const [studentData, setstudentData] = useState({})
 
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [copiedNew, setCopiedNew] = useState(false);
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-  const [copiedConfirmNew, setCopiedConfirmNew] = useState(false);
-  const [modalNewPassword, setModalNewPassword] = useState(false);
-	
-	const generatePassword = () => generator.generate({
-		length: 10,
-		numbers: true
-	});
+  const [school_name, setSchoolName] = useState("");
+  const [school_telp, setSchoolTelp] = useState("");
+  const [school_address, setSchoolAddress] = useState("");
+  const [school_departement, setSchoolDepartement] = useState("");
+  const [school_end, setSchoolEnd] = useState("");
 
-	const uploadImage = async (folderTarget, courseImage) => new Promise(async (resolve, reject) => {
-    if (courseImage === "") return null;
-
-    const formData = new FormData();
-
-    formData.append('folderTarget', folderTarget);
-    formData.append('uploads', courseImage);
-    console.log(`🚀 ~ file: [id].js ~ line 98 ~ uploadImage ~ courseImage`, courseImage)
-    try {
-      const file = await axios.post("/api/upload", formData);
-			return resolve(file)
-    } catch (error) {
-      console.log(`🚀 ~ file: [id].js ~ line 102 ~ uploadImage ~ error`, error)
-      alert(error);
-			return reject(error)
-    }
-  });
-
-	const uploadFormHandle = e => {
-		if(e.target.files[0]) {
-			const file = e.target.files[0]	
-			setAttachment(file)
-			// setCourseImage(file)
-		}
-	}
+  const [campus_name, setCampusName] = useState("");
+  const [campus_telp, setCampusTelp] = useState("");
+  const [campus_address, setCampusAddress] = useState("");
+  const [campus_departement, setCampusDepartement] = useState("");
+  const [campus_end, setCampusEnd] = useState("");
 
   useEffect(() => {
     getStudentData();
@@ -161,7 +114,6 @@ export default function () {
   			setGender(genderGet);
   			setIdentityID(data.data.user_info.identity_id);
   			setIdentityType(data.data.user_info.identity_type_id);
-  			setExpiredVisa(data.data.user_info.expiredVisa);
 
   			setUserID(data.data.user_id);
   			setStudentNumber(data.data.student_number);
@@ -178,9 +130,16 @@ export default function () {
 				setMotherName(data.data.mother_name)
 				setFatherIncome(data.data.father_income)
 				setMotherIncome(data.data.mother_income)
-				setCurrentAttachment(data.data.user.image)
-				if(data.data.user.image)
-					setAttachment({ name : data.data.user.image})
+				setSchoolName(data.data.school_name)
+				setSchoolTelp(data.data.school_telp)
+				setSchoolAddress(data.data.school_address)
+				setSchoolDepartement(data.data.school_departement)
+				setSchoolEnd(data.data.school_end)
+				setCampusName(data.data.campus_name)
+				setCampusTelp(data.data.campus_telp)
+				setCampusAddress(data.data.campus_address)
+				setCampusDepartement(data.data.campus_departement)
+				setCampusEnd(data.data.campus_end)
       } catch (error) {
         if (error.response) {
           if (error.response.status == 404) return;
@@ -269,24 +228,6 @@ export default function () {
 
 	async function submitStudent() {
 		try {
-			let attachmentData = attachment
-			let imageName = ""
-			// const fileForm = listForm.filter(item => item.type === 'file')[0]
-			const fileForm = {
-					label : 'File',
-					name : 'file',
-					value : 'url',
-					type : 'file',
-					path: "profile",
-				}
-				if(attachment.name !== currentAttachment) {
-					const uploadedFile = await uploadImage(fileForm.path, attachment)
-					attachmentData = uploadedFile.data
-					imageName = attachmentData.replace('files','')
-				}
-      console.log(`🚀 ~ file: [id].js ~ line 243 ~ submitStudent ~ imageName`, imageName)
-			alert("uploaded")
-
 			const sendData = {
 				id,
 				place_of_birth,
@@ -294,7 +235,6 @@ export default function () {
 				gender,
 				identity_id,
 				identity_type_id,
-				expiredVisa,
 				user_id,
 				student_number,
 				teacher_id,
@@ -307,9 +247,16 @@ export default function () {
 				mother_name,
 				father_income,
 				mother_income,
-				// password,
-				// newPassword,
-				// confirmNewPassword,
+				school_name,
+				school_telp,
+				school_address,
+				school_departement,
+				school_end,
+				campus_name,
+				campus_telp,
+				campus_address,
+				campus_departement,
+				campus_end,
 			}	
 			let prepareData = {
 				...studentData,
@@ -319,14 +266,11 @@ export default function () {
 				user : {
 					...studentData.user,
 					name : first_name + ' ' + middle_name + ' ' + last_name,
-					image : imageName,
 				},
 				...sendData,
 			}
-			await axios.patch('/api/student', prepareData)
+			const { data } = await axios.patch('/api/student', prepareData)
 			alert("Student successfully updated.")
-			const { data } = await axios.get("/api/auth/session?update")
-      console.log(`🚀 ~ file: [id].js ~ line 296 ~ submitStudent ~ data`, data)
 			router.back()
 		} catch (error) {
 			if(error.response) {
@@ -334,19 +278,6 @@ export default function () {
 			}	
 			alert(error)
 		}	
-	}
-
-	async function submitChangePassword() {
-		try {
-			const url = '/api/password/change/' + session.user.userID
-			const { data }	= await axios.post(url, { password, newPassword, confirmNewPassword })
-			alert('Password successfully changed')
-		} catch (error) {
-			if(error.response) {
-				alert(error.response.data)
-			}	
-			alert(error)
-		}
 	}
 
 	useEffect(() => {
@@ -357,8 +288,7 @@ export default function () {
 		return <div style={{ width : '100vw', heght : '100vh', backgroundColor : '#C7C9C7' }}></div>
 
   return (
-		<LocalizationProvider dateAdapter={AdapterDateFns}>
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Personal Edit">
+    <FormLayout title="Student Edit | AIS UIII" titlePage="Student History Edit">
 			<Grid
 				container
 				spacing={1}
@@ -448,28 +378,39 @@ export default function () {
 					</Select>
 				</FormParent> */}
         <FormContainer
-          label="First Name"
-          name="first_name"
-          value={first_name}
-          setValue={setFirstName}
+          label="School Name"
+          name="school_name"
+          value={school_name}
+          setValue={setSchoolName}
+					width="95%"
         />
         <FormContainer
-          label="Middle Name"
-          name="middle_name"
-          value={middle_name}
-          setValue={setMiddleName}
+          label="School Phone"
+          name="school_telp"
+          value={school_telp}
+          setValue={setSchoolTelp}
+					width="95%"
         />
         <FormContainer
-          label="Last Name"
-          name="last_name"
-          value={last_name}
-          setValue={setLastName}
+          label="School Address"
+          name="school_address"
+          value={school_address}
+          setValue={setSchoolAddress}
+					width="95%"
         />
         <FormContainer
-          label="Place Of Birth"
-          name="place_of_birth"
-          value={place_of_birth}
-          setValue={setPlaceOfBirth}
+          label="School Departement"
+          name="school_departement"
+          value={school_departement}
+          setValue={setSchoolDepartement}
+					width="95%"
+        />
+        <FormContainer
+          label="School End"
+          name="school_end"
+          value={school_end}
+          setValue={setSchoolEnd}
+					width="95%"
         />
         {/* <FormContainer
           label="Date Of Birth"
@@ -477,7 +418,7 @@ export default function () {
           value={date_of_birth}
           setValue={setDateOfBirth}
         /> */}
-				<FormParent label="Date Of Birth">
+				{/* <FormParent label="Date Of Birth">
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 							<DesktopDatePicker
 								inputFormat="MM/dd/yyyy"
@@ -521,21 +462,7 @@ export default function () {
 						</MenuItem>
 						{identityTypeOptions.length > 0 && identityTypeOptions.map(item => <MenuItem value={item.id}>{item.name}</MenuItem>)}
 					</Select>
-				</FormParent>
-				{
-					identity_type_id == 2 &&
-				<FormParent 
-				label="Expired Visa"
-				name="expiredVisa"
-				>
-					<DesktopDatePicker 
-						// label="Date&Time picker"
-						value={expiredVisa}
-						onChange={setExpiredVisa}
-						renderInput={(params) => <TextField {...params} />}
-					/>
-				</FormParent>
-				}
+				</FormParent> */}
         <Stack
           direction="row"
           alignItems="center"
@@ -562,223 +489,43 @@ export default function () {
 					mb={4}
 				>
         <FormContainer
-          label="Father Name"
-          name="father_name"
-          value={father_name}
-          setValue={setFatherName}
+          label="Campus Name"
+          name="campus_name"
+          value={campus_name}
+          setValue={setCampusName}
+					width="90%"
         />
         <FormContainer
-          label="Father Income"
-          name="father_income"
-					type="number"
-          value={father_income}
-          setValue={setFatherIncome}
+          label="Campus Phone"
+          name="campus_telp"
+          value={campus_telp}
+          setValue={setCampusTelp}
+					width="90%"
         />
         <FormContainer
-          label="Mother Name"
-          name="mother_name"
-          value={mother_name}
-          setValue={setMotherName}
+          label="Campus Address"
+          name="campus_address"
+          value={campus_address}
+          setValue={setCampusAddress}
+					width="90%"
         />
         <FormContainer
-          label="Mother Income"
-          name="mother_income"
-					type="number"
-          value={mother_income}
-          setValue={setMotherIncome}
+          label="Campus Departement"
+          name="campus_departement"
+          value={campus_departement}
+          setValue={setCampusDepartement}
+					width="90%"
         />
-				<FormParent label="Upload Profile Image">
-					<label htmlFor="contained-button-file">
-						<Input
-							id="contained-button-file"
-							// multiple
-							type="file"
-							sx={{ display: "none" }}
-							onChange={uploadFormHandle}
-						/>
-						<Button variant="contained" component="span">
-							Upload File
-						</Button>
-						{
-							attachment ?
-							attachment.name && 
-							<p style={{ marginTop: "10px" }}>
-								( {attachment.name.split("/").pop().split("-").pop()} )
-							</p> 
-							: ""
-						}
-					</label>
-				</FormParent>
-				{/* <FormParent>
-						<Button variant="contained" component="span" onClick={() => setModalNewPassword(true)}>
-							Change Password
-						</Button>
-				</FormParent> */}
+        <FormContainer
+          label="Campus End"
+          name="campus_end"
+          value={campus_end}
+          setValue={setCampusEnd}
+					width="90%"
+        />
 				</Stack>
 			</Grid>
 			</Grid>
-			<Modal
-				aria-labelledby="simple-modal-title"
-				aria-describedby="simple-modal-description"
-				open={modalNewPassword}
-				onClose={() => setModalNewPassword(false)}
-			>
-				<Card
-					sx={{
-						position: 'absolute',
-						top: '50%',
-						left: '50%',
-						transform: 'translate(-50%, -50%)',
-						width: 600,
-						// bgcolor: 'background.paper',
-						// border: '2px solid #000',
-						// boxShadow: 24,
-						p: 4,
-					}}
-				>
-        <FormParent label="New Password">
-					<FormControl sx={{ width: "65%" }} variant="outlined">
-							<OutlinedInput
-								id="outlined-adornment-password"
-								type={showNewPassword ? 'text' : 'password'}
-								value={newPassword}
-								onChange={e => setPassword(e.target.value)}
-								endAdornment={
-									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick={e => setShowNewPassword(!showNewPassword)}
-											// onMouseDown={handleMouseDownPassword}
-											edge="end"
-										>
-											{showNewPassword ? <VisibilityOff /> : <Visibility />}
-										</IconButton>
-											<CopyToClipboard 
-												text={newPassword} >
-												<IconButton
-													aria-label="toggle password visibility"
-													onClick={e => setCopiedNew(!copiedNew)}
-													// onMouseDown={handleMouseDownPassword}
-													edge="end"
-												>
-													<Tooltip
-														open={copiedNew}
-														title={"Copied to clipboard!"}
-														leaveDelay={1500}
-														onClose={() => setCopiedNew(false)}
-													>
-													<ContentCopyIcon />
-										</Tooltip>
-												</IconButton>
-											</CopyToClipboard>
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick={e => {
-												setNewPassword(generatePassword())
-												document.getElementById('renew-create-password').classList.add('spin-animation')	
-												setTimeout(() => {
-													document.getElementById('renew-create-password').classList.remove('spin-animation')	
-												}, 1000)
-											}}
-											// onMouseDown={handleMouseDownPassword}
-											edge="end"
-										>
-											<AutorenewIcon id="renew-create-password" />
-										</IconButton>
-									</InputAdornment>
-								}
-								inputProps={{
-										autoComplete: 'new-password'
-								}}
-								autocomplete="new-password"
-								sx={{
-									background: "#E0E0E0"
-								}}
-							/>
-					</FormControl>
-        </FormParent>
-        <FormParent label="Confirm New Password">
-					<FormControl sx={{ width: "65%" }} variant="outlined">
-							<OutlinedInput
-								id="outlined-adornment-password"
-								type={showConfirmNewPassword ? 'text' : 'password'}
-								value={confirmNewPassword}
-								onChange={e => setConfirmNewPassword(e.target.value)}
-								endAdornment={
-									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick={e => setShowConfirmNewPassword(!showConfirmNewPassword)}
-											// onMouseDown={handleMouseDownPassword}
-											edge="end"
-										>
-											{showConfirmNewPassword ? <VisibilityOff /> : <Visibility />}
-										</IconButton>
-									</InputAdornment>
-								}
-								inputProps={{
-										autoComplete: 'new-password'
-								}}
-								autocomplete="new-password"
-								sx={{
-									background: "#E0E0E0"
-								}}
-							/>
-					</FormControl>
-        </FormParent>
-        <FormParent label="Current Password">
-					<FormControl sx={{ width: "65%" }} variant="outlined">
-							<OutlinedInput
-								id="outlined-adornment-password"
-								type={showPassword ? 'text' : 'password'}
-								value={password}
-								onChange={e => setPassword(e.target.value)}
-								endAdornment={
-									<InputAdornment position="end">
-										<IconButton
-											aria-label="toggle password visibility"
-											onClick={e => setShowPassword(!showPassword)}
-											// onMouseDown={handleMouseDownPassword}
-											edge="end"
-										>
-											{showPassword ? <VisibilityOff /> : <Visibility />}
-										</IconButton>
-									</InputAdornment>
-								}
-								inputProps={{
-										autoComplete: 'new-password'
-								}}
-								autocomplete="new-password"
-								sx={{
-									background: "#E0E0E0"
-								}}
-							/>
-					</FormControl>
-        </FormParent>
-				<FormParent>
-        <Stack
-          direction="row"
-          alignItems="center"
-          ml={5}
-          mt={3}
-          sx={{ width: "60%", display: "flex", justifyContent: "flex-start" }}
-        >
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{
-              width: 150,
-            }}
-            startIcon={() => <></>}
-						onClick={submitChangePassword}
-          >
-            Submit
-          </Button>
-        </Stack>
-				</FormParent>
-				</Card>
-			</Modal>
     </FormLayout>
-		</LocalizationProvider>
   );
 }

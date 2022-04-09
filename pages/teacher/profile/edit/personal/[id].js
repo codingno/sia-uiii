@@ -150,7 +150,7 @@ export default function () {
   async function getStudentData() {
     if (id) {
       try {
-        const { data } = await axios.get(`/api/student?id=${id}`);
+        const { data } = await axios.get(`/api/teacher?id=${id}`);
         console.log(`🚀 ~ file: [id].js ~ line 80 ~ getStudentData ~ data`, data)
   			setFirstName(data.data.user_info.first_name);
   			setLastName(data.data.user_info.last_name);
@@ -165,19 +165,19 @@ export default function () {
 
   			setUserID(data.data.user_id);
   			setStudentNumber(data.data.student_number);
-  			setEntryYear(data.data.entry_year);
-				const entrySemesterGet = entrySemesterOptions.filter(item => item.name == data.data.entry_semester)[0].id
-  			setEntrySemester(entrySemesterGet);
-				const entryStatusGet = entryStatusOptions.filter(item => item.name == data.data.entry_status)[0].id
-  			setEntryStatus(entryStatusGet);
-  			setTeacherID(data.data.teacher_id);
+  			// setEntryYear(data.data.entry_year);
+				// const entrySemesterGet = entrySemesterOptions.filter(item => item.name == data.data.entry_semester)[0].id
+  			// setEntrySemester(entrySemesterGet);
+				// const entryStatusGet = entryStatusOptions.filter(item => item.name == data.data.entry_status)[0].id
+  			// setEntryStatus(entryStatusGet);
+  			// setTeacherID(data.data.teacher_id);
   			setDepartement(data.data.departement_id);
   			setStatus(data.data.status);
 				setstudentData(data.data)
-				setFatherName(data.data.father_name)
-				setMotherName(data.data.mother_name)
-				setFatherIncome(data.data.father_income)
-				setMotherIncome(data.data.mother_income)
+				// setFatherName(data.data.father_name)
+				// setMotherName(data.data.mother_name)
+				// setFatherIncome(data.data.father_income)
+				// setMotherIncome(data.data.mother_income)
 				setCurrentAttachment(data.data.user.image)
 				if(data.data.user.image)
 					setAttachment({ name : data.data.user.image})
@@ -303,13 +303,13 @@ export default function () {
 				entry_status,
 				departement_id,
 				status,
-				father_name,
-				mother_name,
-				father_income,
-				mother_income,
 				// password,
 				// newPassword,
 				// confirmNewPassword,
+				// father_name,
+				// mother_name,
+				// father_income,
+				// mother_income,
 			}	
 			let prepareData = {
 				...studentData,
@@ -323,8 +323,8 @@ export default function () {
 				},
 				...sendData,
 			}
-			await axios.patch('/api/student', prepareData)
-			alert("Student successfully updated.")
+			await axios.patch('/api/teacher', prepareData)
+			alert("Teacher successfully updated.")
 			const { data } = await axios.get("/api/auth/session?update")
       console.log(`🚀 ~ file: [id].js ~ line 296 ~ submitStudent ~ data`, data)
 			router.back()
@@ -358,7 +358,7 @@ export default function () {
 
   return (
 		<LocalizationProvider dateAdapter={AdapterDateFns}>
-    <FormLayout title="Student Edit | AIS UIII" titlePage="Student Personal Edit">
+    <FormLayout title="Teacher Edit | AIS UIII" titlePage="Teacher Personal Edit">
 			<Grid
 				container
 				spacing={1}
@@ -561,7 +561,7 @@ export default function () {
 				<Stack
 					mb={4}
 				>
-        <FormContainer
+        {/* <FormContainer
           label="Father Name"
           name="father_name"
           value={father_name}
@@ -586,7 +586,7 @@ export default function () {
 					type="number"
           value={mother_income}
           setValue={setMotherIncome}
-        />
+        /> */}
 				<FormParent label="Upload Profile Image">
 					<label htmlFor="contained-button-file">
 						<Input
@@ -714,6 +714,38 @@ export default function () {
 										>
 											{showConfirmNewPassword ? <VisibilityOff /> : <Visibility />}
 										</IconButton>
+											{/* <CopyToClipboard 
+												text={password} >
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={e => setCopiedConfirmNew(!copiedConfirmNew)}
+													// onMouseDown={handleMouseDownPassword}
+													edge="end"
+												>
+													<Tooltip
+														open={copiedConfirmNew}
+														title={"Copied to clipboard!"}
+														leaveDelay={1500}
+														onClose={() => setCopiedConfirmNew(false)}
+													>
+													<ContentCopyIcon />
+										</Tooltip>
+												</IconButton>
+											</CopyToClipboard> */}
+										{/* <IconButton
+											aria-label="toggle password visibility"
+											onClick={e => {
+												setPassword(generatePassword())
+												document.getElementById('renew-create-password').classList.add('spin-animation')	
+												setTimeout(() => {
+													document.getElementById('renew-create-password').classList.remove('spin-animation')	
+												}, 1000)
+											}}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											<AutorenewIcon id="renew-create-password" />
+										</IconButton> */}
 									</InputAdornment>
 								}
 								inputProps={{
@@ -743,6 +775,38 @@ export default function () {
 										>
 											{showPassword ? <VisibilityOff /> : <Visibility />}
 										</IconButton>
+											{/* <CopyToClipboard 
+												text={password} >
+												<IconButton
+													aria-label="toggle password visibility"
+													onClick={e => setCopied(!copied)}
+													// onMouseDown={handleMouseDownPassword}
+													edge="end"
+												>
+													<Tooltip
+														open={copied}
+														title={"Copied to clipboard!"}
+														leaveDelay={1500}
+														onClose={() => setCopied(false)}
+													>
+													<ContentCopyIcon />
+										</Tooltip>
+												</IconButton>
+											</CopyToClipboard> */}
+										{/* <IconButton
+											aria-label="toggle password visibility"
+											onClick={e => {
+												setPassword(generatePassword())
+												document.getElementById('renew-create-password').classList.add('spin-animation')	
+												setTimeout(() => {
+													document.getElementById('renew-create-password').classList.remove('spin-animation')	
+												}, 1000)
+											}}
+											// onMouseDown={handleMouseDownPassword}
+											edge="end"
+										>
+											<AutorenewIcon id="renew-create-password" />
+										</IconButton> */}
 									</InputAdornment>
 								}
 								inputProps={{

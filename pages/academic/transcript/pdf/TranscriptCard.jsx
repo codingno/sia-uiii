@@ -190,7 +190,7 @@ export default function TranscriptCard(props) {
                     pb: 5,
                   }}
                 >
-                  COURSE REGISTRATION CARD
+								SEMESTER GRADE POINT CARD
                 </Typography>
               </Stack>
             </Grid>

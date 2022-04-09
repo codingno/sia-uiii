@@ -9,9 +9,9 @@ import Stack from "@mui/material/Stack";
 
 export default function pdf() {
   let ref = useRef(null);
-  const exportPDF = () => {
+  const exportPDF = async () => {
     // console.log(ref)
-    ref.save();
+    await ref.save();
   };
 
   return (
@@ -37,10 +37,10 @@ export default function pdf() {
               direction="row"
               alignItems="center"
               justifyContent="center"
-              p={5}
+              p={20}
             >
               <PDFExport
-                paperSize={"Letter"}
+                // paperSize={"Letter"}
                 fileName="_____.pdf"
                 title=""
                 subject=""
@@ -57,6 +57,7 @@ export default function pdf() {
                     margin: "30px auto",
                     overflowX: "hidden",
                     overflowY: "hidden",
+										transform : 'scale(1.5)',
                   }}
                 >
                   <CourseRegistrationCard />

@@ -10,7 +10,7 @@
   "homepage": "http://next-auth-example.now.sh",
   "main": "",
   "scripts": {
-    "dev": "next",
+    "dev": "next & node server",
     "build": "next build",
     "start": "next start -p 3232 & node server",
     "up": "db-migrate up",
