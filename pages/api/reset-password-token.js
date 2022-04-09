@@ -1,4 +1,3 @@
-import { UUIDV4, DataTypes } from "sequelize";
 import nextConnect from "next-connect";
 import { isLogin, isPublic } from "./config/police";
 import { sendEmailForgotPass } from "../../services/emailService";
