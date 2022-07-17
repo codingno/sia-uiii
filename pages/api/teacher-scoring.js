@@ -3,18 +3,21 @@ import nextConnect from "next-connect";
 import { isLogin, isStudent, isAdmin } from "./config/police";
 
 const db = require("../../models");
-const Grade = require("../../models/masterGrade")(db.sequelize, DataTypes);
+const TeacherScoring = require("../../models/masterTeacherScoring")(
+  db.sequelize,
+  DataTypes
+);
 
 export default nextConnect()
   .use(isLogin)
   .post(isAdmin, async (req, res) => {
     let body = req.body;
     console.log(body);
-    if (!body.grade || !body.point)
+    if (!body.aspect || !body.scoring)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
       body.user_id = req.user.id;
-      const data = await Grade.create(body);
+      const data = await TeacherScoring.create(body);
       return res.status(200).json({ data });
     } catch (error) {
       return res.status(500).json({ error });
@@ -23,7 +26,7 @@ export default nextConnect()
   .get(async (req, res) => {
     if (req.query.id) {
       try {
-        const data = await Grade.findOne({
+        const data = await TeacherScoring.findOne({
           where: { id: req.query.id },
         });
         if (!data) return res.status(404).json({ error: "Data not found" });
@@ -33,7 +36,7 @@ export default nextConnect()
       }
     } else {
       try {
-        const data = await Grade.findAll();
+        const data = await TeacherScoring.findAll();
         if (data.length == 0)
           return res.status(404).json({ error: "Data not found", data });
         return res.status(200).json({ data });
@@ -48,7 +51,7 @@ export default nextConnect()
     if (!id) return res.status(400).json({ error: "Incomplete parameters" });
     delete body.id;
     try {
-      const data = await Grade.update(body, {
+      const data = await TeacherScoring.update(body, {
         where: { id: id },
       });
       return res.status(200).json({ message: "success update data" });
@@ -61,7 +64,7 @@ export default nextConnect()
     if (!body.id)
       return res.status(400).json({ message: "Incomplete parameters" });
     try {
-      const data = await Grade.destroy({
+      const data = await TeacherScoring.destroy({
         where: { id: body.id },
       });
       return res.status(200).json({ message: "success delete data" });

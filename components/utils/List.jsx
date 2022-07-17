@@ -76,11 +76,22 @@ const TABLE_HEAD = [
 // ----------------------------------------------------------------------
 
 export default function List(props) {
-  const { title, name, tableHead, getUrl, addLink, generateLink, moremenu, deleteOptions, isUserList, readOnly, disableAdd } =
-    props;
+  const {
+    title,
+    name,
+    tableHead,
+    getUrl,
+    addLink,
+    generateLink,
+    moremenu,
+    deleteOptions,
+    isUserList,
+    readOnly,
+    disableAdd,
+  } = props;
 
   const router = useRouter();
-	const { data : session, status : statusSession } = useSession()
+  const { data: session, status: statusSession } = useSession();
 
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
@@ -89,9 +100,9 @@ export default function List(props) {
   const [filterName, setFilterName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
-  const [dataList, setDataList] = useState({data:[], isLoad: false});
+  const [dataList, setDataList] = useState({ data: [], isLoad: false });
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -110,15 +121,16 @@ export default function List(props) {
   const handleGenerate = async () => {
     try {
       const { data, error } = await axios.get(generateLink);
-        setDataList({...dataList, isLoad: false})
-        alert(data.message)
+      setDataList({ ...dataList, isLoad: false });
+      alert(data.message);
     } catch (error) {
       if (error.response) {
-        if ((error.response.status = 404)) return alert(error.response.data.error);
+        if ((error.response.status = 404))
+          return alert(error.response.data.error);
       }
       alert(error);
     }
-  }
+  };
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -150,21 +162,19 @@ export default function List(props) {
     setFilterName(event.target.value);
   };
 
-
   useEffect(() => {
     if (!dataList.isLoad) getDataList();
+    else setLoading(false);
   }, [dataList]);
 
   async function getDataList() {
     try {
       const { data, error } = await axios.get(getUrl);
-			if(data.data)
-      	setDataList({data:data.data, isLoad: true});
-			else
-      	setDataList({data: data, isLoad: true});
+      if (data.data) setDataList({ data: data.data, isLoad: true });
+      else setDataList({ data: data, isLoad: true });
     } catch (error) {
       if (error.response) {
-        setDataList({...dataList, isLoad: true})
+        setDataList({ ...dataList, isLoad: true });
         if ((error.response.status = 404)) return;
       }
       alert(error);
@@ -198,50 +208,49 @@ export default function List(props) {
   // const filteredUsers = courseList ? applySortFilter(courseList, getComparator(order, orderBy), filterName) : [];
   const filteredUsers =
     dataList.data.length > 0
-      ? applySortFilter(dataList.data, getComparator(order, orderBy), filterName)
+      ? applySortFilter(
+          dataList.data,
+          getComparator(order, orderBy),
+          filterName
+        )
       : [];
   const isUserNotFound = filteredUsers.length === 0;
 
-	if(statusSession === 'loading')
-		return ""
+  if (statusSession === "loading") return "";
 
   return (
     <>
       <Grid item xs={10} p={1}>
         <Card
-					sx={{
-						maxHeight : `calc(100vh + ${-120 + (emptyRows * 47) + 52}px)`,
-					}}
-				>
+          sx={{
+            maxHeight: `calc(100vh + ${-120 + emptyRows * 47 + 52}px)`,
+          }}
+        >
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
             p={5}
-						pb={1}
+            pb={1}
           >
             <Typography variant="h5" gutterBottom>
               {title}
             </Typography>
-            {
-							(((!readOnly && !disableAdd) || session.user.isAdmin) && generateLink ) &&
-            <Button
-              variant="contained"
-              onClick={handleGenerate}
-            >
-              Generate Student Number
-            </Button>
-            }
-						{
-							(((!readOnly && !disableAdd) || session.user.isAdmin) && addLink ) &&
-            <Button
-              variant="contained"
-              onClick={() => router.push(addLink)}
-              startIcon={<Icon icon={plusFill} />}
-            >
-              Add {name}
-            </Button>
-						}
+            {((!readOnly && !disableAdd) || session.user.isAdmin) &&
+              generateLink && (
+                <Button variant="contained" onClick={handleGenerate}>
+                  Generate Student Number
+                </Button>
+              )}
+            {((!readOnly && !disableAdd) || session.user.isAdmin) && addLink && (
+              <Button
+                variant="contained"
+                onClick={() => router.push(addLink)}
+                startIcon={<Icon icon={plusFill} />}
+              >
+                Add {name}
+              </Button>
+            )}
           </Stack>
           <Divider />
 
@@ -254,30 +263,37 @@ export default function List(props) {
           />
 
           {/* <Scrollbar> */}
-            {isLoading ? (
-              <div
-                style={{
-                  margin: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <CircularProgress />
-              </div>
-            ) : (
-              <TableContainer
-              // sx={{ minWidth: 800 }}
-              >
-                <Table size="small">
-                  <CategoryListHead
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={tableHead}
-                    rowCount={dataList.data.length}
-                    numSelected={selected.length}
-                    onRequestSort={handleRequestSort}
-                    onSelectAllClick={handleSelectAllClick}
-                  />
+
+          <TableContainer
+          // sx={{ minWidth: 800 }}
+          >
+            <Table size="small">
+              <CategoryListHead
+                order={order}
+                orderBy={orderBy}
+                headLabel={tableHead}
+                rowCount={dataList.data.length}
+                numSelected={selected.length}
+                onRequestSort={handleRequestSort}
+                onSelectAllClick={handleSelectAllClick}
+              />
+              {isLoading ? (
+                <TableBody>
+                  <TableCell colSpan={12}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100px",
+                      }}
+                    >
+                      <CircularProgress />
+                    </div>
+                  </TableCell>
+                </TableBody>
+              ) : (
+                <>
                   <TableBody>
                     {filteredUsers
                       .slice(
@@ -298,83 +314,121 @@ export default function List(props) {
                           createdBy,
                         } = initialRow;
                         const isItemSelected = selected.indexOf(id) !== -1;
-												let row = JSON.parse(JSON.stringify(initialRow))
+                        let row = JSON.parse(JSON.stringify(initialRow));
 
                         delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
                         Object.keys(row).map((item) => {
-                            
                           if (tableHeadId.indexOf(item) < 0) {
-														if(isUserList && item == 'user')
-															row.name = row.user.name
-														delete row[item];
-													}
-                          if(row[item] && row[item].name)
-                            row[item] = row[item].name
+                            if (isUserList && item == "user")
+                              row.name = row.user.name;
+                            delete row[item];
+                          }
+                          if (row[item] && row[item].name)
+                            row[item] = row[item].name;
                         });
-												// const arrayRow = Object.keys(row)
-												let arrayRow = []
-												Object.keys(row).map(item => arrayRow[tableHeadId.indexOf(item)] = item)
-												// if(isUserList) {
-												// 	arrayRow.unshift(arrayRow[arrayRow.length - 1])
-												// 	arrayRow.pop()
-												// }
-                        const columCell = arrayRow.map(
-                          (item, index) => {
-														let render = row[item]
-														if(tableHead[index].type == 'boolean') {
-															render = <Button
-																variant="contained"
-																color={ render ? 'success' : 'error'}
-																size="small"
-																disabled={render == null}	
-															>
-															{(!render ? render == null ? 'Pending' : 'Not ' : '') + (render == null ? '' : tableHead[index].label)}	
-															</Button>
-															return (
-																<TableCell align="center" key={index} sx={{ maxWidth : 100}}>
-																	<Stack
-																		direction="row"
-																		alignItems="center"
-																		justifyContent="center"
-																		spacing={1}
-																	>
-																		<Typography variant="subtitle2" noWrap>
-																			{/* {row[item]} */}
-																			{render}
-																		</Typography>
-																	</Stack>
-																</TableCell>
-															)
-														}
-														if(tableHead[index].type == 'Date' && render) {
-															const options = { year: 'numeric', month: 'long', day: 'numeric', hour : 'numeric', minute : 'numeric', hour12 : false };
-															render = new Date(row[item]).toLocaleString('default', options)
-														}
-														else if(tableHead[index].type == 'Time' && render) {
-															render = new Date(row[item]).toTimeString().split('GMT')[0]
-														}
-														else if(tableHead[index].type == 'float' && render) {
-															render = row[item].toFixed(2)
-														}
-														else if(tableHead[index].link === true)
-															render = <a href={router.basePath + row[item]} target="_blank">link</a>
+                        // const arrayRow = Object.keys(row)
+                        let arrayRow = [];
+                        Object.keys(row).map(
+                          (item) => (arrayRow[tableHeadId.indexOf(item)] = item)
+                        );
+                        // if(isUserList) {
+                        // 	arrayRow.unshift(arrayRow[arrayRow.length - 1])
+                        // 	arrayRow.pop()
+                        // }
+                        const columCell = arrayRow.map((item, index) => {
+                          let render = row[item];
+                          if (tableHead[index].type == "boolean") {
+                            render = (
+                              <Button
+                                variant="contained"
+                                color={render ? "success" : "error"}
+                                size="small"
+                                disabled={render == null}
+                              >
+                                {(!render
+                                  ? render == null
+                                    ? "Pending"
+                                    : "Not "
+                                  : "") +
+                                  (render == null
+                                    ? ""
+                                    : tableHead[index].label)}
+                              </Button>
+                            );
                             return (
-                              <TableCell align="left" key={index} sx={{ maxWidth : 100}}>
+                              <TableCell
+                                align="center"
+                                key={index}
+                                sx={{ maxWidth: 100 }}
+                              >
                                 <Stack
                                   direction="row"
-                                  alignItems="left"
+                                  alignItems="center"
+                                  justifyContent="center"
                                   spacing={1}
                                 >
                                   <Typography variant="subtitle2" noWrap>
                                     {/* {row[item]} */}
-																		{render}
+                                    {render}
                                   </Typography>
                                 </Stack>
                               </TableCell>
                             );
                           }
-                        );
+                          if (tableHead[index].type == "Date" && render) {
+                            const options = {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: false,
+                            };
+                            render = new Date(row[item]).toLocaleString(
+                              "default",
+                              options
+                            );
+                          } else if (
+                            tableHead[index].type == "Time" &&
+                            render
+                          ) {
+                            render = new Date(row[item])
+                              .toTimeString()
+                              .split("GMT")[0];
+                          } else if (
+                            tableHead[index].type == "float" &&
+                            render
+                          ) {
+                            render = row[item].toFixed(2);
+                          } else if (tableHead[index].link === true)
+                            render = (
+                              <a
+                                href={router.basePath + row[item]}
+                                target="_blank"
+                              >
+                                link
+                              </a>
+                            );
+                          return (
+                            <TableCell
+                              align="left"
+                              key={index}
+                              sx={{ maxWidth: 100 }}
+                            >
+                              <Stack
+                                direction="row"
+                                alignItems="left"
+                                spacing={1}
+                              >
+                                <Typography variant="subtitle2" noWrap>
+                                  {/* {row[item]} */}
+                                  {render}
+                                </Typography>
+                              </Stack>
+                            </TableCell>
+                          );
+                        });
                         // if(user.role_id == 1 || user_enrollment.split(',').indexOf(user.id) >= 0 || createdBy == user.id)
                         return (
                           <TableRow
@@ -405,15 +459,14 @@ export default function List(props) {
                           <TableCell align="left">{status || "None"}</TableCell> */}
                             {
                               <TableCell align="right">
-																{
-																	(!readOnly || session.user.isAdmin) &&
-																	<MoreMenu
-																		id={id}
-																		name={name}
-																		moremenu={moremenu}
-																		deleteOptions={deleteOptions}
-																	/>
-																}
+                                {(!readOnly || session.user.isAdmin) && (
+                                  <MoreMenu
+                                    id={id}
+                                    name={name}
+                                    moremenu={moremenu}
+                                    deleteOptions={deleteOptions}
+                                  />
+                                )}
                               </TableCell>
                             }
                           </TableRow>
@@ -425,6 +478,7 @@ export default function List(props) {
                       </TableRow>
                     )} */}
                   </TableBody>
+
                   {isUserNotFound && (
                     <TableBody>
                       <TableRow>
@@ -434,9 +488,11 @@ export default function List(props) {
                       </TableRow>
                     </TableBody>
                   )}
-                </Table>
-              </TableContainer>
-            )}
+                </>
+              )}
+            </Table>
+          </TableContainer>
+
           {/* </Scrollbar> */}
 
           <TablePagination
