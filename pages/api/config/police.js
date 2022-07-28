@@ -2,6 +2,7 @@ import { useSession, getSession } from "next-auth/react"
 module.exports = {
 	isLogin : async (req, res, next) => {
 		const session  = await getSession({req});
+    console.log(`🚀 ~ file: police.js ~ line 5 ~ isLogin: ~ session`, session)
 		req.user = session ? session.user : null
 		if(req.user)
 			return next()
