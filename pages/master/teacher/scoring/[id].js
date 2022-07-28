@@ -176,7 +176,7 @@ export default function () {
       }
     }
     for (let key in allAspect) {
-      total += allAspect[key] / 5;
+      total += allAspect[key] / aspect.length;
     }
 
     return total.toFixed(2);
