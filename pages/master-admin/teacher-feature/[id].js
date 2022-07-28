@@ -7,7 +7,7 @@ import axios from "axios";
 import List from "../../../components/utils/List";
 import BasicLayout from "../../../components/utils/BasicLayout";
 
-export default function () {
+export default function TeacherFeature() {
   const router = useRouter();
   const { data: session, status: statusSession } = useSession();
 
