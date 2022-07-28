@@ -54,8 +54,8 @@ UserSecret.hasOne(Teacher, {
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export default async (req, res) =>  {
-	// process.env.NEXTAUTH_URL = 'http://' + req.headers.host;
-	process.env.NEXTAUTH_URL = 'http://' + req.headers.host.split(":")[0];
+	process.env.NEXTAUTH_URL = 'http://' + req.headers.host;
+	// process.env.NEXTAUTH_URL = 'http://' + req.headers.host.split(":")[0];
 	return await NextAuth(req, res, {
   // https://next-auth.js.org/configuration/providers
   providers: [
