@@ -11,9 +11,9 @@ export default function () {
       <List
         title="Teachers"
         name="Teacher"
-				getUrl="/api/teacher"
+        getUrl="/api/teacher"
         addLink="/master/teacher/create"
-				isUserList={true}
+        isUserList={true}
         tableHead={[
           { id: "name", label: "Name", alignRight: false },
           { id: "nidn", label: "NIDN", alignRight: false },
@@ -28,6 +28,10 @@ export default function () {
           {
             name: "Edit",
             link: "/master/teacher/edit/",
+          },
+          {
+            name: "Scoring",
+            link: "/master/teacher/scoring/",
           },
         ]}
         deleteOptions={{

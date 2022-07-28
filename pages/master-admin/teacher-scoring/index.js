@@ -16,7 +16,14 @@ export default function () {
         tableHead={[
           { id: "aspect", label: "Aspect", alignRight: false },
           { id: "scoring", label: "Scoring", alignRight: false },
-          { id: "view", label: "View", alignRight: false },
+          {
+            id: "feature",
+            label: "Feature",
+            type: "view",
+            alignRight: false,
+            link: "/master-admin/teacher-feature/",
+          },
+          { id: "" },
         ]}
         moremenu={[
           {

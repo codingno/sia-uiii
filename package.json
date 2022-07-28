@@ -30,7 +30,7 @@
     "@emotion/styled": "^11.6.0",
     "@iconify/icons-eva": "^1.1.0",
     "@iconify/icons-ic": "^1.1.17",
-    "@iconify/react": "^3.1.0",
+    "@iconify/icons-ph": "^1.2.2",
     "@mui/icons-material": "^5.2.4",
     "@mui/lab": "^5.0.0-alpha.60",
     "@mui/material": "^5.2.5",
@@ -72,6 +72,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@iconify/icons-arcticons": "^1.2.23",
+    "@iconify/react": "^3.2.2",
     "babel-plugin-styled-components": "^2.0.2"
   }
 }

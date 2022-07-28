@@ -315,7 +315,6 @@ export default function List(props) {
                         } = initialRow;
                         const isItemSelected = selected.indexOf(id) !== -1;
                         let row = JSON.parse(JSON.stringify(initialRow));
-
                         delete row.id;
                         const tableHeadId = tableHead.map((item) => item.id);
                         Object.keys(row).map((item) => {
@@ -449,6 +448,25 @@ export default function List(props) {
                               />
                             </TableCell> */}
                             {columCell}
+                            {tableHead.map((item, index) => {
+                              if (item.type == "view") {
+                                // console.log(initialRow.id);
+                                return (
+                                  <TableCell sx={{ maxWidth: 10 }}>
+                                    <Button
+                                      variant="contained"
+                                      color="primary"
+                                      size="small"
+                                      onClick={() => {
+                                        router.push(item.link + initialRow.id);
+                                      }}
+                                    >
+                                      View
+                                    </Button>
+                                  </TableCell>
+                                );
+                              }
+                            })}
                             {/* <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Typography variant="subtitle2" noWrap>
@@ -457,6 +475,7 @@ export default function List(props) {
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{status || "None"}</TableCell> */}
+
                             {
                               <TableCell align="right">
                                 {(!readOnly || session.user.isAdmin) && (

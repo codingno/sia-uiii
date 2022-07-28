@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     "master_teacher_feature",
     {
       aspects_id: DataTypes.INTEGER,
-      feature: DataTypes.STRING,
+      features: DataTypes.STRING,
     },
     {
       sequelize,
